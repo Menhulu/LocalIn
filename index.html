@@ -1,0 +1,2267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LocalIn — Find Your Place in a New City</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F8FAFC;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+
+/* ── NAV ── */
+.navbar{background:#fff;border-bottom:1px solid #e2e8f0;padding:0 20px;height:54px;display:flex;align-items:center;gap:14px;z-index:1000;flex-shrink:0}
+.logo{font-size:20px;font-weight:800;color:#0369A1;letter-spacing:-.5px;white-space:nowrap}
+.logo span{color:#10B981}
+/* ── City dropdown ── */
+.city-dd-wrap{position:relative}
+.city-dd-btn{display:flex;align-items:center;gap:7px;padding:6px 12px;background:#F1F5F9;border-radius:9px;border:none;font-size:12px;font-weight:600;color:#1e293b;cursor:pointer;transition:all .2s;white-space:nowrap;min-width:148px}
+.city-dd-btn:hover,.city-dd-btn.open{background:#E0F2FE;color:#0369A1}
+.city-dd-icon{font-size:13px}
+.city-dd-label{flex:1;text-align:left}
+.city-dd-arrow{font-size:9px;color:#94A3B8;transition:transform .2s;margin-left:2px}
+.city-dd-btn.open .city-dd-arrow{transform:rotate(180deg)}
+.city-dd-menu{position:absolute;top:calc(100% + 6px);left:0;z-index:3000;background:#fff;border-radius:12px;box-shadow:0 8px 36px rgba(0,0,0,.16);border:1px solid #e2e8f0;width:230px;overflow:hidden;opacity:0;transform:translateY(-6px);transition:opacity .15s,transform .15s;pointer-events:none}
+.city-dd-menu.open{opacity:1;transform:translateY(0);pointer-events:auto}
+.city-search-row{padding:8px 10px;border-bottom:1px solid #F1F5F9}
+.city-search-inp{width:100%;padding:6px 10px;border:1.5px solid #e2e8f0;border-radius:7px;font-size:12px;outline:none;color:#1e293b;transition:border-color .2s}
+.city-search-inp:focus{border-color:#0369A1}
+.city-list-scroll{max-height:230px;overflow-y:auto}
+.city-region-hdr{font-size:9px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.6px;padding:6px 14px 3px;background:#F8FAFC;border-top:1px solid #F1F5F9}
+.city-opt{display:flex;align-items:center;gap:9px;padding:9px 14px;cursor:pointer;font-size:12px;color:#1e293b;transition:background .15s;border-bottom:1px solid #F8FAFC}
+.city-opt:hover{background:#F0F9FF;color:#0369A1}
+.city-opt.active{background:#E0F2FE;color:#0369A1;font-weight:700}
+.city-opt-icon{font-size:14px;flex-shrink:0}
+.city-opt-info{display:flex;flex-direction:column;gap:1px}
+.city-opt-name{font-weight:600;font-size:12px}
+.city-opt-pop{font-size:10px;color:#94A3B8}
+.search-w{flex:1;max-width:320px;position:relative}
+.search-w input{width:100%;padding:7px 12px 7px 32px;border:1px solid #e2e8f0;border-radius:8px;font-size:12px;background:#F8FAFC;color:#1e293b;outline:none;transition:border-color .2s}
+.search-w input:focus{border-color:#0369A1;background:#fff}
+.search-icon{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:#94A3B8;font-size:13px}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.btn-create{background:#0369A1;color:#fff;border:none;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:background .2s}
+.btn-create:hover{background:#075985}
+
+/* ── TABS ── */
+.tab-bar{background:#fff;border-bottom:2px solid #e2e8f0;padding:0 20px;display:flex;align-items:flex-end;gap:0;flex-shrink:0}
+.tab{padding:10px 18px;font-size:13px;font-weight:600;color:#94A3B8;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.tab:hover{color:#0369A1}
+.tab.active{color:#0369A1;border-bottom-color:#0369A1}
+.tab-badge{background:#E0F2FE;color:#0369A1;border-radius:10px;padding:1px 7px;font-size:10px;font-weight:700}
+
+/* ── VIEWS ── */
+.view{display:none;flex:1;overflow:hidden}
+.view.active{display:flex;flex-direction:column}
+
+/* ══════════ MAP VIEW ══════════ */
+
+/* ── Filter Bar ── */
+.filter-bar{background:linear-gradient(to bottom,#ffffff,#f8fafc);border-bottom:1px solid #e2e8f0;padding:8px 16px;display:flex;align-items:center;gap:6px;overflow-x:auto;flex-shrink:0;scrollbar-width:none;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.filter-bar::-webkit-scrollbar{display:none}
+.chip{display:flex;align-items:center;gap:5px;padding:5px 13px;border-radius:20px;border:1.5px solid #e2e8f0;font-size:11px;font-weight:600;cursor:pointer;transition:all .18s;white-space:nowrap;color:#475569;background:#fff;user-select:none;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.chip:hover{transform:translateY(-1px);box-shadow:0 3px 8px rgba(0,0,0,.1)}
+.chip .ico{font-size:13px;line-height:1;flex-shrink:0}
+.chip.active{color:#fff!important;border-color:transparent!important;box-shadow:0 3px 10px rgba(0,0,0,.18)}
+.chip-all{background:linear-gradient(135deg,#1e293b,#334155);color:#fff;border-color:transparent;box-shadow:0 2px 8px rgba(30,41,59,.3)}
+.chip-social{background:#F5F0FF;border-color:#DDD0FE;color:#7C3AED}
+.chip-sports{background:#FEF2F2;border-color:#FECACA;color:#B91C1C}
+.chip-culture{background:#F0FDFA;border-color:#99F6E4;color:#0F766E}
+.chip-learning{background:#EFF6FF;border-color:#BFDBFE;color:#1D4ED8}
+.chip-outdoor{background:#F0FDF4;border-color:#BBF7D0;color:#15803D}
+.chip-food{background:#FFF7ED;border-color:#FED7AA;color:#C2410C}
+.chip-volunteer{background:#FDF2F8;border-color:#FBCFE8;color:#BE185D}
+
+/* ── Map Layout ── */
+.map-wrap{flex:1;display:flex;overflow:hidden}
+/* Google Maps tiles — exact Google color scheme */
+.leaflet-tile-pane{filter:none}
+#mapPane{flex:1;position:relative;display:flex;min-width:260px;overflow:hidden}
+#map{flex:1;z-index:1}
+
+/* ── Resize Handle ── */
+#resizeHandle{width:7px;background:linear-gradient(to bottom,#E2E8F0,#CBD5E1);cursor:col-resize;z-index:100;flex-shrink:0;user-select:none;transition:all .15s;display:flex;align-items:center;justify-content:center;position:relative}
+#resizeHandle:hover,#resizeHandle.dragging{background:linear-gradient(to bottom,#38BDF8,#0284C7);box-shadow:inset -2px 0 6px rgba(2,132,199,.2)}
+#resizeHandle::after{content:'⋮⋮';writing-mode:vertical-rl;font-size:9px;color:rgba(0,0,0,.2);letter-spacing:3px;pointer-events:none;line-height:1}
+#resizeHandle:hover::after,#resizeHandle.dragging::after{color:rgba(255,255,255,.7)}
+
+/* ── List Pane ── */
+#listPane{width:380px;min-width:240px;max-width:65vw;display:flex;flex-direction:column;background:#F8FAFC;border-left:1px solid #e2e8f0;overflow:hidden;position:relative;flex-shrink:0}
+
+/* ── Map Stats Box ── */
+.map-stats{position:absolute;bottom:24px;left:16px;z-index:500;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-radius:16px;padding:10px 18px;box-shadow:0 4px 24px rgba(0,0,0,.12),0 1px 4px rgba(0,0,0,.08);display:flex;gap:18px;border:1px solid rgba(186,230,253,.7)}
+.stat-item{text-align:center;position:relative}
+.stat-item+.stat-item::before{content:'';position:absolute;left:-9px;top:15%;height:70%;width:1px;background:#e2e8f0}
+.stat-num{font-size:20px;font-weight:800;color:#075985;letter-spacing:-.5px;line-height:1}
+.stat-lbl{font-size:9px;color:#94A3B8;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-top:3px}
+
+/* ── Map Zoom Controls (override Leaflet) ── */
+.leaflet-bar a{border-radius:8px!important;border:none!important;box-shadow:none!important;font-weight:700;color:#334155}
+.leaflet-bar{border-radius:10px!important;border:none!important;box-shadow:0 2px 12px rgba(0,0,0,.14)!important;overflow:hidden}
+.leaflet-bar a:hover{background:#E0F2FE;color:#0369A1}
+.leaflet-bar a:first-child{border-radius:10px 10px 0 0!important}
+.leaflet-bar a:last-child{border-radius:0 0 10px 10px!important}
+
+/* ── Map Locate Button ── */
+#mapLocateBtn{position:absolute;top:80px;left:14px;z-index:500;background:#fff;border:none;border-radius:10px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.14);transition:all .2s}
+#mapLocateBtn:hover{background:#E0F2FE;transform:scale(1.08)}
+
+/* ── Activity List Panel ── */
+.act-list{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#F8FAFC}
+.al-header{background:linear-gradient(135deg,#F0F9FF 0%,#E0F2FE 100%);border-bottom:1px solid #BAE6FD;padding:11px 14px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;gap:8px}
+.al-count{font-size:12px;color:#0369A1;font-weight:700;white-space:nowrap}
+.al-count strong{font-size:18px;color:#075985;font-weight:800;margin-right:1px}
+.sort-btns{display:flex;gap:4px;flex-shrink:0}
+.sort-btn{padding:4px 9px;border-radius:6px;border:1.5px solid #7DD3FC;font-size:11px;font-weight:600;color:#0284C7;background:rgba(255,255,255,.7);cursor:pointer;transition:all .2s;white-space:nowrap}
+.sort-btn:hover{background:#fff;border-color:#0284C7}
+.sort-btn.active{background:#0369A1;color:#fff;border-color:#0369A1}
+.al-scroll{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin;scrollbar-color:#e2e8f0 transparent}
+.al-empty{padding:32px 16px;text-align:center;color:#94A3B8;font-size:12px;line-height:1.7}
+/* Activity Cards — visual card with gradient header */
+.act-card{background:#fff;border-radius:12px;cursor:pointer;transition:all .2s;border:1.5px solid #F1F5F9;box-shadow:0 1px 5px rgba(0,0,0,.07);overflow:hidden;flex-shrink:0}
+.act-card:hover{border-color:#38BDF8;box-shadow:0 5px 18px rgba(3,105,161,.14);transform:translateY(-2px)}
+.act-card.selected{border-color:#0369A1;box-shadow:0 5px 18px rgba(3,105,161,.22)}
+/* Card visual header — photo + emoji badge */
+.ac-header{height:116px;display:flex;align-items:center;justify-content:center;font-size:30px;background:var(--cat-bg,#f1f5f9);border-bottom:2px solid var(--cat-color,#e2e8f0);position:relative;overflow:hidden}
+.ac-header-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform .38s ease}
+.act-card:hover .ac-header-img{transform:scale(1.06)}
+.ac-header-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.04) 0%,rgba(0,0,0,.32) 100%);pointer-events:none}
+.ac-emoji-badge{position:absolute;bottom:8px;right:10px;width:36px;height:36px;background:rgba(255,255,255,.93);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;box-shadow:0 2px 10px rgba(0,0,0,.2);backdrop-filter:blur(4px);z-index:2}
+/* Card body */
+.ac-body{padding:12px 14px 13px}
+.ac-name{font-size:14px;font-weight:700;color:#0F172A;line-height:1.3;margin-bottom:6px;letter-spacing:-.1px}
+.ac-meta{font-size:11px;color:#64748B;display:flex;flex-direction:column;gap:3px;margin-bottom:9px;line-height:1.5}
+.ac-meta span{display:flex;align-items:center;gap:4px}
+.ac-footer{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+/* (legacy selectors kept for compatibility) */
+.ac-top{display:flex;align-items:flex-start;gap:8px;margin-bottom:5px}
+.ac-ico{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;background:var(--cat-bg,#f1f5f9)}
+.ac-cat-tag{font-size:10px;font-weight:700;border-radius:9px;padding:2px 8px;color:#fff}
+.ac-att{font-size:10px;color:#94A3B8;display:flex;align-items:center;gap:3px}
+.ac-nc{font-size:10px;background:#ECFDF5;color:#065F46;border-radius:9px;padding:2px 7px;font-weight:600}
+
+/* Detail Panel — slides over the list pane */
+.detail-panel{position:absolute;left:0;right:0;top:0;bottom:0;background:#fff;border-left:1px solid #e2e8f0;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);z-index:200;overflow-y:auto}
+.detail-panel.open{transform:translateX(0)}
+/* Hero header */
+.dp-hero{padding:16px 14px 14px;display:flex;flex-direction:column;gap:10px;position:relative}
+.dp-hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.dp-emoji{font-size:28px;line-height:1;margin-bottom:2px}
+.pc{background:rgba(255,255,255,.25);border:none;width:28px;height:28px;border-radius:50%;font-size:14px;color:rgba(255,255,255,.9);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.pc:hover{background:rgba(255,255,255,.4);color:#fff}
+.pcat{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:12px;font-size:10px;font-weight:700;background:rgba(255,255,255,.25);color:#fff;backdrop-filter:blur(4px);width:fit-content}
+.ptitle{font-size:15px;font-weight:800;color:#fff;line-height:1.3}
+/* Meta strip */
+.pmeta-strip{background:#fff;padding:10px 14px;display:flex;flex-direction:column;gap:6px;border-bottom:1px solid #F1F5F9}
+.mrow{display:flex;align-items:center;gap:7px;font-size:12px;color:#475569}
+/* Capacity bar */
+.cap-row{display:flex;align-items:center;gap:8px;font-size:12px;color:#475569}
+.cap-bar-bg{flex:1;height:5px;background:#F1F5F9;border-radius:3px;overflow:hidden}
+.cap-bar-fill{height:100%;border-radius:3px;transition:width .6s ease}
+/* Body sections */
+.dp-body{padding:0 14px;flex:1}
+.dp-section{padding:12px 0;border-bottom:1px solid #F8FAFC}
+.dp-section:last-child{border-bottom:none}
+.dp-sec-label{font-size:10px;font-weight:700;color:#CBD5E1;text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px}
+.pdesc{font-size:12px;color:#475569;line-height:1.7}
+/* Attendees */
+.att-row{display:flex;align-items:center;gap:9px}
+.av-stack{display:flex}
+.av{width:26px;height:26px;border-radius:50%;border:2px solid #fff;margin-left:-5px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.av:first-child{margin-left:0}
+.att-cnt{font-size:11px;color:#64748B}
+.ncbadge{background:#ECFDF5;border:1px solid #A7F3D0;border-radius:8px;padding:6px 10px;display:flex;align-items:center;gap:6px;font-size:11px;color:#065F46;font-weight:500}
+/* Demographics compact */
+.demo-legend{display:grid;grid-template-columns:1fr 1fr;gap:4px 8px;margin-top:7px}
+.demo-leg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:#475569}
+/* Age compact */
+.age-chart-wrap{display:flex;flex-direction:column;gap:2px}
+.age-bars-row{display:flex;align-items:flex-end;gap:4px;height:40px}
+.age-bar-cell{flex:1;border-radius:3px 3px 0 0;min-width:0}
+.age-meta-row{display:flex;gap:4px}
+.age-meta-cell{flex:1;display:flex;flex-direction:column;align-items:center;min-width:0}
+.age-meta-lbl{font-size:9px;color:#94A3B8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%;text-align:center}
+.age-meta-pct{font-size:10px;font-weight:700;color:#0369A1}
+/* Vibe + practical */
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.info-pill{background:#F8FAFC;border-radius:8px;padding:8px 10px;display:flex;align-items:center;gap:7px;font-size:11px;color:#334155}
+.info-pill strong{color:#1e293b}
+/* Actions */
+.pactions{padding:12px 14px 16px;display:flex;gap:7px;border-top:1px solid #F1F5F9}
+.btn-join{flex:1;background:#0369A1;color:#fff;border:none;padding:10px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;transition:background .2s}
+.btn-join:hover{background:#075985}
+.btn-save{background:#F8FAFC;color:#0369A1;border:1.5px solid #e2e8f0;padding:10px 13px;border-radius:9px;font-size:16px;cursor:pointer;transition:all .2s}
+.btn-save:hover{background:#E0F2FE;border-color:#38BDF8}
+
+/* ══════════ NETWORK VIEW ══════════ */
+.net-wrap{flex:1;display:flex;overflow:hidden}
+#netSvg{flex:1}
+.net-side{width:280px;background:#fff;border-left:1px solid #e2e8f0;padding:18px;overflow-y:auto;flex-shrink:0}
+.net-title{font-size:15px;font-weight:700;color:#1e293b;margin-bottom:4px}
+.net-sub{font-size:12px;color:#64748B;margin-bottom:16px;line-height:1.5}
+.net-legend{display:flex;flex-direction:column;gap:7px;margin-bottom:18px}
+.leg-row{display:flex;align-items:center;gap:8px;font-size:12px;color:#475569}
+.leg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.net-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}
+.ns-card{background:#F8FAFC;border-radius:10px;padding:10px 12px;text-align:center}
+.ns-num{font-size:22px;font-weight:800;color:#0369A1}
+.ns-lbl{font-size:10px;color:#94A3B8;font-weight:600;text-transform:uppercase}
+.net-person{background:#F8FAFC;border-radius:10px;padding:10px 12px;margin-bottom:8px;cursor:pointer;transition:background .2s}
+.net-person:hover{background:#E0F2FE}
+.np-name{font-size:13px;font-weight:600;color:#1e293b}
+.np-detail{font-size:11px;color:#64748B;margin-top:2px}
+.net-tooltip{position:fixed;background:rgba(15,23,42,.92);color:#fff;padding:8px 12px;border-radius:8px;font-size:12px;pointer-events:none;z-index:9999;display:none;line-height:1.5}
+
+/* ══════════ DASHBOARD VIEW ══════════ */
+.dash-wrap{flex:1;overflow-y:auto;padding:20px;display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:auto auto auto;gap:16px;background:#F0F4F8}
+.dash-card{background:#fff;border-radius:14px;padding:18px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.dc-title{font-size:12px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
+.dc-big{font-size:36px;font-weight:800;color:#1e293b}
+.dc-sub{font-size:12px;color:#64748B;margin-top:3px}
+/* Score ring */
+.score-card{grid-column:1;display:flex;align-items:center;gap:16px}
+.ring-wrap{position:relative;width:88px;height:88px;flex-shrink:0}
+.ring-wrap svg{transform:rotate(-90deg)}
+.ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-val{font-size:20px;font-weight:800;color:#0369A1}
+.ring-lbl{font-size:9px;color:#94A3B8;font-weight:600;text-transform:uppercase}
+/* Progress bars */
+.pbar-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.pbar-lbl{font-size:11px;color:#475569;width:72px;flex-shrink:0}
+.pbar-bg{flex:1;height:7px;background:#F1F5F9;border-radius:4px;overflow:hidden}
+.pbar-fill{height:100%;border-radius:4px;transition:width 1s ease}
+.pbar-val{font-size:11px;color:#64748B;width:28px;text-align:right}
+/* Activity list */
+.act-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #F1F5F9}
+.act-item:last-child{border-bottom:none}
+.act-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.act-name{font-size:12px;font-weight:600;color:#1e293b;flex:1}
+.act-date{font-size:11px;color:#94A3B8}
+/* Streak */
+.streak-days{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px}
+.sd{width:22px;height:22px;border-radius:5px;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;color:#fff}
+.sd.active{background:#0369A1}
+.sd.mid{background:#0284C799}
+.sd.off{background:#E2E8F0;color:#94A3B8}
+/* Span helpers */
+.span2{grid-column:span 2}
+.span3{grid-column:span 3}
+/* chart canvases */
+canvas{max-width:100%;display:block}
+
+/* ══════════ TIMELINE VIEW ══════════ */
+.tl-wrap{flex:1;overflow-y:auto;padding:20px;background:#F0F4F8;display:flex;flex-direction:column;gap:16px}
+.tl-card{background:#fff;border-radius:14px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.tl-card-title{font-size:13px;font-weight:700;color:#1e293b;margin-bottom:16px}
+/* Heatmap */
+.hm-grid{display:grid;grid-template-columns:40px repeat(7,1fr);gap:4px;font-size:10px}
+.hm-dayh{text-align:center;color:#94A3B8;font-weight:600;padding:2px}
+.hm-timelbl{color:#94A3B8;font-weight:600;display:flex;align-items:center;font-size:10px;padding-right:4px}
+.hm-cell{height:26px;border-radius:5px;cursor:pointer;transition:transform .15s,opacity .2s;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:rgba(255,255,255,.85)}
+.hm-cell:hover{transform:scale(1.1)}
+/* Timeline events */
+.tl-events{display:flex;flex-direction:column;gap:0}
+.tl-day-group{margin-bottom:18px}
+.tl-day-label{font-size:11px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;padding-left:24px;position:relative}
+.tl-day-label::before{content:'';position:absolute;left:8px;top:50%;transform:translateY(-50%);width:4px;height:4px;background:#CBD5E1;border-radius:50%}
+.tl-event{display:flex;align-items:flex-start;gap:12px;padding:10px 12px;border-radius:10px;margin-bottom:6px;transition:background .2s;cursor:pointer}
+.tl-event:hover{background:#F8FAFC}
+.tl-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.tl-content{flex:1}
+.tl-ename{font-size:13px;font-weight:600;color:#1e293b}
+.tl-emeta{font-size:11px;color:#64748B;margin-top:2px}
+.tl-time{font-size:11px;color:#94A3B8;white-space:nowrap}
+
+/* ══════════ MODAL ══════════ */
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.4);backdrop-filter:blur(4px);z-index:2000;display:none;align-items:center;justify-content:center}
+.modal-ov.open{display:flex}
+.modal{background:#fff;border-radius:16px;width:460px;max-width:90vw;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.mhdr{padding:18px 22px 0;display:flex;justify-content:space-between;align-items:center}
+.mhdr-title{font-size:16px;font-weight:700;color:#1e293b}
+.mclose{background:none;border:none;font-size:19px;color:#94A3B8;cursor:pointer}
+.mbody{padding:18px 22px 22px;display:flex;flex-direction:column;gap:12px}
+.fg{display:flex;flex-direction:column;gap:4px}
+.flbl{font-size:11px;font-weight:600;color:#475569}
+.finp,.fsel,.ftxt{padding:8px 11px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:12px;color:#1e293b;outline:none;transition:border-color .2s;font-family:inherit}
+.finp:focus,.fsel:focus,.ftxt:focus{border-color:#0369A1}
+.ftxt{resize:vertical;min-height:72px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn-sub{background:#0369A1;color:#fff;border:none;padding:10px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer}
+.btn-sub:hover{background:#075985}
+/* ── Image upload zone ── */
+.img-upload-zone{border:2px dashed #BAE6FD;border-radius:10px;padding:0;cursor:pointer;transition:all .2s;overflow:hidden;position:relative;background:#FAFAFF;min-height:96px;display:flex;align-items:stretch}
+.img-upload-zone:hover,.img-upload-zone.dragover{border-color:#0284C7;background:#F0F9FF}
+.img-upload-placeholder{width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:18px;pointer-events:none}
+.img-upload-icon{font-size:26px;line-height:1}
+.img-upload-label{font-size:12px;font-weight:600;color:#0284C7}
+.img-upload-hint{font-size:10px;color:#94A3B8}
+.img-preview-wrap{width:100%;position:relative;display:none}
+.img-preview-wrap img{width:100%;height:130px;object-fit:cover;display:block}
+.img-preview-remove{position:absolute;top:7px;right:7px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;border:none;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;transition:background .15s}
+.img-preview-remove:hover{background:rgba(220,38,38,.85)}
+
+/* Popup */
+.leaflet-popup-content-wrapper{border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.15);padding:0}
+.leaflet-popup-content{margin:0;font-family:inherit}
+.pop{padding:10px 13px;min-width:170px}
+.pop-cat{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.pop-name{font-size:12px;font-weight:700;color:#1e293b;margin-bottom:3px}
+.pop-det{font-size:11px;color:#64748B}
+
+/* ── Brush / Linking indicator ── */
+.brush-banner{background:#E0F2FE;border-bottom:1px solid #7DD3FC;padding:7px 20px;display:none;align-items:center;gap:8px;font-size:12px;color:#0369A1;font-weight:600;flex-shrink:0}
+.brush-banner.show{display:flex}
+.brush-banner button{background:none;border:none;color:#0369A1;font-size:14px;cursor:pointer;padding:0 2px;line-height:1;opacity:.7}
+.brush-banner button:hover{opacity:1}
+.pbar-row{cursor:pointer;border-radius:6px;padding:3px 6px;margin:-3px -6px;transition:background .15s}
+.pbar-row:hover{background:#F0F9FF}
+.pbar-row:hover .pbar-lbl{color:#0369A1}
+
+/* ── Radar chart card ── */
+.radar-hint{font-size:10px;color:#94A3B8;margin-top:6px;text-align:center}
+
+/* ── Network Growth Timeline ── */
+.growth-wrap{background:#fff;border-top:1px solid #e2e8f0;padding:16px 20px;flex-shrink:0;height:160px;overflow:hidden}
+.growth-title{font-size:11px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+#growthSvg{width:100%;height:100px}
+.growth-tooltip{position:fixed;background:rgba(15,23,42,.92);color:#fff;padding:7px 11px;border-radius:8px;font-size:11px;pointer-events:none;z-index:9999;display:none;line-height:1.6}
+
+/* ── Bubble Scatter ── */
+.bubble-wrap{position:relative}
+#bubbleSvg{width:100%;display:block}
+.bubble-tooltip{position:fixed;background:rgba(15,23,42,.92);color:#fff;padding:8px 12px;border-radius:8px;font-size:12px;pointer-events:none;z-index:9999;display:none;line-height:1.6;max-width:220px}
+
+/* ── Marker pulse (hover from card) ── */
+@keyframes markerPulse{0%,100%{transform:scale(1) translateY(0)}50%{transform:scale(1.15) translateY(-4px)}}
+.marker-pulse>div{animation:markerPulse .7s ease-in-out infinite!important;transform-origin:bottom center}
+
+/* ── Accessibility ── */
+.skip-nav{position:absolute;top:-60px;left:12px;background:#0369A1;color:#fff;padding:8px 16px;font-size:13px;font-weight:600;border-radius:0 0 8px 8px;z-index:10000;transition:top .2s;text-decoration:none}
+.skip-nav:focus{top:0}
+*:focus-visible{outline:3px solid #0284C7;outline-offset:2px;border-radius:3px}
+button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #0284C7;outline-offset:2px}
+
+/* ── Onboarding overlay ── */
+.ob-ov{position:fixed;inset:0;background:rgba(15,23,42,.65);backdrop-filter:blur(3px);z-index:5000;display:flex;align-items:center;justify-content:center}
+.ob-card{background:#fff;border-radius:20px;width:400px;max-width:92vw;padding:28px 28px 22px;box-shadow:0 24px 64px rgba(0,0,0,.25)}
+.ob-logo{font-size:28px;font-weight:800;color:#0369A1;margin-bottom:4px}
+.ob-logo span{color:#1e293b}
+.ob-tagline{font-size:13px;color:#64748B;margin-bottom:20px}
+.ob-steps{display:flex;flex-direction:column;gap:12px;margin-bottom:22px}
+.ob-step{display:flex;align-items:flex-start;gap:12px}
+.ob-step-ico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.ob-step-text{font-size:12px;color:#334155;line-height:1.5}
+.ob-step-title{font-size:13px;font-weight:700;color:#1e293b;margin-bottom:1px}
+.ob-btn{width:100%;background:#0369A1;color:#fff;border:none;padding:12px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:background .2s}
+.ob-btn:hover{background:#075985}
+.ob-skip{display:block;text-align:center;margin-top:10px;font-size:12px;color:#94A3B8;cursor:pointer;background:none;border:none;width:100%}
+.ob-skip:hover{color:#475569}
+
+/* ── Card hover (hover from marker) ── */
+.act-card.map-hover{border-color:#0369A1!important;background:#FAFAFF!important;box-shadow:0 0 0 3px rgba(3,105,161,.18),0 5px 16px rgba(3,105,161,.15)!important;transform:translateY(-2px)}
+
+/* ── Rich detail panel extras ── */
+.det-section{padding:0 14px 12px}
+.det-section-title{font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.demo-bar-row{display:flex;height:10px;border-radius:5px;overflow:hidden;gap:1px;margin-bottom:8px}
+.demo-legend{display:flex;flex-wrap:wrap;gap:5px 10px;margin-bottom:4px}
+.demo-leg-item{display:flex;align-items:center;gap:4px;font-size:10px;color:#475569}
+/* Age chart: bars-only area + separate label rows below — NO fixed height on wrapper */
+.age-chart-wrap{display:flex;flex-direction:column;gap:0;margin-bottom:4px}
+.age-bars-row{display:flex;align-items:flex-end;gap:5px;height:52px;padding:0 2px}
+.age-bar-cell{flex:1;border-radius:4px 4px 0 0;min-height:4px;transition:height .4s ease,opacity .2s}
+.age-bar-cell:hover{opacity:.75;cursor:default}
+.age-meta-row{display:flex;gap:5px;padding:0 2px;margin-top:4px}
+.age-meta-cell{flex:1;text-align:center}
+.age-meta-lbl{font-size:9px;color:#94A3B8;display:block;white-space:nowrap}
+.age-meta-pct{font-size:9px;font-weight:700;color:#0369A1;display:block}
+/* Success box */
+.success-box{margin:0 14px 14px;background:#F0FDF4;border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px}
+.success-ring{flex-shrink:0}
+.success-text .suc-title{font-size:12px;font-weight:700;color:#065F46}
+.success-text .suc-sub{font-size:10px;color:#6B7280;margin-top:2px;line-height:1.4}
+/* Detail panel section dividers */
+.det-divider{margin:2px 14px 10px;border:none;border-top:1px solid #F1F5F9}
+.det-label{font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;padding:0 14px;margin-bottom:8px;display:block}
+/* Practical info grid */
+.prac-grid{padding:0 14px 12px;display:flex;flex-direction:column;gap:7px}
+.prac-row{display:flex;align-items:center;gap:7px;font-size:11px;color:#475569}
+.prac-icon{font-size:14px;flex-shrink:0}
+.lang-chips{display:flex;flex-wrap:wrap;gap:5px}
+.lang-chip{font-size:10px;background:#F1F5F9;color:#475569;padding:3px 8px;border-radius:8px;font-weight:500}
+.vibe-chips{display:flex;flex-wrap:wrap;gap:5px;padding:0 14px;margin-bottom:10px}
+.vibe-chip{font-size:10px;background:#E0F2FE;color:#0369A1;padding:3px 9px;border-radius:12px;font-weight:600}
+
+/* ── Choropleth overlay ── */
+.choro-btn{display:flex;align-items:center;gap:5px;padding:4px 11px;border-radius:20px;border:1.5px solid #e2e8f0;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;color:#475569;background:#fff;transition:all .2s}
+.choro-btn:hover{background:#F0F9FF;color:#0369A1;border-color:#38BDF8}
+.choro-btn.active{background:#0369A1;color:#fff;border-color:#0369A1}
+.choro-legend{position:absolute;bottom:56px;left:14px;z-index:500;background:rgba(255,255,255,.97);backdrop-filter:blur(8px);border-radius:10px;padding:10px 13px;box-shadow:0 2px 14px rgba(0,0,0,.12);display:none;min-width:178px}
+.choro-legend.show{display:block}
+.choro-legend-title{font-size:10px;font-weight:700;color:#0369A1;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.choro-legend-scale{display:flex;gap:2px;height:10px;border-radius:4px;overflow:hidden;margin-bottom:4px}
+.choro-legend-scale div{flex:1}
+.choro-legend-labels{display:flex;justify-content:space-between;font-size:9px;color:#94A3B8;margin-bottom:5px}
+.choro-city-stat{font-size:11px;font-weight:600;color:#1e293b;border-top:1px solid #F1F5F9;padding-top:5px;margin-top:2px}
+/* Source badge */
+.source-badge{font-size:9px;font-weight:700;border-radius:6px;padding:2px 6px;background:#DBEAFE;color:#1D4ED8;white-space:nowrap;flex-shrink:0}
+/* Seasonal/comparison chart section intro */
+.tl-chart-note{font-size:11px;color:#94A3B8;margin-bottom:10px;line-height:1.5}
+</style>
+</head>
+<body>
+<a class="skip-nav" href="#main-content">Skip to main content</a>
+
+<!-- Onboarding overlay -->
+<div class="ob-ov" id="obOv" role="dialog" aria-modal="true" aria-labelledby="obTitle">
+  <div class="ob-card">
+    <div class="ob-logo" id="obTitle">Local<span>In</span></div>
+    <div class="ob-tagline">Your guide to social integration in New Zealand cities</div>
+    <div class="ob-steps">
+      <div class="ob-step">
+        <div class="ob-step-ico" style="background:#F0F9FF">🗺️</div>
+        <div class="ob-step-text"><div class="ob-step-title">Discover activities near you</div>Browse 62 community events across 8 NZ cities, filtered by category.</div>
+      </div>
+      <div class="ob-step">
+        <div class="ob-step-ico" style="background:#F0FDFA">🌍</div>
+        <div class="ob-step-text"><div class="ob-step-title">See where migrants live</div>Toggle the Migrant Density overlay to find communities near you.</div>
+      </div>
+      <div class="ob-step">
+        <div class="ob-step-ico" style="background:#EFF6FF">📊</div>
+        <div class="ob-step-text"><div class="ob-step-title">Track your integration</div>Join activities to grow your social network and integration score.</div>
+      </div>
+    </div>
+    <button class="ob-btn" onclick="closeOnboarding()" aria-label="Start exploring LocalIn">Explore LocalIn →</button>
+    <button class="ob-skip" onclick="closeOnboarding()" aria-label="Skip introduction">Skip intro</button>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="navbar" role="navigation" aria-label="Main navigation">
+  <div class="logo">Local<span>In</span></div>
+  <div class="city-dd-wrap" id="cityDdWrap">
+    <button class="city-dd-btn" id="cityDdBtn" onclick="toggleCityDrop(event)">
+      <span class="city-dd-icon">🏙</span>
+      <span class="city-dd-label" id="cityDdLabel">Hamilton</span>
+      <span class="city-dd-arrow">▼</span>
+    </button>
+    <div class="city-dd-menu" id="cityDdMenu">
+      <div class="city-search-row">
+        <input class="city-search-inp" id="citySearchInp" type="text" placeholder="Search city or region…"
+               oninput="filterCityOpts(this.value)" onclick="event.stopPropagation()"/>
+      </div>
+      <div class="city-list-scroll" id="cityListScroll"></div>
+    </div>
+  </div>
+  <div class="search-w">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="Search activities…" oninput="debouncedSearch()" aria-label="Search activities by name or location"/>
+  </div>
+  <div class="nav-right">
+    <button class="btn-create" onclick="openModal()" aria-label="Post a new activity">＋ Post Activity</button>
+  </div>
+</nav>
+
+<!-- TABS -->
+<div class="tab-bar" role="tablist" aria-label="Main views">
+  <div class="tab active" role="tab" tabindex="0" aria-selected="true"  id="tab-map"       onclick="switchTab('map')"       onkeydown="if(event.key==='Enter'){switchTab('map')}">🗺️ Discover</div>
+  <div class="tab"        role="tab" tabindex="0" aria-selected="false" id="tab-network"    onclick="switchTab('network')"   onkeydown="if(event.key==='Enter'){switchTab('network')}">🌐 My Network <span class="tab-badge" id="connBadge">7</span></div>
+  <div class="tab"        role="tab" tabindex="0" aria-selected="false" id="tab-dashboard"  onclick="switchTab('dashboard')" onkeydown="if(event.key==='Enter'){switchTab('dashboard')}">📊 Dashboard</div>
+  <div class="tab"        role="tab" tabindex="0" aria-selected="false" id="tab-timeline"   onclick="switchTab('timeline')"  onkeydown="if(event.key==='Enter'){switchTab('timeline')}">📅 Timeline</div>
+</div>
+
+<!-- ═══ MAP VIEW ═══ -->
+<div class="view active" id="view-map">
+  <div class="filter-bar" role="group" aria-label="Filter activities by category">
+    <div class="chip chip-all" id="chip-all" role="button" tabindex="0" aria-pressed="true"  title="Show all activities" onclick="toggleFilter('all')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFilter('all')}">🗺️ All</div>
+    <div class="chip chip-social"    id="chip-social"    role="button" tabindex="0" aria-pressed="false" title="Social meetups &amp; mixers"         onclick="toggleFilter('social')"    onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFilter('social')}"><span class="ico">💬</span>Social</div>
+    <div class="chip chip-sports"    id="chip-sports"    role="button" tabindex="0" aria-pressed="false" title="Sports &amp; fitness activities"      onclick="toggleFilter('sports')"    onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFilter('sports')}"><span class="ico">🏃</span>Sports</div>
+    <div class="chip chip-culture"   id="chip-culture"   role="button" tabindex="0" aria-pressed="false" title="Cultural events &amp; arts"           onclick="toggleFilter('culture')"   onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFilter('culture')}"><span class="ico">🎭</span>Culture</div>
+    <div class="chip chip-learning"  id="chip-learning"  role="button" tabindex="0" aria-pressed="false" title="Language exchange &amp; workshops"    onclick="toggleFilter('learning')"  onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFilter('learning')}"><span class="ico">📚</span>Learning</div>
+    <div class="chip chip-outdoor"   id="chip-outdoor"   role="button" tabindex="0" aria-pressed="false" title="Outdoor walks &amp; nature activities" onclick="toggleFilter('outdoor')"   onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFilter('outdoor')}"><span class="ico">🌿</span>Outdoor</div>
+    <div class="chip chip-food"      id="chip-food"      role="button" tabindex="0" aria-pressed="false" title="Food markets &amp; dining events"     onclick="toggleFilter('food')"      onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFilter('food')}"><span class="ico">🍜</span>Food &amp; Dining</div>
+    <div class="chip chip-volunteer" id="chip-volunteer" role="button" tabindex="0" aria-pressed="false" title="Volunteering &amp; community service"  onclick="toggleFilter('volunteer')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFilter('volunteer')}"><span class="ico">🤝</span>Volunteer</div>
+    <div style="margin-left:auto;flex-shrink:0;padding-left:8px">
+      <button class="choro-btn" id="choroBtn" onclick="toggleChoropleth()" aria-pressed="false" aria-label="Toggle migrant density overlay">🌍 Migrant Density</button>
+    </div>
+  </div>
+  <div class="map-wrap" id="main-content" role="main">
+
+    <!-- ── Map Pane ── -->
+    <div id="mapPane">
+      <div id="map"></div>
+      <!-- Stats overlay -->
+      <div class="map-stats">
+        <div class="stat-item">
+          <div class="stat-num" id="statCount">—</div>
+          <div class="stat-lbl">Activities</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num" id="statCity">—</div>
+          <div class="stat-lbl">Hamilton</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num" id="statNC">—</div>
+          <div class="stat-lbl">Newcomer ✓</div>
+        </div>
+      </div>
+      <!-- Re-center button -->
+      <button id="mapLocateBtn" title="Re-center map" onclick="map.setView([-37.787,175.279],13)">📍</button>
+      <!-- Choropleth Legend Overlay -->
+      <div class="choro-legend" id="choroLegend">
+        <div class="choro-legend-title">🌍 Migrant Population %</div>
+        <div class="choro-legend-scale">
+          <div style="background:#E0F2FE"></div><div style="background:#7DD3FC"></div>
+          <div style="background:#3B82F6"></div><div style="background:#0369A1"></div>
+          <div style="background:#1E3A8A"></div>
+        </div>
+        <div class="choro-legend-labels"><span>14%</span><span>~26%</span><span>39%</span></div>
+        <div class="choro-city-stat" id="choroCityStat">NZ 2023 Census data</div>
+      </div>
+    </div>
+
+    <!-- ── Resize Handle ── -->
+    <div id="resizeHandle" title="Drag to resize"></div>
+
+    <!-- ── List Pane ── -->
+    <div id="listPane">
+      <!-- Activity List -->
+      <div class="act-list" id="actList">
+        <div class="al-header">
+          <div class="al-count"><strong id="alCount">—</strong> in view</div>
+          <div class="sort-btns">
+            <button class="sort-btn active" id="sortDate" onclick="setSort('date')">📅 Date</button>
+            <button class="sort-btn" id="sortPop" onclick="setSort('popularity')">🔥 Popular</button>
+          </div>
+        </div>
+        <div class="al-scroll" id="alScroll" aria-live="polite" aria-label="Activity list"></div>
+      </div>
+
+      <!-- Detail Panel — slides over list pane -->
+      <div class="detail-panel" id="detailPanel">
+      <!-- Hero header — bg colour set by JS -->
+      <div class="dp-hero" id="dpHero">
+        <div class="dp-hero-top">
+          <div>
+            <div class="dp-emoji" id="dpEmoji"></div>
+            <div class="pcat" id="pcat"></div>
+          </div>
+          <button class="pc" onclick="closePanel()">✕</button>
+        </div>
+        <div class="ptitle" id="ptitle"></div>
+      </div>
+      <!-- Meta strip -->
+      <div class="pmeta-strip" id="pmeta"></div>
+      <!-- Scrollable body -->
+      <div class="dp-body">
+        <!-- About -->
+        <div class="dp-section">
+          <div class="pdesc" id="pdesc"></div>
+        </div>
+        <!-- Attendees + newcomer badge -->
+        <div class="dp-section">
+          <div class="att-row" id="patt" style="margin-bottom:8px"></div>
+          <div class="ncbadge" id="pnc" style="display:none">🌟 Newcomer-Friendly — all backgrounds welcome</div>
+        </div>
+        <!-- Rich extras: demographics, age, vibe, practical -->
+        <div id="pextras"></div>
+      </div>
+      <div class="pactions">
+        <button class="btn-join" onclick="joinActivity()">Join Activity</button>
+        <button class="btn-save">🔖</button>
+      </div>
+    </div><!-- /detail-panel -->
+    </div><!-- /listPane -->
+  </div><!-- /map-wrap -->
+</div><!-- /view-map -->
+
+<!-- ═══ NETWORK VIEW ═══ -->
+<div class="view" id="view-network">
+  <div class="net-wrap">
+    <svg id="netSvg"></svg>
+    <div class="net-side">
+      <div class="net-title">Your Social Network</div>
+      <div class="net-sub">Connections you've built by attending activities in <span id="netCity">Hamilton</span>. Drag nodes to explore.</div>
+      <div class="net-stats">
+        <div class="ns-card"><div class="ns-num" id="nsConn">7</div><div class="ns-lbl">Connections</div></div>
+        <div class="ns-card"><div class="ns-num" id="nsAct">5</div><div class="ns-lbl">Activities</div></div>
+        <div class="ns-card"><div class="ns-num" id="nsCat">4</div><div class="ns-lbl">Categories</div></div>
+        <div class="ns-card"><div class="ns-num" id="nsScore">62</div><div class="ns-lbl">Int. Score</div></div>
+      </div>
+      <div class="pst" style="padding:0;margin-bottom:10px">Legend</div>
+      <div class="net-legend" id="netLegend"></div>
+      <div class="pst" style="padding:0;margin-bottom:10px;margin-top:14px">People you've met</div>
+      <div id="personList"></div>
+    </div>
+  </div>
+  <div class="net-tooltip" id="netTip"></div>
+  <!-- Growth Timeline -->
+  <div class="growth-wrap">
+    <div class="growth-title">Your Connection Growth — How your network expanded over time</div>
+    <svg id="growthSvg"></svg>
+  </div>
+  <div class="growth-tooltip" id="growthTip"></div>
+</div>
+
+<!-- ═══ DASHBOARD VIEW ═══ -->
+<div class="view" id="view-dashboard">
+  <!-- Brush indicator banner -->
+  <div class="brush-banner" id="brushBanner">
+    <span>🔗 Linked filter active:</span>
+    <span id="brushLabel" style="background:#0369A1;color:#fff;padding:2px 10px;border-radius:10px;font-size:11px"></span>
+    <span style="color:#94A3B8;font-size:11px;font-weight:400">— map &amp; list are showing this category only</span>
+    <button onclick="clearBrush()" title="Clear filter">✕</button>
+  </div>
+  <div class="dash-wrap">
+
+    <!-- Integration Score -->
+    <div class="dash-card score-card">
+      <div class="ring-wrap">
+        <svg width="88" height="88" viewBox="0 0 88 88">
+          <circle cx="44" cy="44" r="36" fill="none" stroke="#E0F2FE" stroke-width="8"/>
+          <circle id="ringArc" cx="44" cy="44" r="36" fill="none" stroke="#0369A1" stroke-width="8"
+                  stroke-linecap="round" stroke-dasharray="226" stroke-dashoffset="86"/>
+        </svg>
+        <div class="ring-center"><div class="ring-val">62</div><div class="ring-lbl">Score</div></div>
+      </div>
+      <div>
+        <div class="dc-title">Integration Score</div>
+        <div style="font-size:12px;color:#475569;line-height:1.6">Based on activities attended, connections made, and category diversity.</div>
+        <div style="margin-top:8px;font-size:12px;color:#10B981;font-weight:600">▲ +8 this week</div>
+      </div>
+    </div>
+
+    <!-- Quick stats -->
+    <div class="dash-card" style="display:flex;gap:0;padding:0;overflow:hidden">
+      <div style="flex:1;padding:16px;border-right:1px solid #F1F5F9;text-align:center">
+        <div class="dc-title">Attended</div>
+        <div class="dc-big">5</div>
+        <div class="dc-sub">activities</div>
+      </div>
+      <div style="flex:1;padding:16px;border-right:1px solid #F1F5F9;text-align:center">
+        <div class="dc-title">Connections</div>
+        <div class="dc-big" style="color:#0369A1">7</div>
+        <div class="dc-sub">people met</div>
+      </div>
+      <div style="flex:1;padding:16px;text-align:center">
+        <div class="dc-title">Streak</div>
+        <div class="dc-big" style="color:#EA580C">3</div>
+        <div class="dc-sub">weeks active</div>
+      </div>
+    </div>
+
+    <!-- Weekly activity heatmap (small) -->
+    <div class="dash-card">
+      <div class="dc-title">Active Days This Month</div>
+      <div class="streak-days" id="streakDays"></div>
+    </div>
+
+    <!-- Participation trend -->
+    <div class="dash-card span2">
+      <div class="dc-title">Participation Trend</div>
+      <div style="position:relative;height:140px"><canvas id="trendChart"></canvas></div>
+    </div>
+
+    <!-- Category radar -->
+    <div class="dash-card">
+      <div class="dc-title">Category Balance <span style="font-size:9px;color:#94A3B8;font-weight:400">click to filter map →</span></div>
+      <div style="position:relative;height:160px"><canvas id="catChart"></canvas></div>
+      <div class="radar-hint">Purple = you · Dashed = ideal balance</div>
+    </div>
+
+    <!-- Category progress bars -->
+    <div class="dash-card span2">
+      <div class="dc-title">Integration by Category</div>
+      <div id="catBars"></div>
+    </div>
+
+    <!-- Upcoming -->
+    <div class="dash-card">
+      <div class="dc-title">Upcoming Activities</div>
+      <div id="upcomingList"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ TIMELINE VIEW ═══ -->
+<div class="view" id="view-timeline">
+  <div class="tl-wrap">
+    <!-- Bubble Scatter -->
+    <div class="tl-card bubble-wrap">
+      <div class="tl-card-title">Activity Landscape — When &amp; What? <span style="font-size:11px;font-weight:400;color:#94A3B8">Bubble size = attendees · Hover for details</span></div>
+      <svg id="bubbleSvg"></svg>
+    </div>
+    <!-- Heatmap -->
+    <div class="tl-card">
+      <div class="tl-card-title">Activity Density — When Do Things Happen?</div>
+      <div class="hm-grid" id="hmGrid"></div>
+      <div style="margin-top:10px;display:flex;align-items:center;gap:6px;font-size:11px;color:#94A3B8">
+        <span>Low</span>
+        <div style="display:flex;gap:3px">
+          <div style="width:14px;height:14px;border-radius:3px;background:#E0F2FE"></div>
+          <div style="width:14px;height:14px;border-radius:3px;background:#7DD3FC"></div>
+          <div style="width:14px;height:14px;border-radius:3px;background:#3B82F6"></div>
+          <div style="width:14px;height:14px;border-radius:3px;background:#0369A1"></div>
+          <div style="width:14px;height:14px;border-radius:3px;background:#1E3A8A"></div>
+        </div>
+        <span>High</span>
+        <span style="margin-left:10px">● Green ring = Newcomer-friendly</span>
+      </div>
+    </div>
+    <!-- Timeline -->
+    <div class="tl-card">
+      <div class="tl-card-title">Upcoming Activities — Next 2 Weeks</div>
+      <div class="tl-events" id="tlEvents"></div>
+    </div>
+    <!-- Seasonal Activity Trends -->
+    <div class="tl-card">
+      <div class="tl-card-title">🌏 Seasonal Activity Trends — Jan to Dec
+        <span style="font-size:11px;font-weight:400;color:#94A3B8"> NZ climate shapes when activities peak</span>
+      </div>
+      <p class="tl-chart-note">Summer (Dec–Feb) = outdoor & sports peak · Winter (Jun–Aug) = culture & learning season</p>
+      <div style="position:relative;height:230px"><canvas id="seasonalChart"></canvas></div>
+    </div>
+    <!-- City Comparison -->
+    <div class="tl-card">
+      <div class="tl-card-title">🏙 City Comparison — How does <span id="compCityLabel">Hamilton</span> compare?
+        <span style="font-size:11px;font-weight:400;color:#94A3B8"> All 8 NZ cities · highlighted = current city</span>
+      </div>
+      <p class="tl-chart-note">Bars = Migrant % &amp; Newcomer-Friendly % (left axis) · Line = Activities per 10k residents (right axis)</p>
+      <div style="position:relative;height:290px"><canvas id="cityCompChart"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<div class="bubble-tooltip" id="bubbleTip"></div>
+
+<!-- MODAL -->
+<div class="modal-ov" id="modalOv">
+  <div class="modal">
+    <div class="mhdr"><div class="mhdr-title">Post a New Activity</div><button class="mclose" onclick="closeModal()">✕</button></div>
+    <div class="mbody">
+      <div class="fg"><label class="flbl">Activity Title *</label><input class="finp" type="text" placeholder="e.g. Saturday Morning Yoga"/></div>
+      <div class="frow">
+        <div class="fg"><label class="flbl">Category *</label>
+          <select class="fsel"><option>Social</option><option>Sports</option><option>Culture</option><option>Learning</option><option>Outdoor</option><option>Food &amp; Dining</option><option>Volunteer</option><option>Other</option></select></div>
+        <div class="fg"><label class="flbl">City *</label>
+          <select class="fsel"><option>Hamilton</option><option>Auckland</option></select></div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label class="flbl">Date</label><input class="finp" type="date"/></div>
+        <div class="fg"><label class="flbl">Time</label><input class="finp" type="time"/></div>
+      </div>
+      <div class="fg"><label class="flbl">Location / Venue</label><input class="finp" type="text" placeholder="e.g. Hamilton Lake, Gate 2"/></div>
+      <div class="fg"><label class="flbl">Description</label><textarea class="ftxt" placeholder="What to expect, who it's for, what to bring…"></textarea></div>
+      <!-- Image upload -->
+      <div class="fg">
+        <label class="flbl">Activity Photo <span style="color:#94A3B8;font-weight:400">(optional)</span></label>
+        <div class="img-upload-zone" id="imgUploadZone" onclick="document.getElementById('imgFileInput').click()"
+             ondragover="event.preventDefault();this.classList.add('dragover')"
+             ondragleave="this.classList.remove('dragover')"
+             ondrop="handleImgDrop(event)">
+          <input type="file" id="imgFileInput" accept="image/*" style="display:none" onchange="handleImgSelect(this)"/>
+          <div class="img-upload-placeholder" id="imgPlaceholder">
+            <div class="img-upload-icon">🖼️</div>
+            <div class="img-upload-label">Click or drag & drop a photo</div>
+            <div class="img-upload-hint">JPG, PNG, WEBP — max 5 MB</div>
+          </div>
+          <div class="img-preview-wrap" id="imgPreviewWrap">
+            <img id="imgPreviewEl" src="" alt="Preview"/>
+            <button class="img-preview-remove" onclick="removeImg(event)" title="Remove photo">✕</button>
+          </div>
+        </div>
+      </div>
+      <div class="fg"><label class="flbl">Max Companions</label><input class="finp" type="number" placeholder="Leave blank for unlimited" min="1"/></div>
+      <div class="fg" style="flex-direction:row;align-items:center;gap:8px">
+        <input type="checkbox" id="ncCheck" style="width:15px;height:15px;accent-color:#0369A1"/>
+        <label for="ncCheck" class="flbl" style="margin:0;cursor:pointer">Mark as Newcomer-Friendly 🌟</label>
+      </div>
+      <button class="btn-sub" onclick="submitAct()">Publish Activity</button>
+    </div>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+
+<script>
+// ════════════════════════════════════════
+//  SHARED DATA
+// ════════════════════════════════════════
+const CAT_COLOR = {
+  social:'#7C3AED', sports:'#EF4444', culture:'#0D9488',
+  learning:'#2563EB', outdoor:'#16A34A', food:'#EA580C',
+  volunteer:'#DB2777', other:'#6B7280'
+};
+const CAT_LABEL = {
+  social:'Social', sports:'Sports', culture:'Culture',
+  learning:'Learning', outdoor:'Outdoor', food:'Food & Dining',
+  volunteer:'Volunteer', other:'Other'
+};
+const CAT_EMOJI = {
+  social:'💬', sports:'🏃', culture:'🎭',
+  learning:'📚', outdoor:'🌿', food:'🍜',
+  volunteer:'🤝', other:'📌'
+};
+const CAT_BG = {
+  social:'#F5F0FF', sports:'#FEF2F2', culture:'#F0FDFA',
+  learning:'#EFF6FF', outdoor:'#F0FDF4', food:'#FFF7ED',
+  volunteer:'#FDF2F8', other:'#F8FAFC'
+};
+// Category photos — 4 per category, rotated by activity ID for visual variety
+const _UP = (id,w,h) => `https://images.unsplash.com/photo-${id}?w=${w}&h=${h}&fit=crop&auto=format&q=75`;
+const CAT_IMGS = {
+  social:   [_UP('1529156069898-49953e39b3ac',400,120),_UP('1543269865-cbf427effbad',400,120),_UP('1528605248644-14dd04022da1',400,120),_UP('1511795409834-ef04bbd61622',400,120)],
+  sports:   [_UP('1571019613454-1cb2f99b2d8b',400,120),_UP('1552674605-db6ffd4facb5',400,120),_UP('1574680178050-55c6a6a96e0a',400,120),_UP('1540497077202-7c8a3999166f',400,120)],
+  culture:  [_UP('1578662996442-48f60103fc96',400,120),_UP('1513364776144-60967b0f800f',400,120),_UP('1460661419201-fd4cecdf8a8b',400,120),_UP('1501761095094-94d36f57edbb',400,120)],
+  learning: [_UP('1481627834876-b7833e8f5570',400,120),_UP('1434030216411-0b793f4b4173',400,120),_UP('1456513080510-7bf3a84b82f8',400,120),_UP('1516979187520-e0f4e4de9e30',400,120)],
+  outdoor:  [_UP('1441974231531-c6227db76b6e',400,120),_UP('1501854140801-50d01698950b',400,120),_UP('1506905925346-21bda4d32df4',400,120),_UP('1476514525535-07fb3b4ae5f1',400,120)],
+  food:     [_UP('1504674900247-0877df9cc836',400,120),_UP('1555939594-58d7cb561ad1',400,120),_UP('1414235077428-338989a2e8c0',400,120),_UP('1565299624946-b28f40a0ae38',400,120)],
+  volunteer:[_UP('1559027615-cd4628902d4a',400,120),_UP('1488521787991-ed7bbaae773c',400,120),_UP('1469571486292-0ba58a3f068b',400,120),_UP('1553729459-efe14ef6a100',400,120)],
+  other:    [_UP('1521737604893-d14cc237f11d',400,120),_UP('1522202176988-66273c2fd55f',400,120),_UP('1516387938699-a927021e5314',400,120),_UP('1556761175-5973dc0f32e7',400,120)]
+};
+function getCardImg(a){ const imgs=CAT_IMGS[a.category]||CAT_IMGS.other; return imgs[a.id % imgs.length]; }
+// Real NZ events with Eventfinda equivalents — shown with a badge
+const EVTFD_IDS=new Set([2,21,27,32,33,41,42,47,48]);
+const CITIES = {
+  hamilton:        {center:[-37.7870,175.2793],zoom:14,label:'Hamilton',        island:'North Island',pop:'170,000',icon:'🌿'},
+  auckland:        {center:[-36.8509,174.7645],zoom:13,label:'Auckland',         island:'North Island',pop:'1,700,000',icon:'🏙'},
+  wellington:      {center:[-41.2865,174.7762],zoom:14,label:'Wellington',       island:'North Island',pop:'430,000',icon:'🌬'},
+  christchurch:    {center:[-43.5321,172.6362],zoom:14,label:'Christchurch',     island:'South Island',pop:'390,000',icon:'🌸'},
+  tauranga:        {center:[-37.6878,176.1651],zoom:14,label:'Tauranga',         island:'North Island',pop:'145,000',icon:'🏖'},
+  rotorua:         {center:[-38.1368,176.2497],zoom:14,label:'Rotorua',          island:'North Island',pop:'58,000', icon:'♨️'},
+  dunedin:         {center:[-45.8788,170.5028],zoom:14,label:'Dunedin',          island:'South Island',pop:'130,000',icon:'🎓'},
+  palmerston_north:{center:[-40.3523,175.6082],zoom:14,label:'Palmerston North', island:'North Island',pop:'85,000', icon:'🌻'},
+};
+// City dropdown list order
+const CITY_ORDER=[
+  {region:'North Island',keys:['auckland','hamilton','wellington','tauranga','rotorua','palmerston_north']},
+  {region:'South Island',keys:['christchurch','dunedin']},
+];
+// ── NZ 2023 Census migrant population data ──
+const MIGRANT_STATS={
+  auckland:        {pct:39.1, pop:1695200},
+  wellington:      {pct:27.8, pop:430600},
+  hamilton:        {pct:22.3, pop:169800},
+  christchurch:    {pct:22.1, pop:389300},
+  tauranga:        {pct:18.4, pop:145200},
+  palmerston_north:{pct:18.1, pop:85800},
+  dunedin:         {pct:17.3, pop:128100},
+  rotorua:         {pct:14.2, pop:57400},
+};
+// ── Monthly activity distribution (NZ seasonal patterns) ──
+const MONTHLY_DIST={
+  labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+  cats:[
+    {label:'Social',   data:[8,7,9,10,8,7,6,7,9,9,10,9],  color:'#7C3AED'},
+    {label:'Sports',   data:[10,9,8,6,5,3,3,4,7,9,10,10], color:'#EF4444'},
+    {label:'Culture',  data:[4,4,5,6,7,8,9,8,6,5,5,4],    color:'#0D9488'},
+    {label:'Learning', data:[3,4,5,6,7,8,8,7,5,5,4,3],    color:'#2563EB'},
+    {label:'Outdoor',  data:[10,9,7,5,4,2,2,3,6,8,9,10],  color:'#16A34A'},
+    {label:'Food',     data:[9,8,7,6,6,5,5,6,7,8,9,10],   color:'#EA580C'},
+    {label:'Volunteer',data:[4,4,5,5,5,6,6,6,5,5,5,4],    color:'#DB2777'},
+  ]
+};
+
+const ACTIVITIES = [
+  {id:1,city:'hamilton',name:"International Coffee Chat @ UoW",category:"social",lat:-37.7872,lng:175.3122,date:"Fri 16 May",time:"3:00 PM",location:"University of Waikato, Student Union Café",attendees:14,maxAttendees:20,newcomer:true,desc:"A relaxed drop-in coffee session for international and domestic students to mingle, swap city tips, and practise conversational English — or any language! No agenda, just good people.",avatarColors:['#7C3AED','#EF4444','#0D9488','#2563EB','#EA580C']},
+  {id:2,city:'hamilton',name:"Hamilton Lake Parkrun",category:"sports",lat:-37.7962,lng:175.2713,date:"Sat 17 May",time:"8:00 AM",location:"Hamilton Lake Domain, Main Car Park",attendees:38,maxAttendees:100,newcomer:true,desc:"Free, weekly, 5km timed run around the beautiful Hamilton Lake. All paces welcome — walkers too! Register once at parkrun.org.nz to get your barcode.",avatarColors:['#EF4444','#16A34A','#7C3AED','#EA580C','#0D9488']},
+  {id:3,city:'hamilton',name:"Waikato Museum Evening Talk",category:"culture",lat:-37.7891,lng:175.2792,date:"Thu 22 May",time:"6:30 PM",location:"Waikato Museum Te Whare Taonga o Waikato",attendees:22,maxAttendees:50,newcomer:false,desc:"Monthly public lecture series exploring Māori history, colonial legacy, and contemporary NZ culture. This month: 'Waikato Land Wars — Contested Histories.'",avatarColors:['#0D9488','#7C3AED','#DB2777','#2563EB','#6B7280']},
+  {id:4,city:'hamilton',name:"English Conversation Club",category:"learning",lat:-37.7900,lng:175.2810,date:"Wed 21 May",time:"5:30 PM",location:"Hamilton City Library, Level 1 Meeting Room",attendees:11,maxAttendees:15,newcomer:true,desc:"Practice everyday English in a friendly, no-pressure environment. Topics change each week — this week: 'Talking about your hometown.' Facilitated by volunteer tutors.",avatarColors:['#2563EB','#7C3AED','#0D9488','#EA580C','#EF4444']},
+  {id:5,city:'hamilton',name:"Hamilton Gardens Guided Walk",category:"outdoor",lat:-37.8049,lng:175.2893,date:"Sun 18 May",time:"10:00 AM",location:"Hamilton Gardens, Visitor Centre",attendees:9,maxAttendees:12,newcomer:true,desc:"Explore the internationally-renowned Hamilton Gardens with a volunteer guide. See the Japanese Garden, Italian Renaissance garden, and Māori Te Parapara garden.",avatarColors:['#16A34A','#0D9488','#7C3AED','#EF4444','#2563EB']},
+  {id:6,city:'hamilton',name:"Garden Place Night Market",category:"food",lat:-37.7889,lng:175.2793,date:"Fri 16 May",time:"5:00 PM",location:"Garden Place, Hamilton CBD",attendees:60,maxAttendees:200,newcomer:true,desc:"Hamilton's weekly night market — over 40 food stalls celebrating cuisines from around the world.",avatarColors:['#EA580C','#EF4444','#7C3AED','#16A34A','#0D9488']},
+  {id:7,city:'hamilton',name:"River Waikato Cleanup Day",category:"volunteer",lat:-37.7850,lng:175.2715,date:"Sat 17 May",time:"9:00 AM",location:"Ferrybank Reserve, Hamilton",attendees:17,maxAttendees:30,newcomer:true,desc:"Join Waikato Cleanup Crew for a morning of litter picking along the river bank.",avatarColors:['#DB2777','#16A34A','#7C3AED','#2563EB','#EF4444']},
+  {id:8,city:'hamilton',name:"Board Games Café Night",category:"social",lat:-37.7902,lng:175.2855,date:"Sat 17 May",time:"7:00 PM",location:"Rocket Café, Victoria Street",attendees:8,maxAttendees:16,newcomer:true,desc:"Board games, card games, conversation and coffee — a relaxed social evening.",avatarColors:['#7C3AED','#EF4444','#EA580C','#0D9488','#2563EB']},
+  {id:9,city:'hamilton',name:"Open Badminton at Seddon Park",category:"sports",lat:-37.7820,lng:175.2930,date:"Tue 20 May",time:"6:30 PM",location:"Seddon Park Sports Complex",attendees:12,maxAttendees:24,newcomer:false,desc:"Casual badminton session — bring your racket or borrow one. All levels welcome.",avatarColors:['#EF4444','#7C3AED','#16A34A','#0D9488','#2563EB']},
+  {id:10,city:'hamilton',name:"Te Reo Māori Beginners Workshop",category:"culture",lat:-37.7875,lng:175.2800,date:"Mon 19 May",time:"6:00 PM",location:"Hamilton Central Community Centre",attendees:16,maxAttendees:25,newcomer:true,desc:"An introductory workshop to Te Reo Māori — greetings, pronunciation, basic phrases, and cultural context.",avatarColors:['#0D9488','#7C3AED','#DB2777','#EF4444','#6B7280']},
+  {id:11,city:'hamilton',name:"IELTS Study Group",category:"learning",lat:-37.7860,lng:175.2775,date:"Sun 18 May",time:"2:00 PM",location:"Hamilton City Library, Quiet Study Zone",attendees:6,maxAttendees:10,newcomer:true,desc:"Peer-led IELTS preparation group — practise writing tasks, reading comprehension, and speaking tests.",avatarColors:['#2563EB','#7C3AED','#0D9488','#EF4444','#EA580C']},
+  {id:12,city:'hamilton',name:"Sanctuary Mountain Hike",category:"outdoor",lat:-37.8200,lng:175.3010,date:"Sun 25 May",time:"9:00 AM",location:"Maungatautari (meet at UoW carpark)",attendees:7,maxAttendees:10,newcomer:false,desc:"Full-day hike to Sanctuary Mountain — NZ's largest pest-free ecosystem.",avatarColors:['#16A34A','#EF4444','#7C3AED','#2563EB','#0D9488']},
+  {id:13,city:'hamilton',name:"Multicultural Food Festival",category:"food",lat:-37.7880,lng:175.2820,date:"Sat 24 May",time:"11:00 AM",location:"Claudelands Events Centre Grounds",attendees:120,maxAttendees:500,newcomer:true,desc:"Hamilton's annual celebration of food from around the world — 80+ stalls, 30+ countries.",avatarColors:['#EA580C','#7C3AED','#EF4444','#0D9488','#16A34A']},
+  {id:14,city:'hamilton',name:"Volunteer English Tutoring",category:"volunteer",lat:-37.7895,lng:175.2795,date:"Wed 21 May",time:"10:00 AM",location:"Hamilton Multicultural Centre",attendees:5,maxAttendees:8,newcomer:false,desc:"Looking for volunteers to tutor adult migrants in conversational English.",avatarColors:['#DB2777','#2563EB','#7C3AED','#16A34A','#6B7280']},
+  {id:15,city:'hamilton',name:"Newcomers Social Mixer",category:"social",lat:-37.7870,lng:175.2855,date:"Fri 23 May",time:"6:00 PM",location:"The Loaded Hog, Hood Street",attendees:25,maxAttendees:40,newcomer:true,desc:"Fun casual mixer for anyone new to Hamilton. Icebreaker games, free nibbles, friendly crowd.",avatarColors:['#7C3AED','#0D9488','#EF4444','#EA580C','#DB2777']},
+  {id:16,city:'auckland',name:"Viaduct International Meetup",category:"social",lat:-36.8441,lng:174.7668,date:"Fri 16 May",time:"6:30 PM",location:"Viaduct Harbour, Event Space",attendees:45,maxAttendees:80,newcomer:true,desc:"Auckland's biggest weekly meetup for internationals, expats, and locals.",avatarColors:['#7C3AED','#EF4444','#0D9488','#2563EB','#EA580C']},
+  {id:17,city:'auckland',name:"Cornwall Park Morning Run",category:"sports",lat:-36.8847,lng:174.7742,date:"Sat 17 May",time:"7:30 AM",location:"Cornwall Park, Huia Lodge Gate",attendees:23,maxAttendees:50,newcomer:true,desc:"Scenic 6km run through Cornwall Park past One Tree Hill.",avatarColors:['#EF4444','#16A34A','#7C3AED','#EA580C','#0D9488']},
+  {id:18,city:'auckland',name:"Auckland Art Gallery Guided Tour",category:"culture",lat:-36.8521,lng:174.7647,date:"Sun 18 May",time:"1:00 PM",location:"Auckland Art Gallery Toi o Tāmaki",attendees:18,maxAttendees:30,newcomer:true,desc:"Free volunteer-led tour of the Gallery's permanent collection.",avatarColors:['#0D9488','#7C3AED','#DB2777','#2563EB','#6B7280']},
+  {id:19,city:'auckland',name:"Ponsonby Language Exchange",category:"learning",lat:-36.8571,lng:174.7478,date:"Thu 22 May",time:"6:00 PM",location:"Ponsonby Central, Common Room",attendees:20,maxAttendees:30,newcomer:true,desc:"Language exchange night — pair up with a native speaker.",avatarColors:['#2563EB','#7C3AED','#0D9488','#EA580C','#EF4444']},
+  {id:20,city:'auckland',name:"Harbour Kayaking Experience",category:"outdoor",lat:-36.8428,lng:174.7688,date:"Sun 18 May",time:"10:00 AM",location:"Auckland Harbour, Pier 21 Launch",attendees:10,maxAttendees:12,newcomer:false,desc:"Guided kayak tour of the Waitematā Harbour.",avatarColors:['#16A34A','#0D9488','#7C3AED','#EF4444','#2563EB']},
+  {id:21,city:'auckland',name:"Night Noodle Markets",category:"food",lat:-36.8585,lng:174.7762,date:"Fri 16 May",time:"5:30 PM",location:"Auckland Domain, Upper Terrace",attendees:200,maxAttendees:1000,newcomer:true,desc:"Auckland's famous Night Noodle Markets — 50+ stalls serving Asian street food.",avatarColors:['#EA580C','#EF4444','#7C3AED','#16A34A','#0D9488']},
+  {id:22,city:'auckland',name:"Volunteer at City Harvest",category:"volunteer",lat:-36.8701,lng:174.7555,date:"Sat 17 May",time:"8:00 AM",location:"City Harvest Warehouse, Penrose",attendees:12,maxAttendees:20,newcomer:true,desc:"Help sort and pack food parcels at Auckland's busiest food rescue organisation.",avatarColors:['#DB2777','#16A34A','#7C3AED','#2563EB','#EF4444']},
+  {id:23,city:'auckland',name:"CBD Photography Walk",category:"outdoor",lat:-36.8517,lng:174.7663,date:"Sat 17 May",time:"2:00 PM",location:"Meet at Sky Tower Base",attendees:14,maxAttendees:20,newcomer:true,desc:"Casual 3km photography walk through Auckland CBD.",avatarColors:['#16A34A','#EF4444','#7C3AED','#0D9488','#2563EB']},
+  {id:24,city:'auckland',name:"Python for Beginners Workshop",category:"learning",lat:-36.8635,lng:174.7721,date:"Sat 17 May",time:"10:00 AM",location:"Auckland Central Library, Digital Hub",attendees:15,maxAttendees:20,newcomer:true,desc:"Hands-on 3-hour introduction to Python. No experience needed.",avatarColors:['#2563EB','#7C3AED','#0D9488','#EF4444','#EA580C']},
+  {id:25,city:'auckland',name:"Sunday Cricket on the Domain",category:"sports",lat:-36.8600,lng:174.7706,date:"Sun 18 May",time:"1:00 PM",location:"Auckland Domain, Cricket Pitch",attendees:18,maxAttendees:30,newcomer:true,desc:"Informal Sunday cricket for all abilities.",avatarColors:['#EF4444','#7C3AED','#16A34A','#0D9488','#2563EB']},
+  {id:26,city:'auckland',name:"Flatmates Dinner Potluck",category:"social",lat:-36.8530,lng:174.7600,date:"Sat 17 May",time:"7:00 PM",location:"Britomart Community Space",attendees:16,maxAttendees:20,newcomer:true,desc:"Bring a dish from your home country and share it!",avatarColors:['#7C3AED','#0D9488','#EF4444','#EA580C','#DB2777']},
+  {id:27,city:'auckland',name:"Otara Saturday Market",category:"food",lat:-36.9505,lng:174.8662,date:"Sat 17 May",time:"6:00 AM",location:"Otara Town Centre Car Park",attendees:300,maxAttendees:2000,newcomer:true,desc:"Auckland's most culturally diverse food market.",avatarColors:['#EA580C','#7C3AED','#EF4444','#0D9488','#16A34A']},
+  {id:28,city:'auckland',name:"Ukulele Jam Session",category:"culture",lat:-36.8555,lng:174.7651,date:"Tue 20 May",time:"6:30 PM",location:"Ellen Melville Centre, CBD",attendees:20,maxAttendees:35,newcomer:true,desc:"Weekly ukulele jam — beginners learn 3 chords and join in immediately.",avatarColors:['#0D9488','#7C3AED','#DB2777','#EF4444','#6B7280']},
+  {id:29,city:'auckland',name:"Newcomer Welcome Evening",category:"social",lat:-36.8512,lng:174.7655,date:"Wed 21 May",time:"6:00 PM",location:"Auckland Council Community Hub, Level 2",attendees:30,maxAttendees:60,newcomer:true,desc:"Organised by Auckland Council's Welcoming Communities initiative.",avatarColors:['#7C3AED','#0D9488','#EF4444','#2563EB','#DB2777']},
+  {id:30,city:'auckland',name:"Waitematā Coastal Walk",category:"outdoor",lat:-36.8465,lng:174.7745,date:"Sun 25 May",time:"9:30 AM",location:"Wynyard Quarter, North Wharf",attendees:11,maxAttendees:15,newcomer:true,desc:"8km coastal walk from Wynyard Quarter to St Heliers.",avatarColors:['#16A34A','#0D9488','#7C3AED','#EF4444','#2563EB']},
+
+  // ── Wellington ──
+  {id:31,city:'wellington',name:"Cuba Street Newcomers Meetup",category:"social",lat:-41.2942,lng:174.7760,date:"Fri 16 May",time:"6:00 PM",location:"Prefab Café, Cuba Street",attendees:28,maxAttendees:50,newcomer:true,desc:"Weekly informal gathering on Wellington's most vibrant street. Meet expats, students, and friendly locals over great coffee and good conversation.",avatarColors:['#7C3AED','#EF4444','#0D9488','#2563EB','#EA580C']},
+  {id:32,city:'wellington',name:"Te Papa Museum Free Guided Tour",category:"culture",lat:-41.2904,lng:174.7818,date:"Sat 17 May",time:"11:00 AM",location:"Te Papa Tongarewa, Cable Street",attendees:20,maxAttendees:25,newcomer:true,desc:"Free volunteer-led tour of NZ's national museum, covering Māori taonga, NZ history, and natural environment. All welcome.",avatarColors:['#0D9488','#7C3AED','#2563EB','#DB2777','#EF4444']},
+  {id:33,city:'wellington',name:"Oriental Bay Parkrun",category:"sports",lat:-41.2873,lng:174.7913,date:"Sat 17 May",time:"8:00 AM",location:"Oriental Bay, Frank Kitts Park end",attendees:45,maxAttendees:200,newcomer:true,desc:"Free 5km timed run along Wellington's beautiful waterfront. Walkers welcome. Register once at parkrun.org.nz.",avatarColors:['#EF4444','#16A34A','#7C3AED','#EA580C','#0D9488']},
+  {id:34,city:'wellington',name:"Newtown Language Café",category:"learning",lat:-41.3060,lng:174.7777,date:"Wed 21 May",time:"5:30 PM",location:"Newtown Community Centre, Hall 2",attendees:15,maxAttendees:20,newcomer:true,desc:"Language café connecting newcomers with volunteer conversational partners. All languages and levels welcome. Snacks provided.",avatarColors:['#2563EB','#7C3AED','#0D9488','#EF4444','#EA580C']},
+  {id:35,city:'wellington',name:"Zealandia Ecosanctuary Walk",category:"outdoor",lat:-41.2900,lng:174.7460,date:"Sun 18 May",time:"9:30 AM",location:"Zealandia Ecosanctuary, Waiapu Rd",attendees:12,maxAttendees:16,newcomer:false,desc:"Guided sunrise walk in the world's first fully-fenced urban ecosanctuary. See native tuatara, kākā, and little spotted kiwi.",avatarColors:['#16A34A','#0D9488','#7C3AED','#EF4444','#2563EB']},
+  {id:60,city:'wellington',name:"Harbourside Market",category:"food",lat:-41.2867,lng:174.7795,date:"Sun 18 May",time:"7:30 AM",location:"Waitangi Park, Cable Street",attendees:400,maxAttendees:2000,newcomer:true,desc:"Wellington's beloved Sunday farmers and food market along the waterfront. Over 60 stalls featuring fresh produce, artisan goods, and street food from Korean, Indian, Vietnamese, and Pacific Island vendors. A weekly ritual for many newcomers to find tastes of home.",avatarColors:['#EA580C','#EF4444','#7C3AED','#16A34A','#0D9488']},
+
+  // ── Christchurch ──
+  {id:36,city:'christchurch',name:"Hagley Park Newcomers Picnic",category:"social",lat:-43.5279,lng:172.6320,date:"Sat 17 May",time:"12:00 PM",location:"Hagley Park North, by the Rose Garden",attendees:22,maxAttendees:40,newcomer:true,desc:"BYO picnic on Christchurch's largest park. A relaxed way to meet other newcomers and locals. Frisbees and games provided!",avatarColors:['#7C3AED','#EF4444','#0D9488','#2563EB','#EA580C']},
+  {id:37,city:'christchurch',name:"Christchurch Art Gallery Tour",category:"culture",lat:-43.5318,lng:172.6353,date:"Sun 18 May",time:"1:00 PM",location:"Christchurch Art Gallery Te Puna o Waiwhetū",attendees:18,maxAttendees:25,newcomer:true,desc:"Free guided tour of the Gallery's permanent collection, including contemporary NZ and Canterbury landscape art.",avatarColors:['#0D9488','#7C3AED','#DB2777','#2563EB','#6B7280']},
+  {id:38,city:'christchurch',name:"New Brighton Beach Sports Day",category:"sports",lat:-43.5063,lng:172.7233,date:"Sat 17 May",time:"2:00 PM",location:"New Brighton Beach, Main Parking Area",attendees:25,maxAttendees:50,newcomer:true,desc:"Volleyball, cricket, touch rugby on the beach. All abilities welcome. Great way to meet active people in Christchurch.",avatarColors:['#EF4444','#16A34A','#7C3AED','#EA580C','#0D9488']},
+  {id:39,city:'christchurch',name:"Banks Peninsula Day Hike",category:"outdoor",lat:-43.7500,lng:172.9200,date:"Sun 25 May",time:"8:30 AM",location:"Akaroa Village (shuttle from Christchurch CBD)",attendees:10,maxAttendees:12,newcomer:false,desc:"Full-day hike around the beautiful volcanic Banks Peninsula. Stunning harbour views and native bush.",avatarColors:['#16A34A','#EF4444','#7C3AED','#2563EB','#0D9488']},
+  {id:40,city:'christchurch',name:"Canterbury English Language Exchange",category:"learning",lat:-43.5340,lng:172.6380,date:"Thu 22 May",time:"5:00 PM",location:"Tūranga Library, Level 4 Rooftop",attendees:14,maxAttendees:20,newcomer:true,desc:"Language exchange connecting English learners with native speakers. Pairs change every 15 minutes to maximise practice.",avatarColors:['#2563EB','#7C3AED','#0D9488','#EA580C','#EF4444']},
+  {id:61,city:'christchurch',name:"Riverside Market",category:"food",lat:-43.5321,lng:172.6389,date:"Sat 17 May",time:"9:00 AM",location:"Riverside Market, Oxford Terrace",attendees:350,maxAttendees:1500,newcomer:true,desc:"Christchurch's award-winning indoor food market beside the Avon River. Home to 50+ vendors including Asian dumpling kitchens, Middle Eastern bakeries, Pacific Island desserts, and a dedicated international cuisine hall. Many newcomers describe it as 'the first place that felt like home.'",avatarColors:['#EA580C','#7C3AED','#EF4444','#0D9488','#16A34A']},
+
+  // ── Tauranga ──
+  {id:41,city:'tauranga',name:"Mount Maunganui Sunrise Run",category:"sports",lat:-37.6333,lng:176.1860,date:"Sat 17 May",time:"7:00 AM",location:"Mount Maunganui Base Track, Main Car Park",attendees:30,maxAttendees:80,newcomer:true,desc:"Weekly sunrise run around the base of the iconic Mount. Flat, scenic, and great for all fitness levels. Coffee after!",avatarColors:['#EF4444','#16A34A','#7C3AED','#EA580C','#0D9488']},
+  {id:42,city:'tauranga',name:"Tauranga Multicultural Festival",category:"culture",lat:-37.6878,lng:176.1651,date:"Sat 24 May",time:"11:00 AM",location:"Tauranga Waterfront, The Strand",attendees:200,maxAttendees:2000,newcomer:true,desc:"Bay of Plenty's biggest multicultural celebration — music, dance, food stalls from 30+ cultures represented in the region.",avatarColors:['#0D9488','#7C3AED','#DB2777','#EF4444','#6B7280']},
+  {id:43,city:'tauranga',name:"Harbour Walk & Social",category:"social",lat:-37.6803,lng:176.1673,date:"Sun 18 May",time:"10:00 AM",location:"Tauranga Waterfront, Coronation Pier",attendees:16,maxAttendees:30,newcomer:true,desc:"Easy 4km harbour walk followed by brunch at a local café. Guided by Tauranga Newcomers Network volunteers.",avatarColors:['#7C3AED','#0D9488','#EF4444','#EA580C','#DB2777']},
+  {id:44,city:'tauranga',name:"Bay of Plenty Language Café",category:"learning",lat:-37.6878,lng:176.1651,date:"Wed 21 May",time:"6:00 PM",location:"Tauranga City Library, Meeting Room 1",attendees:12,maxAttendees:18,newcomer:true,desc:"Practice English and meet new people in a warm, welcoming environment. Topics change weekly.",avatarColors:['#2563EB','#7C3AED','#0D9488','#EA580C','#EF4444']},
+  {id:45,city:'tauranga',name:"Tauranga Night Markets",category:"food",lat:-37.6900,lng:176.1670,date:"Fri 16 May",time:"5:00 PM",location:"Tauranga Night Markets, Wharf Street",attendees:150,maxAttendees:1000,newcomer:true,desc:"Weekly outdoor food market on the Tauranga waterfront with cuisine from across Asia, Polynesia, and the Pacific.",avatarColors:['#EA580C','#EF4444','#7C3AED','#16A34A','#0D9488']},
+
+  // ── Rotorua ──
+  {id:46,city:'rotorua',name:"Rotorua Lakefront Social Run",category:"sports",lat:-38.1460,lng:176.2497,date:"Sat 17 May",time:"8:30 AM",location:"Rotorua Lakefront, near Sulphur Bay",attendees:20,maxAttendees:60,newcomer:true,desc:"5km lakefront run with views across Lake Rotorua. All paces welcome — walkers included. Free, no registration needed.",avatarColors:['#EF4444','#16A34A','#7C3AED','#EA580C','#0D9488']},
+  {id:47,city:'rotorua',name:"Te Puia Cultural Evening",category:"culture",lat:-38.1551,lng:176.2432,date:"Fri 16 May",time:"5:30 PM",location:"Te Puia, Hemo Road",attendees:35,maxAttendees:60,newcomer:true,desc:"Experience Māori culture at NZ's foremost geothermal and cultural attraction. Includes haka performance, traditional carving, and weaving demonstrations.",avatarColors:['#0D9488','#7C3AED','#DB2777','#EF4444','#6B7280']},
+  {id:48,city:'rotorua',name:"Rotorua Night Market",category:"food",lat:-38.1380,lng:176.2530,date:"Thu 22 May",time:"5:00 PM",location:"Tutanekai Street (Eat Streat)",attendees:120,maxAttendees:500,newcomer:true,desc:"Rotorua's famous weekly street food market along Eat Streat — Pacific Island, Asian, and NZ fusion cuisines.",avatarColors:['#EA580C','#EF4444','#7C3AED','#16A34A','#0D9488']},
+  {id:49,city:'rotorua',name:"Whakarewarewa Forest Walk",category:"outdoor",lat:-38.1730,lng:176.2710,date:"Sun 18 May",time:"9:00 AM",location:"Redwoods Visitor Centre, Long Mile Road",attendees:14,maxAttendees:20,newcomer:false,desc:"Guided walk through the iconic Redwood Forest with native bird spotting. The towering Californian redwoods are spectacular.",avatarColors:['#16A34A','#EF4444','#7C3AED','#2563EB','#0D9488']},
+  {id:50,city:'rotorua',name:"Rotorua Newcomers Kōrero",category:"social",lat:-38.1368,lng:176.2497,date:"Tue 20 May",time:"6:00 PM",location:"Rotorua Central Library, Community Room",attendees:10,maxAttendees:20,newcomer:true,desc:"Monthly gathering for people new to Rotorua. Share stories, find activities, and connect with support services. Māori welcome is always extended.",avatarColors:['#7C3AED','#0D9488','#EF4444','#EA580C','#DB2777']},
+
+  // ── Dunedin ──
+  {id:51,city:'dunedin',name:"Otago Uni International Student Mixer",category:"social",lat:-45.8642,lng:170.5143,date:"Fri 16 May",time:"6:00 PM",location:"Otago University, Union Hall",attendees:40,maxAttendees:80,newcomer:true,desc:"Welcome mixer hosted by the Otago International Student Association — games, prizes, and a great chance to meet people from 50+ countries.",avatarColors:['#7C3AED','#EF4444','#0D9488','#2563EB','#EA580C']},
+  {id:52,city:'dunedin',name:"Dunedin Botanic Garden Walk",category:"outdoor",lat:-45.8680,lng:170.5070,date:"Sat 17 May",time:"10:00 AM",location:"Dunedin Botanic Garden, Opoho Road",attendees:9,maxAttendees:15,newcomer:true,desc:"Guided autumn walk through NZ's oldest botanic garden. See the spectacular rhododendron dell and Victorian glasshouses.",avatarColors:['#16A34A','#0D9488','#7C3AED','#EF4444','#2563EB']},
+  {id:53,city:'dunedin',name:"Otago Museum Night Tour",category:"culture",lat:-45.8654,lng:170.5152,date:"Thu 22 May",time:"6:30 PM",location:"Otago Museum, Great King Street",attendees:22,maxAttendees:35,newcomer:true,desc:"After-hours museum tour covering Māori and Pacific Island taonga, Discovery World science exhibits, and the famous butterfly house.",avatarColors:['#0D9488','#7C3AED','#DB2777','#2563EB','#6B7280']},
+  {id:54,city:'dunedin',name:"St Clair Beach Volleyball",category:"sports",lat:-45.9080,lng:170.5018,date:"Sat 17 May",time:"2:00 PM",location:"St Clair Beach, Beach Volleyball Courts",attendees:14,maxAttendees:24,newcomer:true,desc:"Casual beach volleyball on Dunedin's famous surf beach. All levels welcome — newbies actively encouraged!",avatarColors:['#EF4444','#7C3AED','#16A34A','#0D9488','#2563EB']},
+  {id:62,city:'dunedin',name:"Dunedin Farmers & Asian Food Market",category:"food",lat:-45.8745,lng:170.5035,date:"Sat 17 May",time:"8:00 AM",location:"Otago Farmers Market, Railway Station Grounds",attendees:180,maxAttendees:800,newcomer:true,desc:"Dunedin's Saturday institution — fresh South Island produce alongside a growing international food section. Vietnamese bánh mì, Japanese onigiri, Indian curries, and homemade dumplings. Beloved by the city's international student community as an affordable and social weekend ritual.",avatarColors:['#EA580C','#EF4444','#7C3AED','#0D9488','#16A34A']},
+
+  // ── Palmerston North ──
+  {id:55,city:'palmerston_north',name:"Massey Uni International Coffee Morning",category:"social",lat:-40.3752,lng:175.6113,date:"Fri 16 May",time:"10:00 AM",location:"Massey University, Student Union Café",attendees:18,maxAttendees:30,newcomer:true,desc:"Weekly drop-in coffee morning for international students, migrants, and locals at Massey University. Extremely welcoming!",avatarColors:['#7C3AED','#EF4444','#0D9488','#2563EB','#EA580C']},
+  {id:56,city:'palmerston_north',name:"Victoria Esplanade Walk",category:"outdoor",lat:-40.3591,lng:175.6198,date:"Sun 18 May",time:"9:00 AM",location:"Victoria Esplanade, Main Entrance",attendees:11,maxAttendees:20,newcomer:true,desc:"Guided walk through one of NZ's most beautiful urban parks, featuring sunken rose gardens, native aviary, and riverside trails.",avatarColors:['#16A34A','#EF4444','#7C3AED','#0D9488','#2563EB']},
+  {id:57,city:'palmerston_north',name:"Square Edge Community Arts Night",category:"culture",lat:-40.3563,lng:175.6108,date:"Sat 17 May",time:"6:00 PM",location:"Square Edge Community Arts, Princess St",attendees:15,maxAttendees:25,newcomer:true,desc:"Monthly arts evening featuring local artists, musicians, and spoken-word performers. Strong focus on multicultural expression.",avatarColors:['#0D9488','#7C3AED','#DB2777','#EF4444','#6B7280']},
+  {id:58,city:'palmerston_north',name:"Palmy Volleyball Social",category:"sports",lat:-40.3580,lng:175.6090,date:"Tue 20 May",time:"7:00 PM",location:"Lido Aquatic Centre, Sports Hall",attendees:16,maxAttendees:24,newcomer:true,desc:"Indoor volleyball social — fun and inclusive, no experience needed. Teams are mixed to help you meet new people.",avatarColors:['#EF4444','#7C3AED','#16A34A','#0D9488','#2563EB']},
+  {id:59,city:'palmerston_north',name:"Palmy Night Markets",category:"food",lat:-40.3560,lng:175.6100,date:"Fri 16 May",time:"5:00 PM",location:"The Square, Palmerston North",attendees:80,maxAttendees:500,newcomer:true,desc:"Weekly food market in the heart of Palmerston North featuring Vietnamese, Indian, Tongan, and NZ fusion cuisines.",avatarColors:['#EA580C','#EF4444','#7C3AED','#16A34A','#0D9488']},
+];
+
+// ════════════════════════════════════════
+//  STATE
+// ════════════════════════════════════════
+let currentCity='hamilton', activeFilters=new Set(['all']);
+let map, clusterGroup, netInitialized={};
+let dashCharts={};
+let sortMode='date', selectedCardId=null;
+
+// ── Performance: debounce utility ──
+function debounce(fn, ms){
+  let t; return function(...args){ clearTimeout(t); t=setTimeout(()=>fn.apply(this,args), ms); };
+}
+const debouncedSearch = debounce(()=>renderMarkers(), 280);
+
+// ── Onboarding ──
+function closeOnboarding(){
+  const ov=document.getElementById('obOv');
+  if(ov){ ov.style.opacity='0'; ov.style.transition='opacity .3s'; setTimeout(()=>ov.remove(),300); }
+}
+let markerRefs={}; // id → Leaflet marker, for hover cross-linking
+let choroLayer=null, choroActive=false;
+
+// ════════════════════════════════════════
+//  CITY DROPDOWN
+// ════════════════════════════════════════
+function buildCityList(q=''){
+  const scroll=document.getElementById('cityListScroll');
+  const qLow=q.toLowerCase();
+  let html='';
+  CITY_ORDER.forEach(group=>{
+    const matches=group.keys.filter(k=>{
+      const c=CITIES[k];
+      return !q||c.label.toLowerCase().includes(qLow)||group.region.toLowerCase().includes(qLow);
+    });
+    if(!matches.length) return;
+    html+=`<div class="city-region-hdr">${group.region}</div>`;
+    matches.forEach(k=>{
+      const c=CITIES[k];
+      const cnt=ACTIVITIES.filter(a=>a.city===k).length;
+      html+=`<div class="city-opt${currentCity===k?' active':''}" onclick="pickCity('${k}')">
+        <span class="city-opt-icon">${c.icon}</span>
+        <div class="city-opt-info">
+          <span class="city-opt-name">${c.label}</span>
+          <span class="city-opt-pop">${c.pop} · ${cnt} activities</span>
+        </div>
+      </div>`;
+    });
+  });
+  scroll.innerHTML=html||`<div style="padding:14px;font-size:12px;color:#94A3B8;text-align:center">No cities found</div>`;
+}
+function toggleCityDrop(e){
+  e&&e.stopPropagation();
+  const btn=document.getElementById('cityDdBtn');
+  const menu=document.getElementById('cityDdMenu');
+  const open=menu.classList.contains('open');
+  if(open){closeCityDrop();return;}
+  btn.classList.add('open');
+  menu.classList.add('open');
+  document.getElementById('citySearchInp').value='';
+  buildCityList();
+  setTimeout(()=>document.getElementById('citySearchInp').focus(),60);
+}
+function closeCityDrop(){
+  document.getElementById('cityDdBtn').classList.remove('open');
+  document.getElementById('cityDdMenu').classList.remove('open');
+}
+function filterCityOpts(q){buildCityList(q);}
+function pickCity(city){
+  closeCityDrop();
+  switchCity(city);
+}
+// Close dropdown on outside click
+document.addEventListener('click',e=>{
+  if(!document.getElementById('cityDdWrap').contains(e.target)) closeCityDrop();
+});
+
+// ════════════════════════════════════════
+//  TAB SWITCHING
+// ════════════════════════════════════════
+function switchTab(tab) {
+  const tabKeys=['map','network','dashboard','timeline'];
+  document.querySelectorAll('.tab').forEach((t,i)=>{
+    const active=tabKeys[i]===tab;
+    t.classList.toggle('active', active);
+    t.setAttribute('aria-selected', active);
+  });
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+tab).classList.add('active');
+  if(tab==='map' && !map) initMap();
+  if(tab==='network') initNetwork();
+  if(tab==='dashboard') initDashboard();
+  if(tab==='timeline') initTimeline();
+  if(tab==='map') setTimeout(()=>map&&map.invalidateSize(),50);
+}
+
+// ════════════════════════════════════════
+//  MAP
+// ════════════════════════════════════════
+function initMap(){
+  const c=CITIES[currentCity];
+  map=L.map('map',{center:c.center,zoom:c.zoom});
+  // Google Maps tile service — exact Google color scheme
+  L.tileLayer('https://mt{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
+    subdomains:['0','1','2','3'],
+    attribution:'© <a href="https://maps.google.com">Google Maps</a>',
+    maxZoom:20,
+    tileSize:256
+  }).addTo(map);
+  clusterGroup=L.markerClusterGroup({maxClusterRadius:50,showCoverageOnHover:false,
+    iconCreateFunction:c=>{
+      const n=c.getChildCount();
+      const sz=n>99?42:n>9?38:34;
+      return L.divIcon({
+        html:`<div style="background:linear-gradient(135deg,#0369A1,#075985);color:#fff;width:${sz}px;height:${sz}px;border-radius:50%;border:3px solid #fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:${n>99?10:12}px;box-shadow:0 3px 12px rgba(3,105,161,.45),0 1px 4px rgba(0,0,0,.2)">${n}</div>`,
+        className:'',iconSize:[sz,sz],iconAnchor:[sz/2,sz/2]
+      });
+    }
+  });
+  map.addLayer(clusterGroup);
+  renderMarkers();
+  map.on('moveend zoomend', updateActivityList);
+}
+
+function renderMarkers(){
+  if(!map) return;
+  clusterGroup.clearLayers();
+  markerRefs={};
+  const q=document.getElementById('searchInput').value.toLowerCase();
+  const list=ACTIVITIES.filter(a=>{
+    if(a.city!==currentCity)return false;
+    if(!activeFilters.has('all')&&!activeFilters.has(a.category))return false;
+    if(q&&!a.name.toLowerCase().includes(q)&&!a.location.toLowerCase().includes(q)&&!a.desc.toLowerCase().includes(q))return false;
+    return true;
+  });
+  list.forEach(a=>{
+    const col=CAT_COLOR[a.category];
+    const emoji=CAT_EMOJI[a.category]||'📌';
+    const ncDot=a.newcomer?`<div style="position:absolute;top:0px;right:0px;width:12px;height:12px;background:#10B981;border-radius:50%;border:2.5px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.3)"></div>`:'';
+    // Bold floating marker: large circle + outer glow ring + strong shadow — clearly above Google POI icons
+    const icon=L.divIcon({
+      html:`<div style="position:relative;display:inline-flex;flex-direction:column;align-items:center">
+        <!-- Outer glow ring -->
+        <div style="position:absolute;top:-5px;left:-5px;right:-5px;bottom:2px;border-radius:50%;background:${col};opacity:0.18;pointer-events:none"></div>
+        <!-- Main circle -->
+        <div style="position:relative;width:42px;height:42px;border-radius:50%;background:#fff;border:3.5px solid ${col};box-shadow:0 4px 16px rgba(0,0,0,.32),0 1px 4px rgba(0,0,0,.2);display:flex;align-items:center;justify-content:center;font-size:20px;line-height:1;z-index:1">
+          ${emoji}${ncDot}
+        </div>
+        <!-- Pointer -->
+        <svg width="14" height="9" viewBox="0 0 14 9" style="display:block;margin-top:-1px;z-index:1;filter:drop-shadow(0 3px 3px rgba(0,0,0,.18))"><polygon points="0,0 14,0 7,9" fill="${col}"/></svg>
+      </div>`,
+      className:'',iconSize:[42,51],iconAnchor:[21,51],popupAnchor:[0,-54]
+    });
+    const m=L.marker([a.lat,a.lng],{icon});
+    m.bindPopup(`<div class="pop"><div class="pop-cat" style="color:${col}">${CAT_LABEL[a.category]}</div><div class="pop-name">${a.name}</div><div class="pop-det">📅 ${a.date} · ${a.time}</div><div class="pop-det">📍 ${a.location}</div><div class="pop-det" style="margin-top:5px"><span style="color:#0369A1;font-weight:600;cursor:pointer" onclick="showDetail(${a.id})">View details →</span></div></div>`,{maxWidth:240});
+    m.on('click',()=>showDetail(a.id));
+    // Marker hover → highlight card in list
+    m.on('mouseover',()=>{
+      const card=document.getElementById('card-'+a.id);
+      if(card){card.classList.add('map-hover');card.scrollIntoView({behavior:'smooth',block:'nearest'});}
+    });
+    m.on('mouseout',()=>{
+      const card=document.getElementById('card-'+a.id);
+      if(card) card.classList.remove('map-hover');
+    });
+    clusterGroup.addLayer(m);
+    markerRefs[a.id]=m;
+  });
+  document.getElementById('statCount').textContent=list.length;
+  document.getElementById('statCity').textContent=CITIES[currentCity].label;
+  document.getElementById('statNC').textContent=list.filter(a=>a.newcomer).length;
+  // defer list update until map settles
+  setTimeout(updateActivityList, 80);
+}
+
+// ── Activity List ──
+function setSort(mode){
+  sortMode=mode;
+  document.getElementById('sortDate').classList.toggle('active',mode==='date');
+  document.getElementById('sortPop').classList.toggle('active',mode==='popularity');
+  updateActivityList();
+}
+
+function updateActivityList(){
+  if(!map) return;
+  const bounds=map.getBounds();
+  const q=document.getElementById('searchInput').value.toLowerCase();
+  let visible=ACTIVITIES.filter(a=>{
+    if(a.city!==currentCity) return false;
+    if(!activeFilters.has('all')&&!activeFilters.has(a.category)) return false;
+    if(!bounds.contains(L.latLng(a.lat,a.lng))) return false;
+    if(q&&!a.name.toLowerCase().includes(q)&&!a.location.toLowerCase().includes(q)) return false;
+    return true;
+  });
+
+  // Sort
+  const DATE_ORDER={
+    'Fri 16 May':0,'Sat 17 May':1,'Sun 18 May':2,'Mon 19 May':3,
+    'Tue 20 May':4,'Wed 21 May':5,'Thu 22 May':6,'Fri 23 May':7,
+    'Sat 24 May':8,'Sun 25 May':9
+  };
+  if(sortMode==='date'){
+    visible.sort((a,b)=>(DATE_ORDER[a.date]??99)-(DATE_ORDER[b.date]??99) || a.time.localeCompare(b.time));
+  } else {
+    visible.sort((a,b)=>b.attendees-a.attendees);
+  }
+
+  document.getElementById('alCount').textContent=visible.length;
+  const scroll=document.getElementById('alScroll');
+
+  if(!visible.length){
+    scroll.innerHTML=`<div class="al-empty">No activities visible<br>in this map area.<br><br>Try zooming out or<br>switching city.</div>`;
+    return;
+  }
+
+  scroll.innerHTML=visible.map(a=>`
+    <div class="act-card${selectedCardId===a.id?' selected':''}" id="card-${a.id}"
+         onclick="selectCard(${a.id})" onmouseenter="hoverCard(${a.id})" onmouseleave="unhoverCard(${a.id})"
+         style="--cat-color:${CAT_COLOR[a.category]};--cat-bg:${CAT_BG[a.category]}">
+      <div class="ac-header">
+        <img class="ac-header-img" src="${getCardImg(a)}" alt="${CAT_LABEL[a.category]||'activity'}" loading="lazy"
+             onerror="this.style.display='none'"/>
+        <div class="ac-header-overlay"></div>
+        <div class="ac-emoji-badge">${CAT_EMOJI[a.category]||'📌'}</div>
+      </div>
+      <div class="ac-body">
+        <div class="ac-name">${a.name}</div>
+        <div class="ac-meta">
+          <span>📅 ${a.date} · ${a.time}</span>
+          <span>📍 ${a.location}</span>
+        </div>
+        <div class="ac-footer">
+          <span class="ac-cat-tag" style="background:${CAT_COLOR[a.category]}">${CAT_LABEL[a.category]}</span>
+          <span class="ac-att">👥 ${a.attendees}</span>
+          ${a.newcomer?'<span class="ac-nc">🌟 Newcomer ✓</span>':''}
+          ${EVTFD_IDS.has(a.id)?'<span class="source-badge">✓ Real Event</span>':''}
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ── Hover cross-linking ──
+function hoverCard(id){
+  const m=markerRefs[id];
+  if(m&&m._icon) m._icon.classList.add('marker-pulse');
+}
+function unhoverCard(id){
+  const m=markerRefs[id];
+  if(m&&m._icon) m._icon.classList.remove('marker-pulse');
+}
+
+function selectCard(id){
+  selectedCardId=id;
+  document.querySelectorAll('.act-card').forEach(c=>c.classList.remove('selected'));
+  const card=document.getElementById('card-'+id);
+  if(card){card.classList.add('selected');card.scrollIntoView({behavior:'smooth',block:'nearest'});}
+  showDetail(id);
+}
+
+// ════════════════════════════════════════
+//  ACTIVITY METADATA (demographics, vibe)
+// ════════════════════════════════════════
+const DEMO_PRESETS={
+  maori_focus:[{l:'Māori',c:'#DC2626',p:45},{l:'European',c:'#2563EB',p:28},{l:'Asian',c:'#D97706',p:15},{l:'Pacific',c:'#7C3AED',p:8},{l:'Other',c:'#6B7280',p:4}],
+  asian_focus: [{l:'Asian',c:'#D97706',p:50},{l:'European',c:'#2563EB',p:24},{l:'Pacific',c:'#7C3AED',p:14},{l:'Māori',c:'#DC2626',p:8},{l:'Other',c:'#6B7280',p:4}],
+  hamilton_mix:[{l:'European',c:'#2563EB',p:38},{l:'Asian',c:'#D97706',p:30},{l:'Māori',c:'#DC2626',p:18},{l:'Pacific',c:'#7C3AED',p:8},{l:'Other',c:'#6B7280',p:6}],
+  auckland_mix:[{l:'Asian',c:'#D97706',p:38},{l:'European',c:'#2563EB',p:30},{l:'Pacific',c:'#7C3AED',p:14},{l:'Māori',c:'#DC2626',p:12},{l:'Other',c:'#6B7280',p:6}],
+  diverse:     [{l:'Asian',c:'#D97706',p:35},{l:'European',c:'#2563EB',p:32},{l:'Pacific',c:'#7C3AED',p:16},{l:'Māori',c:'#DC2626',p:12},{l:'Other',c:'#6B7280',p:5}],
+};
+function getActDemo(a){
+  const n=a.name.toLowerCase();
+  if(n.includes('māori')||n.includes('maori')||n.includes('te reo')) return DEMO_PRESETS.maori_focus;
+  if(a.category==='food'&&a.city==='auckland') return DEMO_PRESETS.asian_focus;
+  if(a.city==='auckland') return a.id%2===0?DEMO_PRESETS.auckland_mix:DEMO_PRESETS.diverse;
+  return DEMO_PRESETS.hamilton_mix;
+}
+function getActAge(a){
+  // [18-25, 26-35, 36-50, 50-65, 65+]
+  const base=a.newcomer?[28,34,22,11,5]:[14,27,31,19,9];
+  return base.map((v,i)=>Math.max(4,v+((a.id*3+i*7)%13)-6));
+}
+const LANG_SETS={
+  hamilton:[['English','Mandarin','Te Reo Māori'],['English','Hindi','Mandarin'],['English','Mandarin','Korean']],
+  auckland:[['English','Mandarin','Hindi'],['English','Samoan','Mandarin'],['English','Mandarin','Tagalog']]
+};
+const COST_MAP={social:'Free 🆓',sports:'Free 🆓',culture:'Free–$5 🎟',learning:'Free 🆓',outdoor:'Free 🆓',food:'$10–30 💵',volunteer:'Free 🆓',other:'Varies'};
+const ACCESS_MAP=['Wheelchair accessible ♿','Step-free entry ✓','Some stairs — limited access'];
+const VIBE_MAP={
+  social:['Friendly 😊','Casual vibes','Low pressure','Great for introverts'],
+  sports:['Active 🏃','All levels welcome','Energetic','Meet sporty people'],
+  culture:['Educational 🎨','Eye-opening','Enriching','Deep dive into NZ'],
+  learning:['Structured 📚','Interactive','Supportive environment','Practical skills'],
+  outdoor:['Fresh air 🌿','Scenic views','Relaxed pace','Connect with nature'],
+  food:['Delicious 🍜','Diverse cuisines','Vibrant atmosphere','Share & discover'],
+  volunteer:['Giving back ❤️','Rewarding','Community impact','Meet caring people'],
+  other:['Unique experience','Creative space','Open-minded crowd','Welcoming'],
+};
+
+function showDetail(id){
+  const a=ACTIVITIES.find(x=>x.id===id); if(!a)return;
+  const col=CAT_COLOR[a.category];
+  const emoji=CAT_EMOJI[a.category]||'📌';
+  const bg=CAT_BG[a.category]||'#F8FAFC';
+
+  // Hero header
+  const hero=document.getElementById('dpHero');
+  hero.style.background=`linear-gradient(135deg,${col} 0%,${col}cc 100%)`;
+  document.getElementById('dpEmoji').textContent=emoji;
+  document.getElementById('pcat').textContent=CAT_LABEL[a.category];
+  document.getElementById('ptitle').textContent=a.name;
+
+  // Meta strip
+  const spotsLeft=a.maxAttendees>=999?'Open registration':`${a.maxAttendees-a.attendees} spots left`;
+  const fullPct=Math.round(a.attendees/a.maxAttendees*100);
+  const barW=Math.min(100,fullPct);
+  const barCol=barW>80?'#EF4444':barW>50?'#EA580C':'#10B981';
+  document.getElementById('pmeta').innerHTML=`
+    <div class="mrow">📅 <span>${a.date} · ${a.time}</span></div>
+    <div class="mrow">📍 <span>${a.location}</span></div>
+    <div class="cap-row">
+      <span>👥 ${a.attendees}</span>
+      <div class="cap-bar-bg"><div class="cap-bar-fill" style="width:${barW}%;background:${barCol}"></div></div>
+      <span style="color:${barCol};font-weight:600;white-space:nowrap;font-size:11px">${spotsLeft}</span>
+    </div>`;
+
+  // Body
+  document.getElementById('pnc').style.display=a.newcomer?'flex':'none';
+  document.getElementById('pdesc').textContent=a.desc;
+  const ini=['JK','SA','MT','RL','WH','DY','CL'];
+  document.getElementById('patt').innerHTML=`
+    <div class="av-stack">${a.avatarColors.slice(0,5).map((c,i)=>`<div class="av" style="background:${c}">${ini[i]}</div>`).join('')}</div>
+    <span class="att-cnt">+${Math.max(0,a.attendees-5)} others going</span>`;
+
+  // Rich extras
+  const demo=getActDemo(a);
+  const ageGroups=getActAge(a);
+  const ageLabels=['18–25','26–35','36–50','50–65','65+'];
+  const maxAge=Math.max(...ageGroups);
+  const cityLangKey=LANG_SETS[a.city]?a.city:'hamilton';
+  const langs=LANG_SETS[cityLangKey][a.id%3];
+  const cost=COST_MAP[a.category]||'Varies';
+  const access=ACCESS_MAP[a.id%3];
+  const vibes=(VIBE_MAP[a.category]||[]).slice(0,3);
+  const success=a.newcomer?65+(a.id*3%25):40+(a.id*5%30);
+
+  const demoBar=demo.map(d=>`<div style="flex:${d.p};background:${d.c};height:100%"></div>`).join('');
+  const demoLeg=demo.map(d=>`<div class="demo-leg-item"><div style="width:8px;height:8px;border-radius:50%;background:${d.c};flex-shrink:0"></div>${d.l} <b>${d.p}%</b></div>`).join('');
+
+  const ageBarCells=ageGroups.map(v=>{
+    const h=Math.round(v/maxAge*36)+4;
+    return `<div class="age-bar-cell" style="height:${h}px;background:linear-gradient(to top,${col},${col}88)"></div>`;
+  }).join('');
+  const ageLblCells=ageLabels.map((l,i)=>`
+    <div class="age-meta-cell">
+      <span class="age-meta-lbl">${l}</span>
+      <span class="age-meta-pct" style="color:${col}">${ageGroups[i]}%</span>
+    </div>`).join('');
+
+  document.getElementById('pextras').innerHTML=`
+    <div class="dp-section">
+      <div class="dp-sec-label">Who attends</div>
+      <div style="display:flex;height:8px;border-radius:4px;overflow:hidden;margin-bottom:8px">${demoBar}</div>
+      <div class="demo-legend">${demoLeg}</div>
+    </div>
+    <div class="dp-section">
+      <div class="dp-sec-label">Age range</div>
+      <div class="age-chart-wrap">
+        <div class="age-bars-row">${ageBarCells}</div>
+        <div class="age-meta-row">${ageLblCells}</div>
+      </div>
+    </div>
+    <div class="dp-section">
+      <div class="dp-sec-label">Vibe</div>
+      <div class="vibe-chips" style="padding:0;margin:0">${vibes.map(v=>`<span class="vibe-chip">${v}</span>`).join('')}</div>
+    </div>
+    <div class="dp-section">
+      <div class="dp-sec-label">Practical</div>
+      <div class="info-grid">
+        <div class="info-pill">💰 <span>${cost}</span></div>
+        <div class="info-pill">♿ <span style="font-size:10px">${access.split(' ')[0]} ${access.split(' ')[1]||''}</span></div>
+        <div class="info-pill" style="grid-column:span 2">🌍 ${langs.map(l=>`<span class="lang-chip">${l}</span>`).join('')}</div>
+      </div>
+    </div>
+    <div class="dp-section" style="border:none">
+      <div style="background:${bg};border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:12px">
+        <svg width="44" height="44" viewBox="0 0 44 44">
+          <circle cx="22" cy="22" r="17" fill="none" stroke="#e2e8f0" stroke-width="5"/>
+          <circle cx="22" cy="22" r="17" fill="none" stroke="${col}" stroke-width="5"
+            stroke-linecap="round"
+            stroke-dasharray="${Math.round(2*Math.PI*17)}"
+            stroke-dashoffset="${Math.round(2*Math.PI*17*(1-success/100))}"
+            transform="rotate(-90 22 22)"/>
+          <text x="22" y="26" text-anchor="middle" font-size="10" font-weight="800" fill="${col}">${success}%</text>
+        </svg>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:#1e293b">Made a new friend 🤝</div>
+          <div style="font-size:11px;color:#64748B;margin-top:2px">of past attendees made a new connection here</div>
+        </div>
+      </div>
+    </div>`;
+
+  document.getElementById('detailPanel').classList.add('open');
+  if(map) map.setView([a.lat,a.lng],Math.max(map.getZoom(),15),{animate:true});
+  // sync card highlight
+  selectedCardId=a.id;
+  document.querySelectorAll('.act-card').forEach(c=>c.classList.remove('selected'));
+  const card=document.getElementById('card-'+a.id);
+  if(card){card.classList.add('selected');card.scrollIntoView({behavior:'smooth',block:'nearest'});}
+}
+function closePanel(){
+  document.getElementById('detailPanel').classList.remove('open');
+  selectedCardId=null;
+  document.querySelectorAll('.act-card').forEach(c=>c.classList.remove('selected'));
+}
+function joinActivity(){alert('🎉 You joined! Your connection will appear in the Network graph. (Full persistence in Milestone 3)');}
+
+function switchCity(city){
+  currentCity=city;
+  const c=CITIES[city];
+  // Update dropdown button label
+  document.getElementById('cityDdLabel').textContent=`${c.icon} ${c.label}`;
+  // Update network sidebar title
+  const nc=document.getElementById('netCity');
+  if(nc) nc.textContent=c.label;
+  if(map) map.setView(c.center,c.zoom,{animate:true});
+  closePanel();
+  renderMarkers();
+  // Reset network/dashboard for new city so they reinitialise
+  netInitialized[city]=false;
+  dashCharts={};
+  const sv=document.getElementById('view-network');
+  if(sv.classList.contains('active')) initNetwork();
+  const dv=document.getElementById('view-dashboard');
+  if(dv.classList.contains('active')) initDashboard();
+  const tv=document.getElementById('view-timeline');
+  if(tv.classList.contains('active')) initTimeline();
+  // Update choropleth city stat if active
+  if(choroActive) updateChoroStat();
+  // Rebuild dropdown list to update active state
+  buildCityList(document.getElementById('citySearchInp')?.value||'');
+}
+
+function toggleFilter(cat){
+  if(cat==='all'){activeFilters=new Set(['all']);}
+  else{
+    if(activeFilters.has('all'))activeFilters.delete('all');
+    activeFilters.has(cat)?activeFilters.delete(cat):activeFilters.add(cat);
+    if(activeFilters.size===0)activeFilters.add('all');
+  }
+  updateChips(); renderMarkers();
+}
+function updateChips(){
+  const ac=document.getElementById('chip-all');
+  const allActive=activeFilters.has('all');
+  if(allActive){ac.className='chip chip-all';}
+  else{ac.className='chip';ac.style.background='';ac.style.color='';}
+  ac.setAttribute('aria-pressed', allActive);
+
+  Object.keys(CAT_COLOR).forEach(c=>{
+    const ch=document.getElementById('chip-'+c); if(!ch)return;
+    const isActive=activeFilters.has(c);
+    ch.setAttribute('aria-pressed', isActive);
+    if(isActive){
+      ch.classList.add('active');
+      ch.style.background=CAT_COLOR[c];ch.style.borderColor=CAT_COLOR[c];ch.style.color='#fff';
+    } else {
+      ch.classList.remove('active');
+      ch.style.background='';ch.style.borderColor='';ch.style.color='';
+    }
+  });
+}
+
+// ════════════════════════════════════════
+//  CHOROPLETH — Migrant Density Layer
+// ════════════════════════════════════════
+function choroColor(pct){
+  // Scale from 14% (Rotorua) to 39% (Auckland)
+  const t=Math.max(0,Math.min(1,(pct-14)/25));
+  const scale=['#E0F2FE','#7DD3FC','#3B82F6','#0369A1','#1E3A8A'];
+  return scale[Math.min(4,Math.floor(t*5))];
+}
+function toggleChoropleth(){
+  if(!map){switchTab('map');setTimeout(toggleChoropleth,300);return;}
+  choroActive=!choroActive;
+  const btn=document.getElementById('choroBtn');
+  btn.classList.toggle('active',choroActive);
+  btn.setAttribute('aria-pressed', choroActive);
+  document.getElementById('choroLegend').classList.toggle('show',choroActive);
+  if(choroActive) renderChoropleth();
+  else{if(choroLayer){map.removeLayer(choroLayer);choroLayer=null;}}
+}
+function renderChoropleth(){
+  if(choroLayer){map.removeLayer(choroLayer);choroLayer=null;}
+  const layers=[];
+  Object.entries(MIGRANT_STATS).forEach(([cityKey,s])=>{
+    const c=CITIES[cityKey]; if(!c)return;
+    const col=choroColor(s.pct);
+    // Radius proportional to sqrt(pop) — scaled to look good at city zoom
+    const r=Math.max(8000,Math.min(26000,Math.sqrt(s.pop)*35));
+    const circle=L.circle(c.center,{
+      radius:r,
+      color:'transparent',
+      fillColor:col,
+      fillOpacity:0.40,
+      interactive:true
+    });
+    circle.bindTooltip(
+      `<strong>${c.label}</strong><br>🌍 Overseas-born: <b>${s.pct}%</b><br>City population: ${s.pop.toLocaleString()}<br><span style="font-size:10px;color:#94A3B8">NZ 2023 Census</span>`,
+      {sticky:true}
+    );
+    layers.push(circle);
+  });
+  choroLayer=L.layerGroup(layers).addTo(map);
+  updateChoroStat();
+}
+function updateChoroStat(){
+  const s=MIGRANT_STATS[currentCity];
+  const el=document.getElementById('choroCityStat');
+  if(s&&el) el.textContent=`${CITIES[currentCity].label}: ${s.pct}% migrants`;
+}
+
+// ════════════════════════════════════════
+//  NETWORK GRAPH (D3 force-directed)
+// ════════════════════════════════════════
+const NET_DATA = {
+  hamilton:{
+    nodes:[
+      {id:'you',label:'You',group:'you',size:22},
+      {id:'p1',label:'Anika',group:'social',acts:['Coffee Chat','Social Mixer'],size:14},
+      {id:'p2',label:'James',group:'sports',acts:['Parkrun','Badminton'],size:14},
+      {id:'p3',label:'Li Wei',group:'learning',acts:['Conversation Club','IELTS Group'],size:14},
+      {id:'p4',label:'Sofia',group:'culture',acts:['Museum Talk','Maori Workshop'],size:14},
+      {id:'p5',label:'Ravi',group:'social',acts:['Coffee Chat','Board Games'],size:12},
+      {id:'p6',label:'Emma',group:'outdoor',acts:['Gardens Walk'],size:11},
+      {id:'p7',label:'Yuki',group:'food',acts:['Night Market'],size:11},
+    ],
+    links:[
+      {source:'you',target:'p1',value:2,cat:'social'},
+      {source:'you',target:'p2',value:2,cat:'sports'},
+      {source:'you',target:'p3',value:2,cat:'learning'},
+      {source:'you',target:'p4',value:2,cat:'culture'},
+      {source:'you',target:'p5',value:2,cat:'social'},
+      {source:'you',target:'p6',value:1,cat:'outdoor'},
+      {source:'you',target:'p7',value:1,cat:'food'},
+      {source:'p1',target:'p5',value:1,cat:'social'},
+      {source:'p2',target:'p6',value:1,cat:'outdoor'},
+      {source:'p3',target:'p4',value:1,cat:'culture'},
+    ]
+  },
+  auckland:{
+    nodes:[
+      {id:'you',label:'You',group:'you',size:22},
+      {id:'a1',label:'Marco',group:'social',acts:['Viaduct Meetup'],size:14},
+      {id:'a2',label:'Priya',group:'learning',acts:['Language Exchange'],size:13},
+      {id:'a3',label:'Ben',group:'sports',acts:['Morning Run','Cricket'],size:14},
+      {id:'a4',label:'Chen',group:'culture',acts:['Art Gallery Tour','Ukulele Jam'],size:14},
+      {id:'a5',label:'Fatima',group:'volunteer',acts:['City Harvest'],size:12},
+      {id:'a6',label:'Tom',group:'outdoor',acts:['Photography Walk','Coastal Walk'],size:13},
+    ],
+    links:[
+      {source:'you',target:'a1',value:1,cat:'social'},
+      {source:'you',target:'a2',value:1,cat:'learning'},
+      {source:'you',target:'a3',value:2,cat:'sports'},
+      {source:'you',target:'a4',value:2,cat:'culture'},
+      {source:'you',target:'a5',value:1,cat:'volunteer'},
+      {source:'you',target:'a6',value:2,cat:'outdoor'},
+      {source:'a1',target:'a2',value:1,cat:'social'},
+      {source:'a3',target:'a6',value:1,cat:'outdoor'},
+    ]
+  }
+};
+
+function initNetwork(){
+  if(netInitialized[currentCity]) return;
+  netInitialized[currentCity]=true;
+
+  // Fall back to a "just arrived" placeholder for cities without specific network data
+  const NET_DEFAULT={
+    nodes:[{id:'you',label:'You',group:'you',size:22}],
+    links:[]
+  };
+  const data=NET_DATA[currentCity]||NET_DEFAULT;
+  const connCount=data.nodes.length-1;
+  document.getElementById('nsConn').textContent=connCount;
+  const cityActs=ACTIVITIES.filter(a=>a.city===currentCity);
+  document.getElementById('nsAct').textContent=Math.min(connCount,cityActs.length);
+  document.getElementById('nsCat').textContent=[...new Set(data.links.map(l=>l.cat))].length||0;
+  document.getElementById('connBadge').textContent=connCount;
+
+  // Legend
+  const cats=[...new Set(data.links.map(l=>l.cat))];
+  document.getElementById('netLegend').innerHTML=cats.map(c=>`
+    <div class="leg-row"><div class="leg-dot" style="background:${CAT_COLOR[c]}"></div>${CAT_LABEL[c]}</div>
+  `).join('')+`<div class="leg-row"><div class="leg-dot" style="background:#0369A1;border:2px solid #fff;box-shadow:0 0 0 2px #0369A1"></div>You</div>`;
+
+  // Person list
+  document.getElementById('personList').innerHTML=data.nodes.filter(n=>n.id!=='you').map(n=>`
+    <div class="net-person">
+      <div class="np-name" style="color:${CAT_COLOR[n.group]||'#1e293b'}">${n.label}</div>
+      <div class="np-detail">Met at: ${n.acts.join(', ')}</div>
+    </div>`).join('');
+
+  const svg=d3.select('#netSvg');
+  svg.selectAll('*').remove();
+  const rect=document.getElementById('netSvg').getBoundingClientRect();
+  const W=rect.width||700, H=rect.height||480;
+  svg.attr('viewBox',`0 0 ${W} ${H}`);
+
+  const sim=d3.forceSimulation(data.nodes)
+    .force('link',d3.forceLink(data.links).id(d=>d.id).distance(120))
+    .force('charge',d3.forceManyBody().strength(-300))
+    .force('center',d3.forceCenter(W/2,H/2))
+    .force('collision',d3.forceCollide().radius(d=>d.size+14));
+
+  const defs=svg.append('defs');
+  // glow filter
+  const f=defs.append('filter').attr('id','glow');
+  f.append('feGaussianBlur').attr('stdDeviation','3').attr('result','blur');
+  const fm=f.append('feMerge');
+  fm.append('feMergeNode').attr('in','blur');
+  fm.append('feMergeNode').attr('in','SourceGraphic');
+
+  const g=svg.append('g');
+
+  // Zoom
+  svg.call(d3.zoom().scaleExtent([.4,3]).on('zoom',e=>g.attr('transform',e.transform)));
+
+  const link=g.append('g').selectAll('line').data(data.links).enter().append('line')
+    .attr('stroke',d=>CAT_COLOR[d.cat]||'#CBD5E1')
+    .attr('stroke-opacity',.55)
+    .attr('stroke-width',d=>d.value*2.5);
+
+  const node=g.append('g').selectAll('g').data(data.nodes).enter().append('g')
+    .call(d3.drag()
+      .on('start',(e,d)=>{if(!e.active)sim.alphaTarget(.3).restart();d.fx=d.x;d.fy=d.y;})
+      .on('drag',(e,d)=>{d.fx=e.x;d.fy=e.y;})
+      .on('end',(e,d)=>{if(!e.active)sim.alphaTarget(0);d.fx=null;d.fy=null;}));
+
+  node.append('circle')
+    .attr('r',d=>d.size)
+    .attr('fill',d=>d.id==='you'?'#0369A1':CAT_COLOR[d.group]||'#94A3B8')
+    .attr('stroke','#fff')
+    .attr('stroke-width',d=>d.id==='you'?3:2)
+    .attr('filter',d=>d.id==='you'?'url(#glow)':'none')
+    .style('cursor','pointer');
+
+  node.append('text')
+    .text(d=>d.label)
+    .attr('text-anchor','middle')
+    .attr('dy',d=>d.size+13)
+    .attr('font-size',d=>d.id==='you'?13:11)
+    .attr('font-weight',d=>d.id==='you'?700:600)
+    .attr('fill',d=>d.id==='you'?'#0369A1':'#475569')
+    .style('pointer-events','none');
+
+  const tip=document.getElementById('netTip');
+  node.on('mouseover',(e,d)=>{
+    if(d.id==='you'){tip.innerHTML='<strong>You</strong><br>Tap activities to add connections!';}
+    else{tip.innerHTML=`<strong>${d.label}</strong><br>Met at: ${d.acts.join('<br>')}`;}
+    tip.style.display='block';tip.style.left=(e.clientX+12)+'px';tip.style.top=(e.clientY-8)+'px';
+  }).on('mousemove',e=>{
+    tip.style.left=(e.clientX+12)+'px';tip.style.top=(e.clientY-8)+'px';
+  }).on('mouseout',()=>tip.style.display='none');
+
+  sim.on('tick',()=>{
+    link.attr('x1',d=>d.source.x).attr('y1',d=>d.source.y)
+        .attr('x2',d=>d.target.x).attr('y2',d=>d.target.y);
+    node.attr('transform',d=>`translate(${d.x},${d.y})`);
+  });
+
+  // Network growth timeline
+  initGrowthTimeline();
+}
+
+// ════════════════════════════════════════
+//  DASHBOARD
+// ════════════════════════════════════════
+function initDashboard(){
+  // Streak days
+  const days=['M','T','W','T','F','S','S'];
+  const states=[0,1,2,1,2,1,0, 0,1,1,2,2,1,0, 0,0,1,0,2,1,1, 1,0,1,2,1,2,0];
+  const cls=['off','mid','active'];
+  document.getElementById('streakDays').innerHTML=states.map((s,i)=>`<div class="sd ${cls[s]}">${days[i%7]}</div>`).join('');
+
+  // Trend chart
+  if(dashCharts.trend) dashCharts.trend.destroy();
+  const tc=document.getElementById('trendChart').getContext('2d');
+  dashCharts.trend=new Chart(tc,{
+    type:'line',
+    data:{
+      labels:['Week 8','Week 9','Week 10','Week 11','Week 12','Now'],
+      datasets:[{
+        label:'Activities',data:[0,1,2,1,3,5],
+        borderColor:'#0369A1',backgroundColor:'rgba(3,105,161,.08)',
+        borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#0369A1',
+        fill:true,tension:.4
+      },{
+        label:'Connections',data:[0,1,3,3,5,7],
+        borderColor:'#10B981',backgroundColor:'rgba(16,185,129,.06)',
+        borderWidth:2,pointRadius:4,pointBackgroundColor:'#10B981',
+        fill:true,tension:.4
+      }]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:11}}}},scales:{y:{beginAtZero:true,grid:{color:'#F1F5F9'},ticks:{stepSize:1,font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:10}}}}}
+  });
+
+  // ── Radar chart (replaces doughnut) ──
+  if(dashCharts.cat) dashCharts.cat.destroy();
+  const cc=document.getElementById('catChart').getContext('2d');
+  const radarCatKeys=['social','learning','outdoor','culture','sports','volunteer'];
+  const radarLabels=['Social','Learning','Outdoor','Culture','Sports','Volunteer'];
+  const radarActual=[72,55,40,35,30,15];
+  const radarIdeal=[55,55,55,55,55,55];
+  dashCharts.cat=new Chart(cc,{
+    type:'radar',
+    data:{
+      labels:radarLabels,
+      datasets:[
+        {label:'Your participation',data:radarActual,
+         backgroundColor:'rgba(3,105,161,.18)',borderColor:'#0369A1',borderWidth:2.5,
+         pointBackgroundColor:'#0369A1',pointRadius:4,pointHoverRadius:6},
+        {label:'Ideal balance',data:radarIdeal,
+         backgroundColor:'transparent',borderColor:'rgba(16,185,129,.5)',borderWidth:1.5,
+         borderDash:[5,4],pointRadius:0}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      onClick:(e,els)=>{
+        if(els.length){
+          const i=els[0].index;
+          brushFilter(radarCatKeys[i]);
+        }
+      },
+      plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10},padding:8}}},
+      scales:{r:{
+        min:0,max:100,ticks:{stepSize:25,font:{size:9},backdropColor:'transparent'},
+        grid:{color:'#F1F5F9'},pointLabels:{font:{size:10},color:'#475569'}
+      }}
+    }
+  });
+
+  // ── Progress bars (clickable for brushing) ──
+  const cats=[
+    {label:'Social',key:'social',pct:72,color:'#7C3AED'},
+    {label:'Learning',key:'learning',pct:55,color:'#2563EB'},
+    {label:'Outdoor',key:'outdoor',pct:40,color:'#16A34A'},
+    {label:'Culture',key:'culture',pct:35,color:'#0D9488'},
+    {label:'Sports',key:'sports',pct:30,color:'#EF4444'},
+    {label:'Volunteer',key:'volunteer',pct:15,color:'#DB2777'},
+  ];
+  document.getElementById('catBars').innerHTML=cats.map(c=>`
+    <div class="pbar-row" onclick="brushFilter('${c.key}')" title="Click to filter map by ${c.label}">
+      <span class="pbar-lbl">${c.label}</span>
+      <div class="pbar-bg"><div class="pbar-fill" style="width:${c.pct}%;background:${c.color}"></div></div>
+      <span class="pbar-val">${c.pct}%</span>
+    </div>`).join('');
+
+  // Upcoming — use actual current city
+  const upcoming=ACTIVITIES.filter(a=>a.city===currentCity).slice(0,5);
+  document.getElementById('upcomingList').innerHTML=upcoming.map(a=>`
+    <div class="act-item">
+      <div class="act-dot" style="background:${CAT_COLOR[a.category]}"></div>
+      <div class="act-name">${a.name}</div>
+      <div class="act-date">${a.date}</div>
+    </div>`).join('');
+
+  // Animate ring
+  const offset=226*(1-62/100);
+  document.getElementById('ringArc').style.strokeDashoffset=offset;
+}
+
+// ════════════════════════════════════════
+//  TIMELINE
+// ════════════════════════════════════════
+function initTimeline(){
+  const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const slots=['6–9 AM','9–12','12–3 PM','3–6 PM','6–9 PM','9 PM+'];
+  // density matrix [slot][day]
+  const density=[
+    [0,0,0,0,0,1,2],
+    [0,0,0,0,0,3,4],
+    [0,1,1,0,0,2,3],
+    [1,1,1,1,2,3,4],
+    [2,2,3,3,5,4,3],
+    [0,1,0,1,1,2,1],
+  ];
+  const maxD=5;
+  const colors=['transparent','#E0F2FE','#7DD3FC','#3B82F6','#0369A1','#1E3A8A'];
+
+  let html='<div></div>'+days.map(d=>`<div class="hm-dayh">${d}</div>`).join('');
+  slots.forEach((s,si)=>{
+    html+=`<div class="hm-timelbl">${s}</div>`;
+    days.forEach((_,di)=>{
+      const v=density[si][di];
+      const bg=v===0?'#F8FAFC':colors[v];
+      html+=`<div class="hm-cell" style="background:${bg}" title="${v} activities on ${days[di]} ${s}">${v>0?v:''}</div>`;
+    });
+  });
+  document.getElementById('hmGrid').innerHTML=html;
+
+  // Timeline events
+  const grouped={};
+  const cityActs=ACTIVITIES.filter(a=>a.city===currentCity);
+  // Use mock date groups
+  const dateGroups=['Fri 16 May','Sat 17 May','Sun 18 May','Mon 19 May','Tue 20 May','Wed 21 May','Thu 22 May','Fri 23 May','Sat 24 May','Sun 25 May'];
+  dateGroups.forEach(d=>{
+    const acts=cityActs.filter(a=>a.date===d);
+    if(acts.length) grouped[d]=acts;
+  });
+
+  let tlHTML='';
+  Object.entries(grouped).forEach(([date,acts])=>{
+    tlHTML+=`<div class="tl-day-group"><div class="tl-day-label">${date}</div>`;
+    acts.forEach(a=>{
+      tlHTML+=`<div class="tl-event" onclick="switchTab('map');setTimeout(()=>showDetail(${a.id}),100)">
+        <div class="tl-dot" style="background:${CAT_COLOR[a.category]}"></div>
+        <div class="tl-content">
+          <div class="tl-ename">${a.name}</div>
+          <div class="tl-emeta">📍 ${a.location} ${a.newcomer?'🌟':''}</div>
+        </div>
+        <div class="tl-time">${a.time}</div>
+      </div>`;
+    });
+    tlHTML+='</div>';
+  });
+  document.getElementById('tlEvents').innerHTML=tlHTML;
+
+  // Bubble scatter — time-of-day vs day-of-week
+  initBubbleScatter();
+  // Data diversity charts
+  initSeasonalChart();
+  initCityComparison();
+}
+
+// ════════════════════════════════════════
+//  BRUSHING & LINKING
+// ════════════════════════════════════════
+function brushFilter(cat){
+  // Set filter to this category only
+  activeFilters=new Set([cat]);
+  updateChips();
+  renderMarkers();
+  // Show banner in dashboard
+  const banner=document.getElementById('brushBanner');
+  document.getElementById('brushLabel').textContent=CAT_LABEL[cat];
+  document.getElementById('brushLabel').style.background=CAT_COLOR[cat];
+  banner.classList.add('show');
+  // Switch to map tab so user sees the result
+  switchTab('map');
+}
+function clearBrush(){
+  activeFilters=new Set(['all']);
+  updateChips();
+  renderMarkers();
+  document.getElementById('brushBanner').classList.remove('show');
+}
+
+// ════════════════════════════════════════
+//  NETWORK GROWTH TIMELINE
+// ════════════════════════════════════════
+const GROWTH_DATA={
+  hamilton:[
+    {week:'Wk 10',label:'May 8',people:[]},
+    {week:'Wk 11',label:'May 15',people:[
+      {name:'Anika',cat:'social',act:'Coffee Chat'},
+      {name:'James',cat:'sports',act:'Parkrun'}
+    ]},
+    {week:'Wk 12',label:'May 22',people:[
+      {name:'Li Wei',cat:'learning',act:'Conversation Club'},
+      {name:'Sofia',cat:'culture',act:'Museum Talk'}
+    ]},
+    {week:'Wk 13',label:'May 29',people:[
+      {name:'Ravi',cat:'social',act:'Board Games'},
+      {name:'Emma',cat:'outdoor',act:'Gardens Walk'}
+    ]},
+    {week:'Now',label:'Jun 5',people:[
+      {name:'Yuki',cat:'food',act:'Night Market'}
+    ]},
+  ],
+  auckland:[
+    {week:'Wk 10',label:'May 8',people:[]},
+    {week:'Wk 11',label:'May 15',people:[
+      {name:'Marco',cat:'social',act:'Viaduct Meetup'},
+      {name:'Priya',cat:'learning',act:'Language Exchange'}
+    ]},
+    {week:'Wk 12',label:'May 22',people:[
+      {name:'Ben',cat:'sports',act:'Morning Run'},
+      {name:'Fatima',cat:'volunteer',act:'City Harvest'}
+    ]},
+    {week:'Wk 13',label:'May 29',people:[
+      {name:'Chen',cat:'culture',act:'Art Gallery + Ukulele'},
+      {name:'Tom',cat:'outdoor',act:'Photography Walk'}
+    ]},
+    {week:'Now',label:'Jun 5',people:[]},
+  ]
+};
+
+function initGrowthTimeline(){
+  const svg=d3.select('#growthSvg');
+  svg.selectAll('*').remove();
+  const el=document.getElementById('growthSvg');
+  const W=el.getBoundingClientRect().width||700, H=100;
+  svg.attr('viewBox',`0 0 ${W} ${H}`);
+
+  // Fall back to hamilton data for cities without specific growth data
+  const data=GROWTH_DATA[currentCity]||GROWTH_DATA.hamilton;
+  const tip=document.getElementById('growthTip');
+  const xScale=d3.scalePoint().domain(data.map(d=>d.week)).range([40,W-40]).padding(.5);
+  const midY=H/2;
+
+  // Axis line
+  svg.append('line').attr('x1',40).attr('x2',W-40).attr('y1',midY).attr('y2',midY)
+    .attr('stroke','#E2E8F0').attr('stroke-width',2);
+
+  // Week ticks
+  data.forEach(d=>{
+    const x=xScale(d.week);
+    svg.append('circle').attr('cx',x).attr('cy',midY).attr('r',d.people.length?8:5)
+      .attr('fill',d.people.length?'#0369A1':'#E2E8F0').attr('stroke','#fff').attr('stroke-width',2);
+    svg.append('text').attr('x',x).attr('y',midY+22).attr('text-anchor','middle')
+      .attr('font-size',10).attr('fill','#94A3B8').attr('font-weight',600).text(d.week);
+    svg.append('text').attr('x',x).attr('y',midY+33).attr('text-anchor','middle')
+      .attr('font-size',9).attr('fill','#CBD5E1').text(d.label);
+
+    // People dots above/below
+    if(d.people.length){
+      d.people.forEach((p,i)=>{
+        const dir=i%2===0?-1:1;
+        const py=midY+dir*(28+Math.floor(i/2)*20);
+        const px=x+(i>1?((i%2===0?-1:1)*14):0);
+        // connector
+        svg.append('line').attr('x1',x).attr('x2',px).attr('y1',midY+(dir*8)).attr('y2',py-(dir*9))
+          .attr('stroke',CAT_COLOR[p.cat]).attr('stroke-width',1.2).attr('stroke-opacity',.5);
+        const g=svg.append('g').attr('cursor','pointer');
+        g.append('circle').attr('cx',px).attr('cy',py).attr('r',10)
+          .attr('fill',CAT_COLOR[p.cat]).attr('stroke','#fff').attr('stroke-width',2)
+          .attr('opacity',0)
+          .transition().delay(i*150+300).duration(400).attr('opacity',1);
+        g.append('text').attr('x',px).attr('y',py+4).attr('text-anchor','middle')
+          .attr('font-size',8).attr('font-weight',700).attr('fill','#fff').attr('pointer-events','none')
+          .text(p.name.slice(0,2))
+          .attr('opacity',0).transition().delay(i*150+300).duration(400).attr('opacity',1);
+        g.on('mouseover',(e)=>{
+          tip.innerHTML=`<strong>${p.name}</strong><br>Category: ${CAT_LABEL[p.cat]}<br>Met at: ${p.act}`;
+          tip.style.display='block';tip.style.left=(e.clientX+12)+'px';tip.style.top=(e.clientY-8)+'px';
+        }).on('mousemove',e=>{tip.style.left=(e.clientX+12)+'px';tip.style.top=(e.clientY-8)+'px';})
+          .on('mouseout',()=>tip.style.display='none');
+      });
+    }
+  });
+
+  // Running total label
+  let total=0;
+  data.forEach(d=>{
+    total+=d.people.length;
+    if(total>0){
+      const x=xScale(d.week);
+      svg.append('text').attr('x',x).attr('y',midY-14).attr('text-anchor','middle')
+        .attr('font-size',9).attr('fill','#0369A1').attr('font-weight',700).text('+'+total);
+    }
+  });
+}
+
+// ════════════════════════════════════════
+//  BUBBLE SCATTER CHART
+// ════════════════════════════════════════
+function initBubbleScatter(){
+  const container=document.getElementById('bubbleSvg');
+  if(!container)return;
+  d3.select('#bubbleSvg').selectAll('*').remove();
+
+  const cityActs=ACTIVITIES.filter(a=>a.city===currentCity);
+  const timeSlots=['6–9 AM','9–12 PM','12–3 PM','3–6 PM','6–9 PM','9 PM+'];
+  const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+
+  // Map activity time to slot index
+  function timeToSlot(t){
+    const h=parseInt(t.split(':')[0]);
+    const pm=t.includes('PM')&&h!==12;
+    const h24=pm?h+12:h;
+    if(h24>=6&&h24<9)return 0;
+    if(h24>=9&&h24<12)return 1;
+    if(h24>=12&&h24<15)return 2;
+    if(h24>=15&&h24<18)return 3;
+    if(h24>=18&&h24<21)return 4;
+    return 5;
+  }
+  // Map date to day index
+  const dayMap={'Fri':4,'Sat':5,'Sun':6,'Mon':0,'Tue':1,'Wed':2,'Thu':3};
+  function dateToDayIdx(dateStr){
+    const d=dateStr.split(' ')[0];
+    return dayMap[d]??0;
+  }
+
+  const margin={top:14,right:20,bottom:36,left:68};
+  const W=container.getBoundingClientRect().width||700;
+  const H=250;
+  const innerW=W-margin.left-margin.right;
+  const innerH=H-margin.top-margin.bottom;
+
+  const svg=d3.select('#bubbleSvg').attr('viewBox',`0 0 ${W} ${H}`).attr('height',H);
+  const g=svg.append('g').attr('transform',`translate(${margin.left},${margin.top})`);
+
+  const xScale=d3.scalePoint().domain(timeSlots).range([0,innerW]).padding(.5);
+  const yScale=d3.scalePoint().domain(days).range([0,innerH]).padding(.5);
+  const rScale=d3.scaleSqrt().domain([0,300]).range([4,32]);
+
+  // Grid lines
+  g.append('g').selectAll('line.vg').data(timeSlots).enter().append('line')
+    .attr('x1',d=>xScale(d)).attr('x2',d=>xScale(d)).attr('y1',0).attr('y2',innerH)
+    .attr('stroke','#F1F5F9').attr('stroke-width',1);
+  g.append('g').selectAll('line.hg').data(days).enter().append('line')
+    .attr('x1',0).attr('x2',innerW).attr('y1',d=>yScale(d)).attr('y2',d=>yScale(d))
+    .attr('stroke','#F1F5F9').attr('stroke-width',1);
+
+  // Axes
+  g.append('g').attr('transform',`translate(0,${innerH})`)
+    .call(d3.axisBottom(xScale).tickSize(0))
+    .call(ax=>{ax.select('.domain').remove();ax.selectAll('text').attr('font-size',10).attr('fill','#94A3B8');});
+  g.append('g')
+    .call(d3.axisLeft(yScale).tickSize(0))
+    .call(ax=>{ax.select('.domain').remove();ax.selectAll('text').attr('font-size',10).attr('fill','#94A3B8');});
+
+  // Bubbles
+  const tip=document.getElementById('bubbleTip');
+  // Jitter to avoid full overlap
+  const jitter=()=>(Math.random()-.5)*14;
+
+  cityActs.forEach(a=>{
+    const si=timeToSlot(a.time);
+    const di=dateToDayIdx(a.date);
+    const x=xScale(timeSlots[si])+(jitter());
+    const y=yScale(days[di])+(jitter());
+    const r=rScale(a.attendees);
+    const col=CAT_COLOR[a.category];
+
+    // Newcomer glow ring
+    if(a.newcomer){
+      g.append('circle').attr('cx',x).attr('cy',y).attr('r',r+4)
+        .attr('fill','none').attr('stroke','#10B981').attr('stroke-width',2).attr('stroke-opacity',.5);
+    }
+
+    const circle=g.append('circle').attr('cx',x).attr('cy',y).attr('r',0)
+      .attr('fill',col).attr('fill-opacity',.72).attr('stroke','#fff').attr('stroke-width',1.5)
+      .style('cursor','pointer');
+
+    circle.transition().duration(500).delay(Math.random()*300).attr('r',r);
+
+    circle.on('mouseover',(e)=>{
+      circle.attr('fill-opacity',1).attr('stroke-width',2.5);
+      tip.innerHTML=`<strong>${a.name}</strong><br>${CAT_LABEL[a.category]} · ${a.date} ${a.time}<br>👥 ${a.attendees} attending${a.newcomer?' · 🌟 Newcomer-friendly':''}`;
+      tip.style.display='block';tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-10)+'px';
+    }).on('mousemove',e=>{
+      tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-10)+'px';
+    }).on('mouseout',()=>{
+      circle.attr('fill-opacity',.72).attr('stroke-width',1.5);
+      tip.style.display='none';
+    }).on('click',()=>{
+      switchTab('map');setTimeout(()=>showDetail(a.id),100);
+    });
+  });
+
+  // Legend
+  const legCats=Object.keys(CAT_COLOR).slice(0,6);
+  const legG=svg.append('g').attr('transform',`translate(${margin.left},${H-6})`);
+  legCats.forEach((c,i)=>{
+    legG.append('circle').attr('cx',i*90+6).attr('cy',0).attr('r',5).attr('fill',CAT_COLOR[c]);
+    legG.append('text').attr('x',i*90+14).attr('y',4).attr('font-size',9).attr('fill','#64748B').text(CAT_LABEL[c]);
+  });
+}
+
+// ════════════════════════════════════════
+//  SEASONAL ACTIVITY TRENDS (stacked bar)
+// ════════════════════════════════════════
+function initSeasonalChart(){
+  if(dashCharts.seasonal){try{dashCharts.seasonal.destroy();}catch(e){}dashCharts.seasonal=null;}
+  const canvas=document.getElementById('seasonalChart');
+  if(!canvas)return;
+  dashCharts.seasonal=new Chart(canvas.getContext('2d'),{
+    type:'bar',
+    data:{
+      labels:MONTHLY_DIST.labels,
+      datasets:MONTHLY_DIST.cats.map(c=>({
+        label:c.label,
+        data:c.data,
+        backgroundColor:c.color+'AA',
+        borderColor:c.color,
+        borderWidth:1,
+        stack:'monthly'
+      }))
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{
+        legend:{position:'bottom',labels:{boxWidth:9,font:{size:10},padding:6}},
+        tooltip:{
+          mode:'index',intersect:false,
+          callbacks:{title:items=>`${items[0].label} — NZ seasonal pattern`}
+        }
+      },
+      scales:{
+        x:{stacked:true,grid:{display:false},ticks:{font:{size:10}}},
+        y:{
+          stacked:true,beginAtZero:true,
+          grid:{color:'#F1F5F9'},
+          ticks:{font:{size:9}},
+          title:{display:true,text:'Relative activity volume',font:{size:9},color:'#94A3B8'}
+        }
+      }
+    }
+  });
+}
+
+// ════════════════════════════════════════
+//  CITY COMPARISON CHART
+// ════════════════════════════════════════
+function initCityComparison(){
+  if(dashCharts.cityComp){try{dashCharts.cityComp.destroy();}catch(e){}dashCharts.cityComp=null;}
+  const canvas=document.getElementById('cityCompChart');
+  if(!canvas)return;
+  // Update heading label
+  const lbl=document.getElementById('compCityLabel');
+  if(lbl) lbl.textContent=CITIES[currentCity].label;
+  // Sort cities by migrant % desc
+  const keys=Object.keys(MIGRANT_STATS).sort((a,b)=>MIGRANT_STATS[b].pct-MIGRANT_STATS[a].pct);
+  const cityLabels=keys.map(k=>CITIES[k]?CITIES[k].label:k);
+  const migrantPcts=keys.map(k=>MIGRANT_STATS[k].pct);
+  const ncRatios=keys.map(k=>{
+    const acts=ACTIVITIES.filter(a=>a.city===k);
+    return acts.length?Math.round(acts.filter(a=>a.newcomer).length/acts.length*100):0;
+  });
+  const perCapita=keys.map(k=>{
+    const n=ACTIVITIES.filter(a=>a.city===k).length;
+    return+(n/MIGRANT_STATS[k].pop*10000).toFixed(1);
+  });
+  const hl=k=>k===currentCity;
+  dashCharts.cityComp=new Chart(canvas.getContext('2d'),{
+    type:'bar',
+    data:{
+      labels:cityLabels,
+      datasets:[
+        {
+          label:'Overseas-born % (Census 2023)',
+          data:migrantPcts,
+          backgroundColor:keys.map(k=>hl(k)?'#0369A1':'#38BDF888'),
+          borderColor:keys.map(k=>hl(k)?'#075985':'#38BDF8'),
+          borderWidth:keys.map(k=>hl(k)?2.5:1.5),
+          yAxisID:'y'
+        },{
+          label:'Newcomer-Friendly events %',
+          data:ncRatios,
+          backgroundColor:keys.map(k=>hl(k)?'#10B981':'#6EE7B755'),
+          borderColor:keys.map(k=>hl(k)?'#059669':'#6EE7B7'),
+          borderWidth:keys.map(k=>hl(k)?2.5:1.5),
+          yAxisID:'y'
+        },{
+          type:'line',
+          label:'Activities per 10k residents',
+          data:perCapita,
+          borderColor:keys.map(k=>hl(k)?'#EA580C':'#FDBA74'),
+          backgroundColor:keys.map(k=>hl(k)?'#EA580C':'#FED7AA'),
+          borderWidth:2,
+          pointRadius:keys.map(k=>hl(k)?7:4),
+          pointBackgroundColor:keys.map(k=>hl(k)?'#EA580C':'#FDBA74'),
+          tension:.3,
+          yAxisID:'y2'
+        }
+      ]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{
+        legend:{position:'bottom',labels:{boxWidth:10,font:{size:10},padding:6}},
+        tooltip:{mode:'index',intersect:false}
+      },
+      scales:{
+        x:{grid:{display:false},ticks:{font:{size:10}}},
+        y:{
+          beginAtZero:true,max:100,
+          grid:{color:'#F1F5F9'},
+          ticks:{font:{size:9}},
+          title:{display:true,text:'Percentage (%)',font:{size:9},color:'#94A3B8'},
+          position:'left'
+        },
+        y2:{
+          beginAtZero:true,
+          grid:{display:false},
+          ticks:{font:{size:9}},
+          title:{display:true,text:'Per 10k residents',font:{size:9},color:'#94A3B8'},
+          position:'right'
+        }
+      }
+    }
+  });
+}
+
+// ════════════════════════════════════════
+//  MODAL
+// ════════════════════════════════════════
+// ── Image upload helpers ──
+let _uploadedImgDataUrl = null;
+
+function _setImgPreview(dataUrl){
+  _uploadedImgDataUrl = dataUrl;
+  const zone = document.getElementById('imgUploadZone');
+  const placeholder = document.getElementById('imgPlaceholder');
+  const wrap = document.getElementById('imgPreviewWrap');
+  const img = document.getElementById('imgPreviewEl');
+  img.src = dataUrl;
+  placeholder.style.display = 'none';
+  wrap.style.display = 'block';
+  zone.style.cursor = 'default';
+}
+
+function handleImgSelect(input){
+  const file = input.files[0];
+  if(!file) return;
+  if(file.size > 5 * 1024 * 1024){ alert('Image too large — please use a file under 5 MB.'); return; }
+  const reader = new FileReader();
+  reader.onload = e => _setImgPreview(e.target.result);
+  reader.readAsDataURL(file);
+}
+
+function handleImgDrop(e){
+  e.preventDefault();
+  document.getElementById('imgUploadZone').classList.remove('dragover');
+  const file = e.dataTransfer.files[0];
+  if(!file || !file.type.startsWith('image/')) return;
+  if(file.size > 5 * 1024 * 1024){ alert('Image too large — please use a file under 5 MB.'); return; }
+  const reader = new FileReader();
+  reader.onload = ev => _setImgPreview(ev.target.result);
+  reader.readAsDataURL(file);
+}
+
+function removeImg(e){
+  e.stopPropagation();
+  _uploadedImgDataUrl = null;
+  document.getElementById('imgFileInput').value = '';
+  document.getElementById('imgPreviewEl').src = '';
+  document.getElementById('imgPreviewWrap').style.display = 'none';
+  document.getElementById('imgPlaceholder').style.display = 'flex';
+  document.getElementById('imgUploadZone').style.cursor = 'pointer';
+}
+
+function openModal(){
+  // Reset image state each time modal opens
+  removeImg({stopPropagation:()=>{}});
+  document.getElementById('modalOv').classList.add('open');
+}
+function closeModal(){document.getElementById('modalOv').classList.remove('open');}
+function submitAct(){closeModal();setTimeout(()=>alert('🎉 Activity published! (Full persistence in Milestone 3)'),200);}
+document.getElementById('modalOv').addEventListener('click',function(e){if(e.target===this)closeModal();});
+
+// ════════════════════════════════════════
+//  BOOT
+// ════════════════════════════════════════
+window.addEventListener('load',()=>{
+  // Init dropdown with Hamilton pre-selected
+  document.getElementById('cityDdLabel').textContent=`${CITIES.hamilton.icon} Hamilton`;
+  buildCityList();
+  switchTab('map');
+  updateChips();
+
+  // ── Drag-to-resize split panel ──
+  (function(){
+    const handle = document.getElementById('resizeHandle');
+    const listPane = document.getElementById('listPane');
+    if(!handle || !listPane) return;
+    let dragging = false, startX = 0, startW = 0;
+    handle.addEventListener('mousedown', e => {
+      dragging = true;
+      startX = e.clientX;
+      startW = listPane.offsetWidth;
+      handle.classList.add('dragging');
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+      e.preventDefault();
+    });
+    document.addEventListener('mousemove', e => {
+      if(!dragging) return;
+      const delta = startX - e.clientX; // moving left = bigger list
+      const newW = Math.max(240, Math.min(window.innerWidth * 0.65, startW + delta));
+      listPane.style.width = newW + 'px';
+      if(map) map.invalidateSize({animate:false});
+    });
+    document.addEventListener('mouseup', () => {
+      if(!dragging) return;
+      dragging = false;
+      handle.classList.remove('dragging');
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+      if(map) map.invalidateSize();
+    });
+    // Touch support
+    handle.addEventListener('touchstart', e => {
+      const t = e.touches[0];
+      dragging = true; startX = t.clientX; startW = listPane.offsetWidth;
+      handle.classList.add('dragging');
+    }, {passive:true});
+    document.addEventListener('touchmove', e => {
+      if(!dragging) return;
+      const t = e.touches[0];
+      const delta = startX - t.clientX;
+      const newW = Math.max(240, Math.min(window.innerWidth * 0.65, startW + delta));
+      listPane.style.width = newW + 'px';
+      if(map) map.invalidateSize({animate:false});
+    }, {passive:true});
+    document.addEventListener('touchend', () => {
+      dragging = false;
+      handle.classList.remove('dragging');
+      if(map) map.invalidateSize();
+    });
+  })();
+});
+</script>
+</body>
+</html>
