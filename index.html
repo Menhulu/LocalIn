@@ -9,16 +9,16 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F8FAFC;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F0F4F0;height:100vh;display:flex;flex-direction:column;overflow:hidden}
 
 /* ── NAV ── */
-.navbar{background:#fff;border-bottom:1px solid #e2e8f0;padding:0 20px;height:54px;display:flex;align-items:center;gap:14px;z-index:1000;flex-shrink:0}
-.logo{font-size:20px;font-weight:800;color:#0369A1;letter-spacing:-.5px;white-space:nowrap}
+.navbar{background:rgba(255,255,255,.97);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,0,0,.07);padding:0 20px;height:56px;display:flex;align-items:center;gap:14px;z-index:1000;flex-shrink:0;box-shadow:0 1px 0 rgba(0,0,0,.04),0 4px 16px rgba(0,0,0,.06)}
+.logo{font-size:21px;font-weight:800;color:#0F6E56;letter-spacing:-.6px;white-space:nowrap}
 .logo span{color:#10B981}
 /* ── City dropdown ── */
 .city-dd-wrap{position:relative}
 .city-dd-btn{display:flex;align-items:center;gap:7px;padding:6px 12px;background:#F1F5F9;border-radius:9px;border:none;font-size:12px;font-weight:600;color:#1e293b;cursor:pointer;transition:all .2s;white-space:nowrap;min-width:148px}
-.city-dd-btn:hover,.city-dd-btn.open{background:#E0F2FE;color:#0369A1}
+.city-dd-btn:hover,.city-dd-btn.open{background:#E1F5EE;color:#0F6E56}
 .city-dd-icon{font-size:13px}
 .city-dd-label{flex:1;text-align:left}
 .city-dd-arrow{font-size:9px;color:#94A3B8;transition:transform .2s;margin-left:2px}
@@ -27,30 +27,30 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .city-dd-menu.open{opacity:1;transform:translateY(0);pointer-events:auto}
 .city-search-row{padding:8px 10px;border-bottom:1px solid #F1F5F9}
 .city-search-inp{width:100%;padding:6px 10px;border:1.5px solid #e2e8f0;border-radius:7px;font-size:12px;outline:none;color:#1e293b;transition:border-color .2s}
-.city-search-inp:focus{border-color:#0369A1}
+.city-search-inp:focus{border-color:#0F6E56}
 .city-list-scroll{max-height:230px;overflow-y:auto}
 .city-region-hdr{font-size:9px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.6px;padding:6px 14px 3px;background:#F8FAFC;border-top:1px solid #F1F5F9}
 .city-opt{display:flex;align-items:center;gap:9px;padding:9px 14px;cursor:pointer;font-size:12px;color:#1e293b;transition:background .15s;border-bottom:1px solid #F8FAFC}
-.city-opt:hover{background:#F0F9FF;color:#0369A1}
-.city-opt.active{background:#E0F2FE;color:#0369A1;font-weight:700}
+.city-opt:hover{background:#E1F5EE;color:#0F6E56}
+.city-opt.active{background:#E1F5EE;color:#0F6E56;font-weight:700}
 .city-opt-icon{font-size:14px;flex-shrink:0}
 .city-opt-info{display:flex;flex-direction:column;gap:1px}
 .city-opt-name{font-weight:600;font-size:12px}
 .city-opt-pop{font-size:10px;color:#94A3B8}
 .search-w{flex:1;max-width:320px;position:relative}
 .search-w input{width:100%;padding:7px 12px 7px 32px;border:1px solid #e2e8f0;border-radius:8px;font-size:12px;background:#F8FAFC;color:#1e293b;outline:none;transition:border-color .2s}
-.search-w input:focus{border-color:#0369A1;background:#fff}
+.search-w input:focus{border-color:#0F6E56;background:#fff}
 .search-icon{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:#94A3B8;font-size:13px}
 .nav-right{margin-left:auto;display:flex;align-items:center;gap:8px}
-.btn-create{background:#0369A1;color:#fff;border:none;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:background .2s}
-.btn-create:hover{background:#075985}
+.btn-create{background:linear-gradient(135deg,#0F6E56,#085041);color:#fff;border:none;padding:7px 16px;border-radius:9px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .2s;box-shadow:0 2px 8px rgba(15,110,86,.35),0 1px 2px rgba(0,0,0,.1);letter-spacing:.1px}
+.btn-create:hover{background:linear-gradient(135deg,#1D9E75,#0F6E56);box-shadow:0 4px 14px rgba(15,110,86,.45);transform:translateY(-1px)}
 
 /* ── TABS ── */
-.tab-bar{background:#fff;border-bottom:2px solid #e2e8f0;padding:0 20px;display:flex;align-items:flex-end;gap:0;flex-shrink:0}
-.tab{padding:10px 18px;font-size:13px;font-weight:600;color:#94A3B8;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:6px}
-.tab:hover{color:#0369A1}
-.tab.active{color:#0369A1;border-bottom-color:#0369A1}
-.tab-badge{background:#E0F2FE;color:#0369A1;border-radius:10px;padding:1px 7px;font-size:10px;font-weight:700}
+.tab-bar{background:rgba(255,255,255,.96);border-bottom:1px solid rgba(0,0,0,.07);padding:0 20px;display:flex;align-items:flex-end;gap:0;flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.tab{padding:10px 18px;font-size:13px;font-weight:600;color:#94A3B8;cursor:pointer;border-bottom:2.5px solid transparent;margin-bottom:-1px;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.tab:hover{color:#0F6E56;background:rgba(15,110,86,.04);border-radius:8px 8px 0 0}
+.tab.active{color:#0F6E56;border-bottom-color:#0F6E56;font-weight:700}
+.tab-badge{background:linear-gradient(135deg,#D1FAE5,#A7F3D0);color:#065F46;border-radius:10px;padding:1px 7px;font-size:10px;font-weight:700;box-shadow:0 1px 3px rgba(16,185,129,.2)}
 
 /* ── VIEWS ── */
 .view{display:none;flex:1;overflow:hidden}
@@ -83,46 +83,101 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 /* ── Resize Handle ── */
 #resizeHandle{width:7px;background:linear-gradient(to bottom,#E2E8F0,#CBD5E1);cursor:col-resize;z-index:100;flex-shrink:0;user-select:none;transition:all .15s;display:flex;align-items:center;justify-content:center;position:relative}
-#resizeHandle:hover,#resizeHandle.dragging{background:linear-gradient(to bottom,#38BDF8,#0284C7);box-shadow:inset -2px 0 6px rgba(2,132,199,.2)}
+#resizeHandle:hover,#resizeHandle.dragging{background:linear-gradient(to bottom,#5DCAA5,#1D9E75);box-shadow:inset -2px 0 6px rgba(29,158,117,.2)}
 #resizeHandle::after{content:'⋮⋮';writing-mode:vertical-rl;font-size:9px;color:rgba(0,0,0,.2);letter-spacing:3px;pointer-events:none;line-height:1}
 #resizeHandle:hover::after,#resizeHandle.dragging::after{color:rgba(255,255,255,.7)}
 
 /* ── List Pane ── */
-#listPane{width:380px;min-width:240px;max-width:65vw;display:flex;flex-direction:column;background:#F8FAFC;border-left:1px solid #e2e8f0;overflow:hidden;position:relative;flex-shrink:0}
+#listPane{width:380px;min-width:240px;max-width:65vw;display:flex;flex-direction:column;background:#F5F7F5;border-left:1px solid rgba(0,0,0,.08);overflow:hidden;position:relative;flex-shrink:0;box-shadow:-4px 0 20px rgba(0,0,0,.06)}
 
 /* ── Map Stats Box ── */
 .map-stats{position:absolute;bottom:24px;left:16px;z-index:500;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-radius:16px;padding:10px 18px;box-shadow:0 4px 24px rgba(0,0,0,.12),0 1px 4px rgba(0,0,0,.08);display:flex;gap:18px;border:1px solid rgba(186,230,253,.7)}
 .stat-item{text-align:center;position:relative}
 .stat-item+.stat-item::before{content:'';position:absolute;left:-9px;top:15%;height:70%;width:1px;background:#e2e8f0}
-.stat-num{font-size:20px;font-weight:800;color:#075985;letter-spacing:-.5px;line-height:1}
+.stat-num{font-size:20px;font-weight:800;color:#085041;letter-spacing:-.5px;line-height:1}
 .stat-lbl{font-size:9px;color:#94A3B8;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-top:3px}
 
 /* ── Map Zoom Controls (override Leaflet) ── */
 .leaflet-bar a{border-radius:8px!important;border:none!important;box-shadow:none!important;font-weight:700;color:#334155}
 .leaflet-bar{border-radius:10px!important;border:none!important;box-shadow:0 2px 12px rgba(0,0,0,.14)!important;overflow:hidden}
-.leaflet-bar a:hover{background:#E0F2FE;color:#0369A1}
+.leaflet-bar a:hover{background:#E1F5EE;color:#0F6E56}
 .leaflet-bar a:first-child{border-radius:10px 10px 0 0!important}
 .leaflet-bar a:last-child{border-radius:0 0 10px 10px!important}
 
 /* ── Map Locate Button ── */
 #mapLocateBtn{position:absolute;top:80px;left:14px;z-index:500;background:#fff;border:none;border-radius:10px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.14);transition:all .2s}
-#mapLocateBtn:hover{background:#E0F2FE;transform:scale(1.08)}
+#mapLocateBtn:hover{background:#E1F5EE;transform:scale(1.08)}
 
 /* ── Activity List Panel ── */
-.act-list{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#F8FAFC}
-.al-header{background:linear-gradient(135deg,#F0F9FF 0%,#E0F2FE 100%);border-bottom:1px solid #BAE6FD;padding:11px 14px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;gap:8px}
-.al-count{font-size:12px;color:#0369A1;font-weight:700;white-space:nowrap}
-.al-count strong{font-size:18px;color:#075985;font-weight:800;margin-right:1px}
-.sort-btns{display:flex;gap:4px;flex-shrink:0}
-.sort-btn{padding:4px 9px;border-radius:6px;border:1.5px solid #7DD3FC;font-size:11px;font-weight:600;color:#0284C7;background:rgba(255,255,255,.7);cursor:pointer;transition:all .2s;white-space:nowrap}
-.sort-btn:hover{background:#fff;border-color:#0284C7}
-.sort-btn.active{background:#0369A1;color:#fff;border-color:#0369A1}
+.act-list{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#F5F7F5}
+/* ── List panel header — two-row layout ── */
+.al-header{background:linear-gradient(135deg,#E1F5EE 0%,#D1FAE5 100%);border-bottom:1px solid #9FE1CB;padding:0;display:flex;flex-direction:column;flex-shrink:0}
+.al-header-row1{display:flex;padding:0 4px;gap:0}
+.al-header-row2{display:flex;align-items:center;gap:6px;padding:5px 14px;border-top:1px solid rgba(159,225,203,.4);background:rgba(255,255,255,.35)}
+.al-count{font-size:11px;color:#0F6E56;font-weight:700;white-space:nowrap}
+.al-count strong{font-size:15px;color:#085041;font-weight:800;margin-right:1px}
+/* ── Panel mode tabs — full width, primary ── */
+.panel-tabs{display:flex;width:100%}
+.panel-tab{flex:1;padding:10px 8px;font-size:12px;font-weight:600;color:#1D9E75;cursor:pointer;transition:all .18s;white-space:nowrap;border:none;background:transparent;text-align:center;border-bottom:2.5px solid transparent;margin-bottom:-1px}
+.panel-tab.active{color:#085041;border-bottom-color:#0F6E56;background:rgba(255,255,255,.3);font-weight:700}
+.panel-tab:hover:not(.active){background:rgba(255,255,255,.2);color:#085041}
+/* ── Sort + distance row ── */
+.sort-btns{display:flex;gap:4px;flex-shrink:0;margin-left:auto}
+.sort-btn{padding:3px 9px;border-radius:6px;border:1.5px solid #9FE1CB;font-size:11px;font-weight:600;color:#1D9E75;background:rgba(255,255,255,.7);cursor:pointer;transition:all .2s;white-space:nowrap}
+.sort-btn:hover{background:#fff;border-color:#1D9E75}
+.sort-btn.active{background:#0F6E56;color:#fff;border-color:#0F6E56}
+/* ── Distance filter pills ── */
+.dist-pills{display:flex;gap:3px;align-items:center}
+.dist-lbl{font-size:10px;color:#64748B;font-weight:600;white-space:nowrap;margin-right:1px}
+.dist-pill{padding:3px 8px;border-radius:20px;border:1.5px solid #CBD5E1;font-size:10.5px;font-weight:600;color:#475569;background:rgba(255,255,255,.7);cursor:pointer;transition:all .18s;white-space:nowrap}
+.dist-pill:hover{border-color:#5DCAA5;color:#0F6E56}
+.dist-pill.active{background:#0F6E56;color:#fff;border-color:#0F6E56}
 .al-scroll{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin;scrollbar-color:#e2e8f0 transparent}
-.al-empty{padding:32px 16px;text-align:center;color:#94A3B8;font-size:12px;line-height:1.7}
+/* ── Upcoming grouped list (in map panel) ── */
+.up-scroll{flex:1;overflow-y:auto;padding:10px 10px 16px;scrollbar-width:thin;scrollbar-color:#e2e8f0 transparent}
+.up-date-hdr{font-size:10px;font-weight:700;color:#0F6E56;text-transform:uppercase;letter-spacing:.6px;padding:10px 4px 5px;display:flex;align-items:center;gap:7px}
+.up-date-hdr::after{content:'';flex:1;height:1px;background:#9FE1CB;opacity:.6}
+.up-item{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:10px;margin-bottom:6px;background:#fff;border:1px solid #F1F5F9;border-left:3.5px solid var(--uc,#E2E8F0);box-shadow:0 1px 3px rgba(0,0,0,.05);cursor:pointer;transition:all .18s}
+.up-item:hover{transform:translateX(2px);box-shadow:0 2px 8px rgba(15,110,86,.1);border-color:#9FE1CB;background:#F8FFFE}
+.up-item-body{flex:1;min-width:0}
+.up-item-name{font-size:12px;font-weight:700;color:#0F172A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.up-item-meta{font-size:10.5px;color:#64748B;margin-top:2px;display:flex;align-items:center;gap:5px}
+.up-item-time{font-size:11px;font-weight:600;color:#475569;white-space:nowrap;flex-shrink:0}
+.up-item-arr{font-size:11px;color:#CBD5E1;flex-shrink:0;transition:all .18s}
+.up-item:hover .up-item-arr{color:#0F6E56;transform:translateX(2px)}
+/* ── Insight bars ── */
+.insight-bar{background:linear-gradient(135deg,#ECFDF5,#D1FAE5);border-bottom:1px solid #9FE1CB;padding:7px 14px;display:flex;align-items:center;gap:7px;font-size:11px;color:#065F46;flex-shrink:0}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+.insight-dot{width:7px;height:7px;border-radius:50%;background:#10B981;flex-shrink:0;animation:blink 2.2s ease-in-out infinite}
+.net-insight{background:linear-gradient(135deg,#ECFDF5,#E1F5EE);border-radius:10px;padding:10px 12px;margin-bottom:14px;font-size:11.5px;color:#065F46;line-height:1.6;border:1px solid #9FE1CB}
+.dash-insight{grid-column:span 3;background:linear-gradient(135deg,#ECFDF5,#E1F5EE);border:1px solid #9FE1CB;border-radius:10px;padding:9px 14px;display:flex;align-items:center;gap:10px}
+/* ── Card share button ── */
+.ac-share{position:absolute;top:8px;left:10px;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.88);border:none;cursor:pointer;display:none;align-items:center;justify-content:center;font-size:12px;z-index:3;backdrop-filter:blur(4px);transition:background .15s}
+.act-card:hover .ac-share{display:flex}
+.ac-share:hover{background:#fff}
+/* ── Copy toast ── */
+/* ── App toast notification ── */
+#appToast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(16px);min-width:260px;max-width:420px;background:#fff;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,.18),0 2px 8px rgba(0,0,0,.1);padding:13px 16px;display:flex;align-items:flex-start;gap:12px;opacity:0;transition:opacity .25s,transform .25s;z-index:10000;pointer-events:none;border:1px solid #e2e8f0}
+#appToast.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
+#appToast .at-icon{font-size:22px;flex-shrink:0;line-height:1;margin-top:1px}
+#appToast .at-body{flex:1}
+#appToast .at-title{font-size:13px;font-weight:700;color:#0F172A;margin-bottom:2px}
+#appToast .at-msg{font-size:12px;color:#64748B;line-height:1.5}
+#appToast .at-close{background:none;border:none;font-size:16px;color:#94A3B8;cursor:pointer;padding:0;line-height:1;flex-shrink:0;margin-top:2px}
+#appToast .at-close:hover{color:#475569}
+#appToast.at-success{border-color:#9FE1CB}
+#appToast.at-success .at-title{color:#065F46}
+#appToast.at-warn{border-color:#FED7AA}
+#appToast.at-warn .at-title{color:#92400E}
+/* ── Info tooltip ── */
+.dc-info{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;background:#E1F5EE;color:#0F6E56;font-size:9px;cursor:help;margin-left:5px;vertical-align:middle;position:relative}
+.dc-info:hover::after{content:attr(data-tip);position:absolute;bottom:120%;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;font-size:10px;font-weight:400;padding:5px 9px;border-radius:6px;white-space:nowrap;z-index:999;pointer-events:none}
+/* ── Empty state ── */
+.al-empty{padding:28px 16px;text-align:center;color:#94A3B8;font-size:12px;line-height:1.8}
 /* Activity Cards — visual card with gradient header */
-.act-card{background:#fff;border-radius:12px;cursor:pointer;transition:all .2s;border:1.5px solid #F1F5F9;box-shadow:0 1px 5px rgba(0,0,0,.07);overflow:hidden;flex-shrink:0}
-.act-card:hover{border-color:#38BDF8;box-shadow:0 5px 18px rgba(3,105,161,.14);transform:translateY(-2px)}
-.act-card.selected{border-color:#0369A1;box-shadow:0 5px 18px rgba(3,105,161,.22)}
+.act-card{background:#fff;border-radius:14px;cursor:pointer;transition:all .22s cubic-bezier(.2,0,.2,1);border:1px solid rgba(0,0,0,.07);box-shadow:0 1px 3px rgba(0,0,0,.06),0 4px 12px rgba(0,0,0,.06);overflow:hidden;flex-shrink:0}
+.act-card:hover{border-color:#5DCAA5;box-shadow:0 2px 6px rgba(0,0,0,.06),0 8px 24px rgba(15,110,86,.14);transform:translateY(-3px)}
+.act-card.selected{border-color:#0F6E56;box-shadow:0 2px 8px rgba(0,0,0,.06),0 8px 24px rgba(15,110,86,.2)}
 /* Card visual header — photo + emoji badge */
 .ac-header{height:116px;display:flex;align-items:center;justify-content:center;font-size:30px;background:var(--cat-bg,#f1f5f9);border-bottom:2px solid var(--cat-color,#e2e8f0);position:relative;overflow:hidden}
 .ac-header-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform .38s ease}
@@ -146,7 +201,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .detail-panel{position:absolute;left:0;right:0;top:0;bottom:0;background:#fff;border-left:1px solid #e2e8f0;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);z-index:200;overflow-y:auto}
 .detail-panel.open{transform:translateX(0)}
 /* Hero header */
-.dp-hero{padding:16px 14px 14px;display:flex;flex-direction:column;gap:10px;position:relative}
+.dp-hero{padding:16px 14px 14px;display:flex;flex-direction:column;gap:10px;position:relative;min-height:130px;overflow:hidden}
+.dp-hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.35;pointer-events:none}
+.dp-hero>*:not(.dp-hero-img){position:relative;z-index:1}
 .dp-hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
 .dp-emoji{font-size:28px;line-height:1;margin-bottom:2px}
 .pc{background:rgba(255,255,255,.25);border:none;width:28px;height:28px;border-radius:50%;font-size:14px;color:rgba(255,255,255,.9);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
@@ -183,21 +240,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .age-meta-row{display:flex;gap:4px}
 .age-meta-cell{flex:1;display:flex;flex-direction:column;align-items:center;min-width:0}
 .age-meta-lbl{font-size:9px;color:#94A3B8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%;text-align:center}
-.age-meta-pct{font-size:10px;font-weight:700;color:#0369A1}
+.age-meta-pct{font-size:10px;font-weight:700;color:#0F6E56}
 /* Vibe + practical */
 .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .info-pill{background:#F8FAFC;border-radius:8px;padding:8px 10px;display:flex;align-items:center;gap:7px;font-size:11px;color:#334155}
 .info-pill strong{color:#1e293b}
 /* Actions */
 .pactions{padding:12px 14px 16px;display:flex;gap:7px;border-top:1px solid #F1F5F9}
-.btn-join{flex:1;background:#0369A1;color:#fff;border:none;padding:10px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;transition:background .2s}
-.btn-join:hover{background:#075985}
-.btn-save{background:#F8FAFC;color:#0369A1;border:1.5px solid #e2e8f0;padding:10px 13px;border-radius:9px;font-size:16px;cursor:pointer;transition:all .2s}
-.btn-save:hover{background:#E0F2FE;border-color:#38BDF8}
+.btn-join{flex:1;background:linear-gradient(135deg,#0F6E56,#085041);color:#fff;border:none;padding:11px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 3px 10px rgba(15,110,86,.35);letter-spacing:.1px}
+.btn-join:hover{background:linear-gradient(135deg,#1D9E75,#0F6E56);box-shadow:0 5px 16px rgba(15,110,86,.45);transform:translateY(-1px)}
+.btn-save{background:#F8FAFC;color:#0F6E56;border:1.5px solid #e2e8f0;padding:10px 13px;border-radius:9px;font-size:16px;cursor:pointer;transition:all .2s}
+.btn-save:hover{background:#E1F5EE;border-color:#5DCAA5}
 
 /* ══════════ NETWORK VIEW ══════════ */
-.net-wrap{flex:1;display:flex;overflow:hidden}
-#netSvg{flex:1}
+.net-wrap{flex:1;display:flex;overflow:hidden;background:linear-gradient(160deg,#EDF5EF 0%,#E8F0E8 50%,#EDF2F0 100%)}
+#netSvg{flex:1;background:transparent}
 .net-side{width:280px;background:#fff;border-left:1px solid #e2e8f0;padding:18px;overflow-y:auto;flex-shrink:0}
 .net-title{font-size:15px;font-weight:700;color:#1e293b;margin-bottom:4px}
 .net-sub{font-size:12px;color:#64748B;margin-bottom:16px;line-height:1.5}
@@ -205,18 +262,31 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .leg-row{display:flex;align-items:center;gap:8px;font-size:12px;color:#475569}
 .leg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
 .net-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}
-.ns-card{background:#F8FAFC;border-radius:10px;padding:10px 12px;text-align:center}
-.ns-num{font-size:22px;font-weight:800;color:#0369A1}
-.ns-lbl{font-size:10px;color:#94A3B8;font-weight:600;text-transform:uppercase}
+.ns-card{border-radius:12px;padding:11px 12px;text-align:center;border:1px solid rgba(255,255,255,.6);backdrop-filter:blur(6px)}
+.ns-card.c-teal{background:linear-gradient(135deg,#D1FAE5,#A7F3D0)}
+.ns-card.c-blue{background:linear-gradient(135deg,#DBEAFE,#BFDBFE)}
+.ns-card.c-purple{background:linear-gradient(135deg,#EDE9FE,#DDD6FE)}
+.ns-card.c-amber{background:linear-gradient(135deg,#FEF3C7,#FDE68A)}
+.ns-num{font-size:24px;font-weight:800;line-height:1}
+.ns-card.c-teal .ns-num{color:#065F46}
+.ns-card.c-blue .ns-num{color:#1E40AF}
+.ns-card.c-purple .ns-num{color:#5B21B6}
+.ns-card.c-amber .ns-num{color:#92400E}
+.ns-lbl{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-top:3px}
+.ns-card.c-teal .ns-lbl{color:#047857}
+.ns-card.c-blue .ns-lbl{color:#1D4ED8}
+.ns-card.c-purple .ns-lbl{color:#6D28D9}
+.ns-card.c-amber .ns-lbl{color:#B45309}
+.ns-trend{font-size:10px;font-weight:600;margin-top:4px}
 .net-person{background:#F8FAFC;border-radius:10px;padding:10px 12px;margin-bottom:8px;cursor:pointer;transition:background .2s}
-.net-person:hover{background:#E0F2FE}
+.net-person:hover{background:#E1F5EE}
 .np-name{font-size:13px;font-weight:600;color:#1e293b}
 .np-detail{font-size:11px;color:#64748B;margin-top:2px}
 .net-tooltip{position:fixed;background:rgba(15,23,42,.92);color:#fff;padding:8px 12px;border-radius:8px;font-size:12px;pointer-events:none;z-index:9999;display:none;line-height:1.5}
 
 /* ══════════ DASHBOARD VIEW ══════════ */
-.dash-wrap{flex:1;overflow-y:auto;padding:20px;display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:auto auto auto;gap:16px;background:#F0F4F8}
-.dash-card{background:#fff;border-radius:14px;padding:18px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.dash-wrap{flex:1;overflow-y:auto;padding:20px;display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:auto auto auto;gap:16px;background:linear-gradient(160deg,#EDF5EF 0%,#E8F0E8 50%,#EDF2F0 100%)}
+.dash-card{background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-radius:16px;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,.06),0 6px 20px rgba(0,0,0,.07);border:1px solid rgba(255,255,255,.8)}
 .dc-title{font-size:12px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
 .dc-big{font-size:36px;font-weight:800;color:#1e293b}
 .dc-sub{font-size:12px;color:#64748B;margin-top:3px}
@@ -225,14 +295,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .ring-wrap{position:relative;width:88px;height:88px;flex-shrink:0}
 .ring-wrap svg{transform:rotate(-90deg)}
 .ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.ring-val{font-size:20px;font-weight:800;color:#0369A1}
+.ring-val{font-size:20px;font-weight:800;color:#0F6E56}
 .ring-lbl{font-size:9px;color:#94A3B8;font-weight:600;text-transform:uppercase}
 /* Progress bars */
 .pbar-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
-.pbar-lbl{font-size:11px;color:#475569;width:72px;flex-shrink:0}
-.pbar-bg{flex:1;height:7px;background:#F1F5F9;border-radius:4px;overflow:hidden}
-.pbar-fill{height:100%;border-radius:4px;transition:width 1s ease}
-.pbar-val{font-size:11px;color:#64748B;width:28px;text-align:right}
+.pbar-lbl{font-size:12px;font-weight:600;color:#334155;width:76px;flex-shrink:0}
+.pbar-bg{flex:1;height:10px;background:#E2E8F0;border-radius:5px;overflow:hidden}
+.pbar-fill{height:100%;border-radius:5px;transition:width 1s ease}
+.pbar-val{font-size:12px;font-weight:700;color:#0F6E56;width:36px;text-align:right}
 /* Activity list */
 .act-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #F1F5F9}
 .act-item:last-child{border-bottom:none}
@@ -242,8 +312,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 /* Streak */
 .streak-days{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px}
 .sd{width:22px;height:22px;border-radius:5px;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;color:#fff}
-.sd.active{background:#0369A1}
-.sd.mid{background:#0284C799}
+.sd.active{background:#0F6E56}
+.sd.mid{background:#1D9E7599}
 .sd.off{background:#E2E8F0;color:#94A3B8}
 /* Span helpers */
 .span2{grid-column:span 2}
@@ -252,8 +322,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 canvas{max-width:100%;display:block}
 
 /* ══════════ TIMELINE VIEW ══════════ */
-.tl-wrap{flex:1;overflow-y:auto;padding:20px;background:#F0F4F8;display:flex;flex-direction:column;gap:16px}
-.tl-card{background:#fff;border-radius:14px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.tl-wrap{flex:1;overflow-y:auto;padding:20px;background:linear-gradient(160deg,#EDF5EF 0%,#E8F0E8 50%,#EDF2F0 100%);display:flex;flex-direction:column;gap:16px}
+.tl-card{background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-radius:16px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.06),0 6px 20px rgba(0,0,0,.07);border:1px solid rgba(255,255,255,.8)}
 .tl-card-title{font-size:13px;font-weight:700;color:#1e293b;margin-bottom:16px}
 /* Heatmap */
 .hm-grid{display:grid;grid-template-columns:40px repeat(7,1fr);gap:4px;font-size:10px}
@@ -266,13 +336,16 @@ canvas{max-width:100%;display:block}
 .tl-day-group{margin-bottom:18px}
 .tl-day-label{font-size:11px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;padding-left:24px;position:relative}
 .tl-day-label::before{content:'';position:absolute;left:8px;top:50%;transform:translateY(-50%);width:4px;height:4px;background:#CBD5E1;border-radius:50%}
-.tl-event{display:flex;align-items:flex-start;gap:12px;padding:10px 12px;border-radius:10px;margin-bottom:6px;transition:background .2s;cursor:pointer}
-.tl-event:hover{background:#F8FAFC}
-.tl-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:3px}
-.tl-content{flex:1}
-.tl-ename{font-size:13px;font-weight:600;color:#1e293b}
-.tl-emeta{font-size:11px;color:#64748B;margin-top:2px}
-.tl-time{font-size:11px;color:#94A3B8;white-space:nowrap}
+.tl-event{display:flex;align-items:center;gap:11px;padding:10px 13px;border-radius:11px;margin-bottom:7px;transition:all .18s;cursor:pointer;background:#fff;border:1px solid #F1F5F9;box-shadow:0 1px 4px rgba(0,0,0,.05);border-left:3.5px solid var(--evt-col,#E2E8F0)}
+.tl-event:hover{background:#F8FFFE;transform:translateX(3px);box-shadow:0 2px 10px rgba(15,110,86,.1);border-color:#9FE1CB}
+.tl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;background:var(--evt-col)}
+.tl-content{flex:1;min-width:0}
+.tl-ename{font-size:13px;font-weight:700;color:#0F172A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px}
+.tl-emeta{font-size:11px;color:#64748B;display:flex;align-items:center;gap:6px}
+.tl-cat-tag{font-size:9px;font-weight:700;border-radius:8px;padding:1px 7px;color:#fff;flex-shrink:0}
+.tl-time{font-size:12px;font-weight:600;color:#475569;white-space:nowrap;flex-shrink:0}
+.tl-arrow{font-size:12px;color:#CBD5E1;flex-shrink:0;transition:all .18s}
+.tl-event:hover .tl-arrow{color:#0F6E56;transform:translateX(2px)}
 
 /* ══════════ MODAL ══════════ */
 .modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.4);backdrop-filter:blur(4px);z-index:2000;display:none;align-items:center;justify-content:center}
@@ -285,17 +358,17 @@ canvas{max-width:100%;display:block}
 .fg{display:flex;flex-direction:column;gap:4px}
 .flbl{font-size:11px;font-weight:600;color:#475569}
 .finp,.fsel,.ftxt{padding:8px 11px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:12px;color:#1e293b;outline:none;transition:border-color .2s;font-family:inherit}
-.finp:focus,.fsel:focus,.ftxt:focus{border-color:#0369A1}
+.finp:focus,.fsel:focus,.ftxt:focus{border-color:#0F6E56}
 .ftxt{resize:vertical;min-height:72px}
 .frow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.btn-sub{background:#0369A1;color:#fff;border:none;padding:10px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer}
-.btn-sub:hover{background:#075985}
+.btn-sub{background:#0F6E56;color:#fff;border:none;padding:10px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer}
+.btn-sub:hover{background:#085041}
 /* ── Image upload zone ── */
-.img-upload-zone{border:2px dashed #BAE6FD;border-radius:10px;padding:0;cursor:pointer;transition:all .2s;overflow:hidden;position:relative;background:#FAFAFF;min-height:96px;display:flex;align-items:stretch}
-.img-upload-zone:hover,.img-upload-zone.dragover{border-color:#0284C7;background:#F0F9FF}
+.img-upload-zone{border:2px dashed #9FE1CB;border-radius:10px;padding:0;cursor:pointer;transition:all .2s;overflow:hidden;position:relative;background:#FAFAFF;min-height:96px;display:flex;align-items:stretch}
+.img-upload-zone:hover,.img-upload-zone.dragover{border-color:#1D9E75;background:#E1F5EE}
 .img-upload-placeholder{width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:18px;pointer-events:none}
 .img-upload-icon{font-size:26px;line-height:1}
-.img-upload-label{font-size:12px;font-weight:600;color:#0284C7}
+.img-upload-label{font-size:12px;font-weight:600;color:#1D9E75}
 .img-upload-hint{font-size:10px;color:#94A3B8}
 .img-preview-wrap{width:100%;position:relative;display:none}
 .img-preview-wrap img{width:100%;height:130px;object-fit:cover;display:block}
@@ -311,21 +384,36 @@ canvas{max-width:100%;display:block}
 .pop-det{font-size:11px;color:#64748B}
 
 /* ── Brush / Linking indicator ── */
-.brush-banner{background:#E0F2FE;border-bottom:1px solid #7DD3FC;padding:7px 20px;display:none;align-items:center;gap:8px;font-size:12px;color:#0369A1;font-weight:600;flex-shrink:0}
+.brush-banner{background:#E1F5EE;border-bottom:1px solid #5DCAA5;padding:7px 20px;display:none;align-items:center;gap:8px;font-size:12px;color:#0F6E56;font-weight:600;flex-shrink:0}
 .brush-banner.show{display:flex}
-.brush-banner button{background:none;border:none;color:#0369A1;font-size:14px;cursor:pointer;padding:0 2px;line-height:1;opacity:.7}
+.brush-banner button{background:none;border:none;color:#0F6E56;font-size:14px;cursor:pointer;padding:0 2px;line-height:1;opacity:.7}
 .brush-banner button:hover{opacity:1}
+/* ── Map time-brush banner (Timeline → Map) ── */
+.map-time-banner{background:#E1F5EE;border-bottom:1px solid #5DCAA5;padding:6px 16px;display:none;align-items:center;gap:8px;font-size:12px;color:#0F6E56;font-weight:600;flex-shrink:0}
+.map-time-banner.show{display:flex}
+.map-time-banner button{background:none;border:none;color:#0F6E56;font-size:14px;cursor:pointer;padding:0 2px;line-height:1;opacity:.7;margin-left:auto}
+.map-time-banner button:hover{opacity:1}
+/* ── Heatmap cell: clickable highlight ── */
+.hm-cell{cursor:pointer}
+.hm-cell:hover{outline:2px solid #0F6E56;outline-offset:-2px}
+/* ── Network person row: clickable ── */
+.net-person{cursor:pointer}
+/* ── Newcomer badge tooltip ── */
+.nc-tip{position:relative}
+.nc-tip::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#065F46;color:#fff;font-size:10px;font-weight:600;padding:4px 9px;border-radius:8px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .18s;z-index:9999;letter-spacing:.2px}
+.nc-tip::before{content:'';position:absolute;bottom:calc(100% + 1px);left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:#065F46;opacity:0;transition:opacity .18s;z-index:9999}
+.nc-tip:hover::after,.nc-tip:hover::before{opacity:1}
 .pbar-row{cursor:pointer;border-radius:6px;padding:3px 6px;margin:-3px -6px;transition:background .15s}
-.pbar-row:hover{background:#F0F9FF}
-.pbar-row:hover .pbar-lbl{color:#0369A1}
+.pbar-row:hover{background:#E1F5EE}
+.pbar-row:hover .pbar-lbl{color:#0F6E56}
 
 /* ── Radar chart card ── */
 .radar-hint{font-size:10px;color:#94A3B8;margin-top:6px;text-align:center}
 
 /* ── Network Growth Timeline ── */
-.growth-wrap{background:#fff;border-top:1px solid #e2e8f0;padding:16px 20px;flex-shrink:0;height:160px;overflow:hidden}
-.growth-title{font-size:11px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
-#growthSvg{width:100%;height:100px}
+.growth-wrap{background:rgba(255,255,255,.92);border-top:1px solid rgba(0,0,0,.07);padding:14px 20px 10px;flex-shrink:0;height:190px;overflow:hidden;backdrop-filter:blur(8px)}
+.growth-title{font-size:11px;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px}
+#growthSvg{width:100%;height:140px}
 .growth-tooltip{position:fixed;background:rgba(15,23,42,.92);color:#fff;padding:7px 11px;border-radius:8px;font-size:11px;pointer-events:none;z-index:9999;display:none;line-height:1.6}
 
 /* ── Bubble Scatter ── */
@@ -338,15 +426,15 @@ canvas{max-width:100%;display:block}
 .marker-pulse>div{animation:markerPulse .7s ease-in-out infinite!important;transform-origin:bottom center}
 
 /* ── Accessibility ── */
-.skip-nav{position:absolute;top:-60px;left:12px;background:#0369A1;color:#fff;padding:8px 16px;font-size:13px;font-weight:600;border-radius:0 0 8px 8px;z-index:10000;transition:top .2s;text-decoration:none}
+.skip-nav{position:absolute;top:-60px;left:12px;background:#0F6E56;color:#fff;padding:8px 16px;font-size:13px;font-weight:600;border-radius:0 0 8px 8px;z-index:10000;transition:top .2s;text-decoration:none}
 .skip-nav:focus{top:0}
-*:focus-visible{outline:3px solid #0284C7;outline-offset:2px;border-radius:3px}
-button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #0284C7;outline-offset:2px}
+*:focus-visible{outline:3px solid #1D9E75;outline-offset:2px;border-radius:3px}
+button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1D9E75;outline-offset:2px}
 
 /* ── Onboarding overlay ── */
 .ob-ov{position:fixed;inset:0;background:rgba(15,23,42,.65);backdrop-filter:blur(3px);z-index:5000;display:flex;align-items:center;justify-content:center}
 .ob-card{background:#fff;border-radius:20px;width:400px;max-width:92vw;padding:28px 28px 22px;box-shadow:0 24px 64px rgba(0,0,0,.25)}
-.ob-logo{font-size:28px;font-weight:800;color:#0369A1;margin-bottom:4px}
+.ob-logo{font-size:28px;font-weight:800;color:#0F6E56;margin-bottom:4px}
 .ob-logo span{color:#1e293b}
 .ob-tagline{font-size:13px;color:#64748B;margin-bottom:20px}
 .ob-steps{display:flex;flex-direction:column;gap:12px;margin-bottom:22px}
@@ -354,13 +442,13 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #0
 .ob-step-ico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 .ob-step-text{font-size:12px;color:#334155;line-height:1.5}
 .ob-step-title{font-size:13px;font-weight:700;color:#1e293b;margin-bottom:1px}
-.ob-btn{width:100%;background:#0369A1;color:#fff;border:none;padding:12px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:background .2s}
-.ob-btn:hover{background:#075985}
+.ob-btn{width:100%;background:#0F6E56;color:#fff;border:none;padding:12px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:background .2s}
+.ob-btn:hover{background:#085041}
 .ob-skip{display:block;text-align:center;margin-top:10px;font-size:12px;color:#94A3B8;cursor:pointer;background:none;border:none;width:100%}
 .ob-skip:hover{color:#475569}
 
 /* ── Card hover (hover from marker) ── */
-.act-card.map-hover{border-color:#0369A1!important;background:#FAFAFF!important;box-shadow:0 0 0 3px rgba(3,105,161,.18),0 5px 16px rgba(3,105,161,.15)!important;transform:translateY(-2px)}
+.act-card.map-hover{border-color:#0F6E56!important;background:#FAFAFF!important;box-shadow:0 0 0 3px rgba(15,110,86,.18),0 5px 16px rgba(15,110,86,.15)!important;transform:translateY(-2px)}
 
 /* ── Rich detail panel extras ── */
 .det-section{padding:0 14px 12px}
@@ -376,7 +464,7 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #0
 .age-meta-row{display:flex;gap:5px;padding:0 2px;margin-top:4px}
 .age-meta-cell{flex:1;text-align:center}
 .age-meta-lbl{font-size:9px;color:#94A3B8;display:block;white-space:nowrap}
-.age-meta-pct{font-size:9px;font-weight:700;color:#0369A1;display:block}
+.age-meta-pct{font-size:9px;font-weight:700;color:#0F6E56;display:block}
 /* Success box */
 .success-box{margin:0 14px 14px;background:#F0FDF4;border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px}
 .success-ring{flex-shrink:0}
@@ -392,15 +480,15 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #0
 .lang-chips{display:flex;flex-wrap:wrap;gap:5px}
 .lang-chip{font-size:10px;background:#F1F5F9;color:#475569;padding:3px 8px;border-radius:8px;font-weight:500}
 .vibe-chips{display:flex;flex-wrap:wrap;gap:5px;padding:0 14px;margin-bottom:10px}
-.vibe-chip{font-size:10px;background:#E0F2FE;color:#0369A1;padding:3px 9px;border-radius:12px;font-weight:600}
+.vibe-chip{font-size:10px;background:#E1F5EE;color:#0F6E56;padding:3px 9px;border-radius:12px;font-weight:600}
 
 /* ── Choropleth overlay ── */
 .choro-btn{display:flex;align-items:center;gap:5px;padding:4px 11px;border-radius:20px;border:1.5px solid #e2e8f0;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;color:#475569;background:#fff;transition:all .2s}
-.choro-btn:hover{background:#F0F9FF;color:#0369A1;border-color:#38BDF8}
-.choro-btn.active{background:#0369A1;color:#fff;border-color:#0369A1}
+.choro-btn:hover{background:#E1F5EE;color:#0F6E56;border-color:#5DCAA5}
+.choro-btn.active{background:#0F6E56;color:#fff;border-color:#0F6E56}
 .choro-legend{position:absolute;bottom:56px;left:14px;z-index:500;background:rgba(255,255,255,.97);backdrop-filter:blur(8px);border-radius:10px;padding:10px 13px;box-shadow:0 2px 14px rgba(0,0,0,.12);display:none;min-width:178px}
 .choro-legend.show{display:block}
-.choro-legend-title{font-size:10px;font-weight:700;color:#0369A1;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.choro-legend-title{font-size:10px;font-weight:700;color:#0F6E56;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
 .choro-legend-scale{display:flex;gap:2px;height:10px;border-radius:4px;overflow:hidden;margin-bottom:4px}
 .choro-legend-scale div{flex:1}
 .choro-legend-labels{display:flex;justify-content:space-between;font-size:9px;color:#94A3B8;margin-bottom:5px}
@@ -421,7 +509,7 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #0
     <div class="ob-tagline">Your guide to social integration in New Zealand cities</div>
     <div class="ob-steps">
       <div class="ob-step">
-        <div class="ob-step-ico" style="background:#F0F9FF">🗺️</div>
+        <div class="ob-step-ico" style="background:#E1F5EE">🗺️</div>
         <div class="ob-step-text"><div class="ob-step-title">Discover activities near you</div>Browse 62 community events across 8 NZ cities, filtered by category.</div>
       </div>
       <div class="ob-step">
@@ -487,6 +575,13 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #0
       <button class="choro-btn" id="choroBtn" onclick="toggleChoropleth()" aria-pressed="false" aria-label="Toggle migrant density overlay">🌍 Migrant Density</button>
     </div>
   </div>
+  <!-- Time-brush banner: shows when Timeline → Map link is active -->
+  <div class="map-time-banner" id="mapTimeBanner">
+    <span>⏰ Timeline filter:</span>
+    <span id="mapTimeLabel" style="background:#0F6E56;color:#fff;padding:2px 10px;border-radius:10px;font-size:11px"></span>
+    <span style="color:#94A3B8;font-size:11px;font-weight:400">— map shows activities in this slot only</span>
+    <button onclick="clearTimeBrush()" title="Clear time filter">✕</button>
+  </div>
   <div class="map-wrap" id="main-content" role="main">
 
     <!-- ── Map Pane ── -->
@@ -513,9 +608,9 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #0
       <div class="choro-legend" id="choroLegend">
         <div class="choro-legend-title">🌍 Migrant Population %</div>
         <div class="choro-legend-scale">
-          <div style="background:#E0F2FE"></div><div style="background:#7DD3FC"></div>
-          <div style="background:#3B82F6"></div><div style="background:#0369A1"></div>
-          <div style="background:#1E3A8A"></div>
+          <div style="background:#E1F5EE"></div><div style="background:#5DCAA5"></div>
+          <div style="background:#1D9E75"></div><div style="background:#0F6E56"></div>
+          <div style="background:#064E3B"></div>
         </div>
         <div class="choro-legend-labels"><span>14%</span><span>~26%</span><span>39%</span></div>
         <div class="choro-city-stat" id="choroCityStat">NZ 2023 Census data</div>
@@ -530,13 +625,41 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #0
       <!-- Activity List -->
       <div class="act-list" id="actList">
         <div class="al-header">
-          <div class="al-count"><strong id="alCount">—</strong> in view</div>
-          <div class="sort-btns">
-            <button class="sort-btn active" id="sortDate" onclick="setSort('date')">📅 Date</button>
-            <button class="sort-btn" id="sortPop" onclick="setSort('popularity')">🔥 Popular</button>
+          <!-- Row 1: primary mode tabs — full width -->
+          <div class="al-header-row1">
+            <div class="panel-tabs">
+              <button class="panel-tab active" id="panelTabMap" onclick="setPanelMode('map')">🗺 Near Me</button>
+              <button class="panel-tab" id="panelTabUp" onclick="setPanelMode('upcoming')">📅 Upcoming 2 Wks</button>
+            </div>
+          </div>
+          <!-- Row 2: count + distance filter + sort (only in map mode) -->
+          <div class="al-header-row2" id="sortBtns">
+            <div class="al-count" style="margin-right:2px"><strong id="alCount">—</strong></div>
+            <div class="dist-pills">
+              <span class="dist-lbl">📍</span>
+              <select id="distSelect" onchange="setDist(this.value===''?null:Number(this.value))"
+                style="padding:3px 8px;border-radius:8px;border:1.5px solid #9FE1CB;font-size:11px;font-weight:600;color:#0F6E56;background:#fff;cursor:pointer;outline:none;appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%228%22 height=%225%22><path d=%22M0 0l4 5 4-5z%22 fill=%22%230F6E56%22/></svg>');background-repeat:no-repeat;background-position:right 7px center;padding-right:20px">
+                <option value="">Any distance</option>
+                <option value="1">Within 1 km</option>
+                <option value="2">Within 2 km</option>
+                <option value="5">Within 5 km</option>
+              </select>
+            </div>
+            <div class="sort-btns">
+              <button class="sort-btn active" id="sortDate" onclick="setSort('date')">📅 Date</button>
+              <button class="sort-btn" id="sortPop" onclick="setSort('popularity')">🔥 Popular</button>
+            </div>
           </div>
         </div>
+        <!-- Map insight bar -->
+        <div class="insight-bar" id="mapInsightBar">
+          <div class="insight-dot"></div>
+          <span id="mapInsightText">Calculating…</span>
+        </div>
+        <!-- In-view card list -->
         <div class="al-scroll" id="alScroll" aria-live="polite" aria-label="Activity list"></div>
+        <!-- Upcoming 2-week list -->
+        <div class="up-scroll" id="upScroll" style="display:none"></div>
       </div>
 
       <!-- Detail Panel — slides over list pane -->
@@ -570,7 +693,7 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #0
       </div>
       <div class="pactions">
         <button class="btn-join" onclick="joinActivity()">Join Activity</button>
-        <button class="btn-save">🔖</button>
+        <a id="dpWebsite" href="#" target="_blank" rel="noopener" style="display:none;align-items:center;justify-content:center;gap:5px;background:#F0FDF4;color:#0F6E56;border:1.5px solid #9FE1CB;padding:10px 12px;border-radius:9px;font-size:12px;font-weight:600;text-decoration:none;transition:all .2s;white-space:nowrap">🌐 Website</a>
       </div>
     </div><!-- /detail-panel -->
     </div><!-- /listPane -->
@@ -584,11 +707,31 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #0
     <div class="net-side">
       <div class="net-title">Your Social Network</div>
       <div class="net-sub">Connections you've built by attending activities in <span id="netCity">Hamilton</span>. Drag nodes to explore.</div>
+      <!-- Network insight -->
+      <div class="net-insight" id="netInsight">
+        💡 <strong>Opportunity:</strong> <span id="netInsightText">You're 2 connections away from 3 Mandarin speakers. Join the next Language Exchange to expand your network.</span>
+      </div>
       <div class="net-stats">
-        <div class="ns-card"><div class="ns-num" id="nsConn">7</div><div class="ns-lbl">Connections</div></div>
-        <div class="ns-card"><div class="ns-num" id="nsAct">5</div><div class="ns-lbl">Activities</div></div>
-        <div class="ns-card"><div class="ns-num" id="nsCat">4</div><div class="ns-lbl">Categories</div></div>
-        <div class="ns-card"><div class="ns-num" id="nsScore">62</div><div class="ns-lbl">Int. Score</div></div>
+        <div class="ns-card c-teal">
+          <div class="ns-num" id="nsConn">7</div>
+          <div class="ns-lbl">Connections</div>
+          <div class="ns-trend" style="color:#047857">▲ +2 this week</div>
+        </div>
+        <div class="ns-card c-blue">
+          <div class="ns-num" id="nsAct">5</div>
+          <div class="ns-lbl">Activities</div>
+          <div class="ns-trend" style="color:#1D4ED8">▲ +1 this week</div>
+        </div>
+        <div class="ns-card c-purple">
+          <div class="ns-num" id="nsCat">4</div>
+          <div class="ns-lbl">Categories</div>
+          <div class="ns-trend" style="color:#6D28D9">of 7 total</div>
+        </div>
+        <div class="ns-card c-amber">
+          <div class="ns-num" id="nsScore">62</div>
+          <div class="ns-lbl">Int. Score</div>
+          <div class="ns-trend" style="color:#B45309">▲ +8 pts</div>
+        </div>
       </div>
       <div class="pst" style="padding:0;margin-bottom:10px">Legend</div>
       <div class="net-legend" id="netLegend"></div>
@@ -610,18 +753,24 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #0
   <!-- Brush indicator banner -->
   <div class="brush-banner" id="brushBanner">
     <span>🔗 Linked filter active:</span>
-    <span id="brushLabel" style="background:#0369A1;color:#fff;padding:2px 10px;border-radius:10px;font-size:11px"></span>
+    <span id="brushLabel" style="background:#0F6E56;color:#fff;padding:2px 10px;border-radius:10px;font-size:11px"></span>
     <span style="color:#94A3B8;font-size:11px;font-weight:400">— map &amp; list are showing this category only</span>
     <button onclick="clearBrush()" title="Clear filter">✕</button>
   </div>
   <div class="dash-wrap">
 
+    <!-- Dashboard insight banner -->
+    <div class="dash-insight">
+      <span style="font-size:16px;flex-shrink:0">💡</span>
+      <div style="font-size:12px;color:#065F46;line-height:1.5" id="dashInsightText"><strong>Insight:</strong> Your <strong>Outdoor</strong> participation is 27% below the average newcomer. The <em>Hamilton Gardens Walk</em> on Sunday is newcomer-friendly — only 9 spots left!</div>
+    </div>
+
     <!-- Integration Score -->
     <div class="dash-card score-card">
       <div class="ring-wrap">
         <svg width="88" height="88" viewBox="0 0 88 88">
-          <circle cx="44" cy="44" r="36" fill="none" stroke="#E0F2FE" stroke-width="8"/>
-          <circle id="ringArc" cx="44" cy="44" r="36" fill="none" stroke="#0369A1" stroke-width="8"
+          <circle cx="44" cy="44" r="36" fill="none" stroke="#E1F5EE" stroke-width="8"/>
+          <circle id="ringArc" cx="44" cy="44" r="36" fill="none" stroke="#0F6E56" stroke-width="8"
                   stroke-linecap="round" stroke-dasharray="226" stroke-dashoffset="86"/>
         </svg>
         <div class="ring-center"><div class="ring-val">62</div><div class="ring-lbl">Score</div></div>
@@ -642,7 +791,7 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #0
       </div>
       <div style="flex:1;padding:16px;border-right:1px solid #F1F5F9;text-align:center">
         <div class="dc-title">Connections</div>
-        <div class="dc-big" style="color:#0369A1">7</div>
+        <div class="dc-big" style="color:#0F6E56">7</div>
         <div class="dc-sub">people met</div>
       </div>
       <div style="flex:1;padding:16px;text-align:center">
@@ -660,7 +809,7 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #0
 
     <!-- Participation trend -->
     <div class="dash-card span2">
-      <div class="dc-title">Participation Trend</div>
+      <div class="dc-title">Participation Trend <span class="dc-info" data-tip="Based on your joined activities over the past 8 weeks">ⓘ</span></div>
       <div style="position:relative;height:140px"><canvas id="trendChart"></canvas></div>
     </div>
 
@@ -668,12 +817,12 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #0
     <div class="dash-card">
       <div class="dc-title">Category Balance <span style="font-size:9px;color:#94A3B8;font-weight:400">click to filter map →</span></div>
       <div style="position:relative;height:160px"><canvas id="catChart"></canvas></div>
-      <div class="radar-hint">Purple = you · Dashed = ideal balance</div>
+      <div class="radar-hint">Teal = you · Dashed = ideal balance</div>
     </div>
 
     <!-- Category progress bars -->
     <div class="dash-card span2">
-      <div class="dc-title">Integration by Category</div>
+      <div class="dc-title">Integration by Category <span class="dc-info" data-tip="Avg. newcomer scores per category — NZ Community Survey 2024">ⓘ</span></div>
       <div id="catBars"></div>
     </div>
 
@@ -691,7 +840,7 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #0
   <div class="tl-wrap">
     <!-- Bubble Scatter -->
     <div class="tl-card bubble-wrap">
-      <div class="tl-card-title">Activity Landscape — When &amp; What? <span style="font-size:11px;font-weight:400;color:#94A3B8">Bubble size = attendees · Hover for details</span></div>
+      <div class="tl-card-title">Activity Landscape — When &amp; What? <span style="font-size:11px;font-weight:400;color:#94A3B8">Bubble size = attendees · Hover for details · Click to view on map</span></div>
       <svg id="bubbleSvg"></svg>
     </div>
     <!-- Heatmap -->
@@ -701,11 +850,11 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #0
       <div style="margin-top:10px;display:flex;align-items:center;gap:6px;font-size:11px;color:#94A3B8">
         <span>Low</span>
         <div style="display:flex;gap:3px">
-          <div style="width:14px;height:14px;border-radius:3px;background:#E0F2FE"></div>
-          <div style="width:14px;height:14px;border-radius:3px;background:#7DD3FC"></div>
-          <div style="width:14px;height:14px;border-radius:3px;background:#3B82F6"></div>
-          <div style="width:14px;height:14px;border-radius:3px;background:#0369A1"></div>
-          <div style="width:14px;height:14px;border-radius:3px;background:#1E3A8A"></div>
+          <div style="width:14px;height:14px;border-radius:3px;background:#E1F5EE"></div>
+          <div style="width:14px;height:14px;border-radius:3px;background:#5DCAA5"></div>
+          <div style="width:14px;height:14px;border-radius:3px;background:#1D9E75"></div>
+          <div style="width:14px;height:14px;border-radius:3px;background:#0F6E56"></div>
+          <div style="width:14px;height:14px;border-radius:3px;background:#064E3B"></div>
         </div>
         <span>High</span>
         <span style="margin-left:10px">● Green ring = Newcomer-friendly</span>
@@ -776,7 +925,7 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #0
       </div>
       <div class="fg"><label class="flbl">Max Companions</label><input class="finp" type="number" placeholder="Leave blank for unlimited" min="1"/></div>
       <div class="fg" style="flex-direction:row;align-items:center;gap:8px">
-        <input type="checkbox" id="ncCheck" style="width:15px;height:15px;accent-color:#0369A1"/>
+        <input type="checkbox" id="ncCheck" style="width:15px;height:15px;accent-color:#0F6E56"/>
         <label for="ncCheck" class="flbl" style="margin:0;cursor:pointer">Mark as Newcomer-Friendly 🌟</label>
       </div>
       <button class="btn-sub" onclick="submitAct()">Publish Activity</button>
@@ -823,7 +972,7 @@ const CAT_IMGS = {
   learning: [_UP('1481627834876-b7833e8f5570',400,120),_UP('1434030216411-0b793f4b4173',400,120),_UP('1456513080510-7bf3a84b82f8',400,120),_UP('1516979187520-e0f4e4de9e30',400,120)],
   outdoor:  [_UP('1441974231531-c6227db76b6e',400,120),_UP('1501854140801-50d01698950b',400,120),_UP('1506905925346-21bda4d32df4',400,120),_UP('1476514525535-07fb3b4ae5f1',400,120)],
   food:     [_UP('1504674900247-0877df9cc836',400,120),_UP('1555939594-58d7cb561ad1',400,120),_UP('1414235077428-338989a2e8c0',400,120),_UP('1565299624946-b28f40a0ae38',400,120)],
-  volunteer:[_UP('1559027615-cd4628902d4a',400,120),_UP('1488521787991-ed7bbaae773c',400,120),_UP('1469571486292-0ba58a3f068b',400,120),_UP('1553729459-efe14ef6a100',400,120)],
+  volunteer:[_UP('1532996122-6e2f65b5e87a',400,120),_UP('1559027615-cd4628902d4a',400,120),_UP('1488521787923-e1a9210e9aa4',400,120),_UP('1469571486292-0ba58a3f068b',400,120)],
   other:    [_UP('1521737604893-d14cc237f11d',400,120),_UP('1522202176988-66273c2fd55f',400,120),_UP('1516387938699-a927021e5314',400,120),_UP('1556761175-5973dc0f32e7',400,120)]
 };
 function getCardImg(a){ const imgs=CAT_IMGS[a.category]||CAT_IMGS.other; return imgs[a.id % imgs.length]; }
@@ -870,13 +1019,13 @@ const MONTHLY_DIST={
 };
 
 const ACTIVITIES = [
-  {id:1,city:'hamilton',name:"International Coffee Chat @ UoW",category:"social",lat:-37.7872,lng:175.3122,date:"Fri 16 May",time:"3:00 PM",location:"University of Waikato, Student Union Café",attendees:14,maxAttendees:20,newcomer:true,desc:"A relaxed drop-in coffee session for international and domestic students to mingle, swap city tips, and practise conversational English — or any language! No agenda, just good people.",avatarColors:['#7C3AED','#EF4444','#0D9488','#2563EB','#EA580C']},
-  {id:2,city:'hamilton',name:"Hamilton Lake Parkrun",category:"sports",lat:-37.7962,lng:175.2713,date:"Sat 17 May",time:"8:00 AM",location:"Hamilton Lake Domain, Main Car Park",attendees:38,maxAttendees:100,newcomer:true,desc:"Free, weekly, 5km timed run around the beautiful Hamilton Lake. All paces welcome — walkers too! Register once at parkrun.org.nz to get your barcode.",avatarColors:['#EF4444','#16A34A','#7C3AED','#EA580C','#0D9488']},
-  {id:3,city:'hamilton',name:"Waikato Museum Evening Talk",category:"culture",lat:-37.7891,lng:175.2792,date:"Thu 22 May",time:"6:30 PM",location:"Waikato Museum Te Whare Taonga o Waikato",attendees:22,maxAttendees:50,newcomer:false,desc:"Monthly public lecture series exploring Māori history, colonial legacy, and contemporary NZ culture. This month: 'Waikato Land Wars — Contested Histories.'",avatarColors:['#0D9488','#7C3AED','#DB2777','#2563EB','#6B7280']},
-  {id:4,city:'hamilton',name:"English Conversation Club",category:"learning",lat:-37.7900,lng:175.2810,date:"Wed 21 May",time:"5:30 PM",location:"Hamilton City Library, Level 1 Meeting Room",attendees:11,maxAttendees:15,newcomer:true,desc:"Practice everyday English in a friendly, no-pressure environment. Topics change each week — this week: 'Talking about your hometown.' Facilitated by volunteer tutors.",avatarColors:['#2563EB','#7C3AED','#0D9488','#EA580C','#EF4444']},
-  {id:5,city:'hamilton',name:"Hamilton Gardens Guided Walk",category:"outdoor",lat:-37.8049,lng:175.2893,date:"Sun 18 May",time:"10:00 AM",location:"Hamilton Gardens, Visitor Centre",attendees:9,maxAttendees:12,newcomer:true,desc:"Explore the internationally-renowned Hamilton Gardens with a volunteer guide. See the Japanese Garden, Italian Renaissance garden, and Māori Te Parapara garden.",avatarColors:['#16A34A','#0D9488','#7C3AED','#EF4444','#2563EB']},
-  {id:6,city:'hamilton',name:"Garden Place Night Market",category:"food",lat:-37.7889,lng:175.2793,date:"Fri 16 May",time:"5:00 PM",location:"Garden Place, Hamilton CBD",attendees:60,maxAttendees:200,newcomer:true,desc:"Hamilton's weekly night market — over 40 food stalls celebrating cuisines from around the world.",avatarColors:['#EA580C','#EF4444','#7C3AED','#16A34A','#0D9488']},
-  {id:7,city:'hamilton',name:"River Waikato Cleanup Day",category:"volunteer",lat:-37.7850,lng:175.2715,date:"Sat 17 May",time:"9:00 AM",location:"Ferrybank Reserve, Hamilton",attendees:17,maxAttendees:30,newcomer:true,desc:"Join Waikato Cleanup Crew for a morning of litter picking along the river bank.",avatarColors:['#DB2777','#16A34A','#7C3AED','#2563EB','#EF4444']},
+  {id:1,city:'hamilton',name:"International Coffee Chat @ UoW",category:"social",website:"https://www.waikato.ac.nz/international/",lat:-37.7872,lng:175.3122,date:"Fri 16 May",time:"3:00 PM",location:"University of Waikato, Student Union Café",attendees:14,maxAttendees:20,newcomer:true,desc:"A relaxed drop-in coffee session for international and domestic students to mingle, swap city tips, and practise conversational English — or any language! No agenda, just good people.",avatarColors:['#7C3AED','#EF4444','#0D9488','#2563EB','#EA580C']},
+  {id:2,city:'hamilton',name:"Hamilton Lake Parkrun",category:"sports",lat:-37.7962,lng:175.2713,date:"Sat 17 May",time:"8:00 AM",location:"Hamilton Lake Domain, Main Car Park",attendees:38,maxAttendees:100,newcomer:true,website:'https://www.parkrun.org.nz/hamilton/',desc:"Free, weekly, 5km timed run around the beautiful Hamilton Lake. All paces welcome — walkers too! Register once at parkrun.org.nz to get your barcode.",avatarColors:['#EF4444','#16A34A','#7C3AED','#EA580C','#0D9488']},
+  {id:3,city:'hamilton',name:"Waikato Museum Evening Talk",category:"culture",website:"https://waikatomuseum.co.nz/",lat:-37.7891,lng:175.2792,date:"Thu 22 May",time:"6:30 PM",location:"Waikato Museum Te Whare Taonga o Waikato",attendees:22,maxAttendees:50,newcomer:false,desc:"Monthly public lecture series exploring Māori history, colonial legacy, and contemporary NZ culture. This month: 'Waikato Land Wars — Contested Histories.'",avatarColors:['#0D9488','#7C3AED','#DB2777','#2563EB','#6B7280']},
+  {id:4,city:'hamilton',name:"English Conversation Club",category:"learning",website:"https://www.hamiltonlibrary.info/",lat:-37.7900,lng:175.2810,date:"Wed 21 May",time:"5:30 PM",location:"Hamilton City Library, Level 1 Meeting Room",attendees:11,maxAttendees:15,newcomer:true,desc:"Practice everyday English in a friendly, no-pressure environment. Topics change each week — this week: 'Talking about your hometown.' Facilitated by volunteer tutors.",avatarColors:['#2563EB','#7C3AED','#0D9488','#EA580C','#EF4444']},
+  {id:5,city:'hamilton',name:"Hamilton Gardens Guided Walk",category:"outdoor",website:"https://hamiltongardens.co.nz/",lat:-37.8049,lng:175.2893,date:"Sun 18 May",time:"10:00 AM",location:"Hamilton Gardens, Visitor Centre",attendees:9,maxAttendees:12,newcomer:true,desc:"Explore the internationally-renowned Hamilton Gardens with a volunteer guide. See the Japanese Garden, Italian Renaissance garden, and Māori Te Parapara garden.",avatarColors:['#16A34A','#0D9488','#7C3AED','#EF4444','#2563EB']},
+  {id:6,city:'hamilton',name:"Garden Place Night Market",category:"food",website:"https://www.hamiltongardensnightmarket.co.nz/",lat:-37.7889,lng:175.2793,date:"Fri 16 May",time:"5:00 PM",location:"Garden Place, Hamilton CBD",attendees:60,maxAttendees:200,newcomer:true,desc:"Hamilton's weekly night market — over 40 food stalls celebrating cuisines from around the world.",avatarColors:['#EA580C','#EF4444','#7C3AED','#16A34A','#0D9488']},
+  {id:7,city:'hamilton',name:"River Waikato Cleanup Day",category:"volunteer",website:"https://www.waikato.ac.nz/community/environment/",lat:-37.7850,lng:175.2715,date:"Sat 17 May",time:"9:00 AM",location:"Ferrybank Reserve, Hamilton",attendees:17,maxAttendees:30,newcomer:true,desc:"Join Waikato Cleanup Crew for a morning of litter picking along the river bank.",avatarColors:['#DB2777','#16A34A','#7C3AED','#2563EB','#EF4444']},
   {id:8,city:'hamilton',name:"Board Games Café Night",category:"social",lat:-37.7902,lng:175.2855,date:"Sat 17 May",time:"7:00 PM",location:"Rocket Café, Victoria Street",attendees:8,maxAttendees:16,newcomer:true,desc:"Board games, card games, conversation and coffee — a relaxed social evening.",avatarColors:['#7C3AED','#EF4444','#EA580C','#0D9488','#2563EB']},
   {id:9,city:'hamilton',name:"Open Badminton at Seddon Park",category:"sports",lat:-37.7820,lng:175.2930,date:"Tue 20 May",time:"6:30 PM",location:"Seddon Park Sports Complex",attendees:12,maxAttendees:24,newcomer:false,desc:"Casual badminton session — bring your racket or borrow one. All levels welcome.",avatarColors:['#EF4444','#7C3AED','#16A34A','#0D9488','#2563EB']},
   {id:10,city:'hamilton',name:"Te Reo Māori Beginners Workshop",category:"culture",lat:-37.7875,lng:175.2800,date:"Mon 19 May",time:"6:00 PM",location:"Hamilton Central Community Centre",attendees:16,maxAttendees:25,newcomer:true,desc:"An introductory workshop to Te Reo Māori — greetings, pronunciation, basic phrases, and cultural context.",avatarColors:['#0D9488','#7C3AED','#DB2777','#EF4444','#6B7280']},
@@ -950,9 +1099,10 @@ const ACTIVITIES = [
 //  STATE
 // ════════════════════════════════════════
 let currentCity='hamilton', activeFilters=new Set(['all']);
+let timeBrushIds=null; // Set<id> when Timeline→Map filter active, null = inactive
 let map, clusterGroup, netInitialized={};
 let dashCharts={};
-let sortMode='date', selectedCardId=null;
+let sortMode='date', selectedCardId=null, distFilter=null;
 
 // ── Performance: debounce utility ──
 function debounce(fn, ms){
@@ -1059,7 +1209,7 @@ function initMap(){
       const n=c.getChildCount();
       const sz=n>99?42:n>9?38:34;
       return L.divIcon({
-        html:`<div style="background:linear-gradient(135deg,#0369A1,#075985);color:#fff;width:${sz}px;height:${sz}px;border-radius:50%;border:3px solid #fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:${n>99?10:12}px;box-shadow:0 3px 12px rgba(3,105,161,.45),0 1px 4px rgba(0,0,0,.2)">${n}</div>`,
+        html:`<div style="background:linear-gradient(135deg,#0F6E56,#085041);color:#fff;width:${sz}px;height:${sz}px;border-radius:50%;border:3px solid #fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:${n>99?10:12}px;box-shadow:0 3px 12px rgba(15,110,86,.45),0 1px 4px rgba(0,0,0,.2)">${n}</div>`,
         className:'',iconSize:[sz,sz],iconAnchor:[sz/2,sz/2]
       });
     }
@@ -1076,14 +1226,18 @@ function renderMarkers(){
   const q=document.getElementById('searchInput').value.toLowerCase();
   const list=ACTIVITIES.filter(a=>{
     if(a.city!==currentCity)return false;
-    if(!activeFilters.has('all')&&!activeFilters.has(a.category))return false;
+    if(timeBrushIds!==null){if(!timeBrushIds.has(a.id))return false;}
+    else if(!activeFilters.has('all')&&!activeFilters.has(a.category))return false;
+    if(!withinDist(a))return false;
     if(q&&!a.name.toLowerCase().includes(q)&&!a.location.toLowerCase().includes(q)&&!a.desc.toLowerCase().includes(q))return false;
     return true;
   });
   list.forEach(a=>{
     const col=CAT_COLOR[a.category];
     const emoji=CAT_EMOJI[a.category]||'📌';
-    const ncDot=a.newcomer?`<div style="position:absolute;top:0px;right:0px;width:12px;height:12px;background:#10B981;border-radius:50%;border:2.5px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.3)"></div>`:'';
+    const ncBadge=a.newcomer?`
+      <div class="nc-tip" data-tip="🌟 Newcomer-friendly"
+           style="position:absolute;top:-6px;right:-6px;width:20px;height:20px;background:#10B981;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;font-size:11px;line-height:1;z-index:4">🌟</div>`:'';
     // Bold floating marker: large circle + outer glow ring + strong shadow — clearly above Google POI icons
     const icon=L.divIcon({
       html:`<div style="position:relative;display:inline-flex;flex-direction:column;align-items:center">
@@ -1091,7 +1245,7 @@ function renderMarkers(){
         <div style="position:absolute;top:-5px;left:-5px;right:-5px;bottom:2px;border-radius:50%;background:${col};opacity:0.18;pointer-events:none"></div>
         <!-- Main circle -->
         <div style="position:relative;width:42px;height:42px;border-radius:50%;background:#fff;border:3.5px solid ${col};box-shadow:0 4px 16px rgba(0,0,0,.32),0 1px 4px rgba(0,0,0,.2);display:flex;align-items:center;justify-content:center;font-size:20px;line-height:1;z-index:1">
-          ${emoji}${ncDot}
+          ${emoji}${ncBadge}
         </div>
         <!-- Pointer -->
         <svg width="14" height="9" viewBox="0 0 14 9" style="display:block;margin-top:-1px;z-index:1;filter:drop-shadow(0 3px 3px rgba(0,0,0,.18))"><polygon points="0,0 14,0 7,9" fill="${col}"/></svg>
@@ -1099,7 +1253,7 @@ function renderMarkers(){
       className:'',iconSize:[42,51],iconAnchor:[21,51],popupAnchor:[0,-54]
     });
     const m=L.marker([a.lat,a.lng],{icon});
-    m.bindPopup(`<div class="pop"><div class="pop-cat" style="color:${col}">${CAT_LABEL[a.category]}</div><div class="pop-name">${a.name}</div><div class="pop-det">📅 ${a.date} · ${a.time}</div><div class="pop-det">📍 ${a.location}</div><div class="pop-det" style="margin-top:5px"><span style="color:#0369A1;font-weight:600;cursor:pointer" onclick="showDetail(${a.id})">View details →</span></div></div>`,{maxWidth:240});
+    m.bindPopup(`<div class="pop"><div class="pop-cat" style="color:${col}">${CAT_LABEL[a.category]}</div><div class="pop-name">${a.name}</div><div class="pop-det">📅 ${a.date} · ${a.time}</div><div class="pop-det">📍 ${a.location}</div><div class="pop-det" style="margin-top:5px"><span style="color:#0F6E56;font-weight:600;cursor:pointer" onclick="showDetail(${a.id})">View details →</span></div></div>`,{maxWidth:240});
     m.on('click',()=>showDetail(a.id));
     // Marker hover → highlight card in list
     m.on('mouseover',()=>{
@@ -1131,10 +1285,13 @@ function setSort(mode){
 function updateActivityList(){
   if(!map) return;
   const bounds=map.getBounds();
+  if(!bounds) { setTimeout(updateActivityList, 120); return; }
   const q=document.getElementById('searchInput').value.toLowerCase();
   let visible=ACTIVITIES.filter(a=>{
     if(a.city!==currentCity) return false;
-    if(!activeFilters.has('all')&&!activeFilters.has(a.category)) return false;
+    if(timeBrushIds!==null){if(!timeBrushIds.has(a.id))return false;}
+    else if(!activeFilters.has('all')&&!activeFilters.has(a.category)) return false;
+    if(!withinDist(a))return false;
     if(!bounds.contains(L.latLng(a.lat,a.lng))) return false;
     if(q&&!a.name.toLowerCase().includes(q)&&!a.location.toLowerCase().includes(q)) return false;
     return true;
@@ -1152,11 +1309,20 @@ function updateActivityList(){
     visible.sort((a,b)=>b.attendees-a.attendees);
   }
 
-  document.getElementById('alCount').textContent=visible.length;
+  const alCountEl=document.getElementById('alCount');
+  if(alCountEl) alCountEl.textContent=visible.length;
   const scroll=document.getElementById('alScroll');
 
   if(!visible.length){
-    scroll.innerHTML=`<div class="al-empty">No activities visible<br>in this map area.<br><br>Try zooming out or<br>switching city.</div>`;
+    scroll.innerHTML=`<div class="al-empty">
+      <svg width="56" height="56" viewBox="0 0 56 56" fill="none" style="margin:0 auto 12px;display:block">
+        <circle cx="28" cy="28" r="27" stroke="#E2E8F0" stroke-width="2"/>
+        <text x="28" y="36" text-anchor="middle" font-size="22">🗺️</text>
+      </svg>
+      <div style="font-weight:600;color:#64748B;margin-bottom:4px">No activities in this area</div>
+      <div style="color:#94A3B8">Try zooming out, panning the map,<br>or clearing the active filter.</div>
+      <button onclick="clearBrush()" style="margin-top:12px;background:#E1F5EE;border:1px solid #9FE1CB;border-radius:8px;padding:6px 14px;font-size:11px;color:#0F6E56;font-weight:600;cursor:pointer">Clear filter</button>
+    </div>`;
     return;
   }
 
@@ -1169,6 +1335,7 @@ function updateActivityList(){
              onerror="this.style.display='none'"/>
         <div class="ac-header-overlay"></div>
         <div class="ac-emoji-badge">${CAT_EMOJI[a.category]||'📌'}</div>
+        <button class="ac-share" onclick="event.stopPropagation();copyActivity(${a.id})" title="Copy activity details">🔗</button>
       </div>
       <div class="ac-body">
         <div class="ac-name">${a.name}</div>
@@ -1181,9 +1348,12 @@ function updateActivityList(){
           <span class="ac-att">👥 ${a.attendees}</span>
           ${a.newcomer?'<span class="ac-nc">🌟 Newcomer ✓</span>':''}
           ${EVTFD_IDS.has(a.id)?'<span class="source-badge">✓ Real Event</span>':''}
+          ${a.website?`<a href="${a.website}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="font-size:9.5px;font-weight:600;color:#0F6E56;text-decoration:none;border:1px solid #9FE1CB;border-radius:8px;padding:2px 7px;background:#F0FDF4;white-space:nowrap;flex-shrink:0">🌐 Website ↗</a>`:''}
         </div>
       </div>
     </div>`).join('');
+
+  updateMapInsight(visible);
 }
 
 // ── Hover cross-linking ──
@@ -1249,9 +1419,14 @@ function showDetail(id){
   const emoji=CAT_EMOJI[a.category]||'📌';
   const bg=CAT_BG[a.category]||'#F8FAFC';
 
-  // Hero header
+  // Hero header — photo background + colour overlay
   const hero=document.getElementById('dpHero');
-  hero.style.background=`linear-gradient(135deg,${col} 0%,${col}cc 100%)`;
+  hero.style.background=`linear-gradient(135deg,${col}ee 0%,${col}bb 100%)`;
+  // Inject or update background image
+  let heroImg=hero.querySelector('.dp-hero-img');
+  if(!heroImg){heroImg=document.createElement('img');heroImg.className='dp-hero-img';hero.prepend(heroImg);}
+  heroImg.src=getCardImg(a);
+  heroImg.onerror=()=>{heroImg.style.display='none';};
   document.getElementById('dpEmoji').textContent=emoji;
   document.getElementById('pcat').textContent=CAT_LABEL[a.category];
   document.getElementById('ptitle').textContent=a.name;
@@ -1346,6 +1521,10 @@ function showDetail(id){
       </div>
     </div>`;
 
+  // Website button
+  const wb=document.getElementById('dpWebsite');
+  if(wb){wb.href=a.website||'#';wb.style.display=a.website?'flex':'none';}
+
   document.getElementById('detailPanel').classList.add('open');
   if(map) map.setView([a.lat,a.lng],Math.max(map.getZoom(),15),{animate:true});
   // sync card highlight
@@ -1359,7 +1538,7 @@ function closePanel(){
   selectedCardId=null;
   document.querySelectorAll('.act-card').forEach(c=>c.classList.remove('selected'));
 }
-function joinActivity(){alert('🎉 You joined! Your connection will appear in the Network graph. (Full persistence in Milestone 3)');}
+function joinActivity(){showToast('You\'re in! 🎉','Your new connection will appear in the Network graph.','success');}
 
 function switchCity(city){
   currentCity=city;
@@ -1423,7 +1602,7 @@ function updateChips(){
 function choroColor(pct){
   // Scale from 14% (Rotorua) to 39% (Auckland)
   const t=Math.max(0,Math.min(1,(pct-14)/25));
-  const scale=['#E0F2FE','#7DD3FC','#3B82F6','#0369A1','#1E3A8A'];
+  const scale=['#E1F5EE','#5DCAA5','#1D9E75','#0F6E56','#064E3B'];
   return scale[Math.min(4,Math.floor(t*5))];
 }
 function toggleChoropleth(){
@@ -1538,12 +1717,12 @@ function initNetwork(){
   const cats=[...new Set(data.links.map(l=>l.cat))];
   document.getElementById('netLegend').innerHTML=cats.map(c=>`
     <div class="leg-row"><div class="leg-dot" style="background:${CAT_COLOR[c]}"></div>${CAT_LABEL[c]}</div>
-  `).join('')+`<div class="leg-row"><div class="leg-dot" style="background:#0369A1;border:2px solid #fff;box-shadow:0 0 0 2px #0369A1"></div>You</div>`;
+  `).join('')+`<div class="leg-row"><div class="leg-dot" style="background:#0F6E56;border:2px solid #fff;box-shadow:0 0 0 2px #0F6E56"></div>You</div>`;
 
   // Person list
   document.getElementById('personList').innerHTML=data.nodes.filter(n=>n.id!=='you').map(n=>`
-    <div class="net-person">
-      <div class="np-name" style="color:${CAT_COLOR[n.group]||'#1e293b'}">${n.label}</div>
+    <div class="net-person" onclick="netBrushPerson('${n.group}','${n.label}')" title="Click to see ${n.label}'s activities on map">
+      <div class="np-name" style="color:${CAT_COLOR[n.group]||'#1e293b'}">${n.label} <span style="font-size:10px;opacity:.6">→ map</span></div>
       <div class="np-detail">Met at: ${n.acts.join(', ')}</div>
     </div>`).join('');
 
@@ -1554,27 +1733,50 @@ function initNetwork(){
   svg.attr('viewBox',`0 0 ${W} ${H}`);
 
   const sim=d3.forceSimulation(data.nodes)
-    .force('link',d3.forceLink(data.links).id(d=>d.id).distance(120))
-    .force('charge',d3.forceManyBody().strength(-300))
+    .force('link',d3.forceLink(data.links).id(d=>d.id).distance(Math.min(W,H)*0.22))
+    .force('charge',d3.forceManyBody().strength(-Math.min(W,H)*1.1))
     .force('center',d3.forceCenter(W/2,H/2))
-    .force('collision',d3.forceCollide().radius(d=>d.size+14));
+    .force('x',d3.forceX(W/2).strength(0.04))
+    .force('y',d3.forceY(H/2).strength(0.04))
+    .force('collision',d3.forceCollide().radius(d=>d.size+22))
+    .alphaDecay(0.02);
 
   const defs=svg.append('defs');
-  // glow filter
-  const f=defs.append('filter').attr('id','glow');
-  f.append('feGaussianBlur').attr('stdDeviation','3').attr('result','blur');
-  const fm=f.append('feMerge');
-  fm.append('feMergeNode').attr('in','blur');
-  fm.append('feMergeNode').attr('in','SourceGraphic');
+
+  // Drop-shadow filter
+  const fShadow=defs.append('filter').attr('id','nodeShadow').attr('x','-30%').attr('y','-30%').attr('width','160%').attr('height','160%');
+  fShadow.append('feDropShadow').attr('dx',0).attr('dy',2).attr('stdDeviation',3).attr('flood-opacity',.22);
+
+  // Stronger glow for "you" node
+  const fGlow=defs.append('filter').attr('id','youGlow').attr('x','-40%').attr('y','-40%').attr('width','180%').attr('height','180%');
+  fGlow.append('feGaussianBlur').attr('stdDeviation','5').attr('result','blur');
+  const fGlowMerge=fGlow.append('feMerge');
+  fGlowMerge.append('feMergeNode').attr('in','blur');
+  fGlowMerge.append('feMergeNode').attr('in','SourceGraphic');
+
+  // Radial gradients — one per unique node colour
+  const allCols=[...new Set(data.nodes.map(n=>n.id==='you'?'#0F6E56':CAT_COLOR[n.group]||'#94A3B8'))];
+  allCols.forEach((col,i)=>{
+    const grad=defs.append('radialGradient').attr('id',`ng${i}`).attr('cx','35%').attr('cy','30%').attr('r','65%');
+    grad.append('stop').attr('offset','0%').attr('stop-color',col).attr('stop-opacity',.55);
+    grad.append('stop').attr('offset','100%').attr('stop-color',col).attr('stop-opacity',1);
+  });
+  const colIdx=col=>allCols.indexOf(col);
+  const nodeFill=d=>{
+    const col=d.id==='you'?'#0F6E56':CAT_COLOR[d.group]||'#94A3B8';
+    return `url(#ng${colIdx(col)})`;
+  };
 
   const g=svg.append('g');
 
   // Zoom
   svg.call(d3.zoom().scaleExtent([.4,3]).on('zoom',e=>g.attr('transform',e.transform)));
 
-  const link=g.append('g').selectAll('line').data(data.links).enter().append('line')
+  // Links — slightly curved paths
+  const link=g.append('g').selectAll('path').data(data.links).enter().append('path')
+    .attr('fill','none')
     .attr('stroke',d=>CAT_COLOR[d.cat]||'#CBD5E1')
-    .attr('stroke-opacity',.55)
+    .attr('stroke-opacity',.5)
     .attr('stroke-width',d=>d.value*2.5);
 
   const node=g.append('g').selectAll('g').data(data.nodes).enter().append('g')
@@ -1583,21 +1785,58 @@ function initNetwork(){
       .on('drag',(e,d)=>{d.fx=e.x;d.fy=e.y;})
       .on('end',(e,d)=>{if(!e.active)sim.alphaTarget(0);d.fx=null;d.fy=null;}));
 
+  // Outer pulse ring for "you"
+  node.filter(d=>d.id==='you').append('circle')
+    .attr('r',d=>d.size+8)
+    .attr('fill','none')
+    .attr('stroke','#0F6E56')
+    .attr('stroke-width',2)
+    .attr('stroke-opacity',.25)
+    .attr('stroke-dasharray','4,4');
+
+  // Shadow base circle
+  node.append('circle')
+    .attr('r',d=>d.size+1)
+    .attr('fill','rgba(0,0,0,.12)')
+    .attr('transform','translate(0,3)')
+    .style('pointer-events','none');
+
+  // Main node circle with gradient
   node.append('circle')
     .attr('r',d=>d.size)
-    .attr('fill',d=>d.id==='you'?'#0369A1':CAT_COLOR[d.group]||'#94A3B8')
-    .attr('stroke','#fff')
-    .attr('stroke-width',d=>d.id==='you'?3:2)
-    .attr('filter',d=>d.id==='you'?'url(#glow)':'none')
+    .attr('fill',nodeFill)
+    .attr('stroke','rgba(255,255,255,.9)')
+    .attr('stroke-width',d=>d.id==='you'?3.5:2.5)
+    .attr('filter',d=>d.id==='you'?'url(#youGlow)':'url(#nodeShadow)')
     .style('cursor','pointer');
+
+  // White inner highlight dot (gives sphere-like depth)
+  node.filter(d=>d.id!=='you').append('circle')
+    .attr('r',d=>Math.round(d.size*0.32))
+    .attr('cx',d=>-Math.round(d.size*0.22))
+    .attr('cy',d=>-Math.round(d.size*0.22))
+    .attr('fill','rgba(255,255,255,.45)')
+    .style('pointer-events','none');
+
+  // Label with white background pill
+  node.append('rect')
+    .attr('rx',5).attr('ry',5)
+    .attr('height',15)
+    .attr('y',d=>d.size+5)
+    .attr('fill','rgba(255,255,255,.82)')
+    .style('pointer-events','none')
+    .each(function(d){
+      const w=(d.label.length*6.5)+10;
+      d3.select(this).attr('width',w).attr('x',-w/2);
+    });
 
   node.append('text')
     .text(d=>d.label)
     .attr('text-anchor','middle')
-    .attr('dy',d=>d.size+13)
-    .attr('font-size',d=>d.id==='you'?13:11)
+    .attr('dy',d=>d.size+16)
+    .attr('font-size',d=>d.id==='you'?12:10.5)
     .attr('font-weight',d=>d.id==='you'?700:600)
-    .attr('fill',d=>d.id==='you'?'#0369A1':'#475569')
+    .attr('fill',d=>d.id==='you'?'#0F6E56':'#334155')
     .style('pointer-events','none');
 
   const tip=document.getElementById('netTip');
@@ -1607,11 +1846,19 @@ function initNetwork(){
     tip.style.display='block';tip.style.left=(e.clientX+12)+'px';tip.style.top=(e.clientY-8)+'px';
   }).on('mousemove',e=>{
     tip.style.left=(e.clientX+12)+'px';tip.style.top=(e.clientY-8)+'px';
-  }).on('mouseout',()=>tip.style.display='none');
+  }).on('mouseout',()=>tip.style.display='none')
+    .on('click',(e,d)=>{
+      if(d.id==='you')return;
+      tip.style.display='none';
+      netBrushPerson(d.group, d.label);
+    });
 
   sim.on('tick',()=>{
-    link.attr('x1',d=>d.source.x).attr('y1',d=>d.source.y)
-        .attr('x2',d=>d.target.x).attr('y2',d=>d.target.y);
+    link.attr('d',d=>{
+      const dx=d.target.x-d.source.x, dy=d.target.y-d.source.y;
+      const dr=Math.sqrt(dx*dx+dy*dy)*1.4; // curve radius
+      return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
+    });
     node.attr('transform',d=>`translate(${d.x},${d.y})`);
   });
 
@@ -1638,13 +1885,13 @@ function initDashboard(){
       labels:['Week 8','Week 9','Week 10','Week 11','Week 12','Now'],
       datasets:[{
         label:'Activities',data:[0,1,2,1,3,5],
-        borderColor:'#0369A1',backgroundColor:'rgba(3,105,161,.08)',
-        borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#0369A1',
+        borderColor:'#2563EB',backgroundColor:'rgba(37,99,235,.08)',
+        borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#2563EB',
         fill:true,tension:.4
       },{
         label:'Connections',data:[0,1,3,3,5,7],
-        borderColor:'#10B981',backgroundColor:'rgba(16,185,129,.06)',
-        borderWidth:2,pointRadius:4,pointBackgroundColor:'#10B981',
+        borderColor:'#0F6E56',backgroundColor:'rgba(15,110,86,.07)',
+        borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#0F6E56',
         fill:true,tension:.4
       }]
     },
@@ -1663,9 +1910,9 @@ function initDashboard(){
     data:{
       labels:radarLabels,
       datasets:[
-        {label:'Your participation',data:radarActual,
-         backgroundColor:'rgba(3,105,161,.18)',borderColor:'#0369A1',borderWidth:2.5,
-         pointBackgroundColor:'#0369A1',pointRadius:4,pointHoverRadius:6},
+        {label:'You',data:radarActual,
+         backgroundColor:'rgba(15,110,86,.18)',borderColor:'#0F6E56',borderWidth:2.5,
+         pointBackgroundColor:'#0F6E56',pointRadius:4,pointHoverRadius:6},
         {label:'Ideal balance',data:radarIdeal,
          backgroundColor:'transparent',borderColor:'rgba(16,185,129,.5)',borderWidth:1.5,
          borderDash:[5,4],pointRadius:0}
@@ -1681,8 +1928,8 @@ function initDashboard(){
       },
       plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10},padding:8}}},
       scales:{r:{
-        min:0,max:100,ticks:{stepSize:25,font:{size:9},backdropColor:'transparent'},
-        grid:{color:'#F1F5F9'},pointLabels:{font:{size:10},color:'#475569'}
+        min:0,max:100,ticks:{stepSize:25,font:{size:10},backdropColor:'rgba(255,255,255,.75)',callback:v=>v+'%'},
+        grid:{color:'#E2E8F0'},pointLabels:{font:{size:12,weight:'600'},color:'#334155'}
       }}
     }
   });
@@ -1733,7 +1980,7 @@ function initTimeline(){
     [0,1,0,1,1,2,1],
   ];
   const maxD=5;
-  const colors=['transparent','#E0F2FE','#7DD3FC','#3B82F6','#0369A1','#1E3A8A'];
+  const colors=['transparent','#D1FAE5','#5DCAA5','#1D9E75','#0F6E56','#064E3B'];
 
   let html='<div></div>'+days.map(d=>`<div class="hm-dayh">${d}</div>`).join('');
   slots.forEach((s,si)=>{
@@ -1741,7 +1988,7 @@ function initTimeline(){
     days.forEach((_,di)=>{
       const v=density[si][di];
       const bg=v===0?'#F8FAFC':colors[v];
-      html+=`<div class="hm-cell" style="background:${bg}" title="${v} activities on ${days[di]} ${s}">${v>0?v:''}</div>`;
+      html+=`<div class="hm-cell" style="background:${bg}" title="${v} activities on ${days[di]} ${s} — click to filter map" onclick="hmBrushTime(${si},${di})">${v>0?v:''}</div>`;
     });
   });
   document.getElementById('hmGrid').innerHTML=html;
@@ -1760,13 +2007,18 @@ function initTimeline(){
   Object.entries(grouped).forEach(([date,acts])=>{
     tlHTML+=`<div class="tl-day-group"><div class="tl-day-label">${date}</div>`;
     acts.forEach(a=>{
-      tlHTML+=`<div class="tl-event" onclick="switchTab('map');setTimeout(()=>showDetail(${a.id}),100)">
-        <div class="tl-dot" style="background:${CAT_COLOR[a.category]}"></div>
+      tlHTML+=`<div class="tl-event" style="--evt-col:${CAT_COLOR[a.category]}" onclick="switchTab('map');setTimeout(()=>showDetail(${a.id}),100)" title="Click to view on map">
+        <div class="tl-dot"></div>
         <div class="tl-content">
           <div class="tl-ename">${a.name}</div>
-          <div class="tl-emeta">📍 ${a.location} ${a.newcomer?'🌟':''}</div>
+          <div class="tl-emeta">
+            <span class="tl-cat-tag" style="background:${CAT_COLOR[a.category]}">${CAT_LABEL[a.category]}</span>
+            <span>📍 ${a.location.split(',')[0]}</span>
+            ${a.newcomer?'<span>🌟</span>':''}
+          </div>
         </div>
         <div class="tl-time">${a.time}</div>
+        <div class="tl-arrow">›</div>
       </div>`;
     });
     tlHTML+='</div>';
@@ -1796,11 +2048,179 @@ function brushFilter(cat){
   // Switch to map tab so user sees the result
   switchTab('map');
 }
+// ════════════════════════════════════════
+//  INSIGHT / COPY / EMPTY STATE
+// ════════════════════════════════════════
+// ════════════════════════════════════════
+//  PANEL MODE: In View ↔ Upcoming
+// ════════════════════════════════════════
+let panelMode='map';
+
+function setPanelMode(mode){
+  panelMode=mode;
+  const isMap=mode==='map';
+  document.getElementById('panelTabMap').classList.toggle('active',isMap);
+  document.getElementById('panelTabUp').classList.toggle('active',!isMap);
+  document.getElementById('sortBtns').style.display=isMap?'flex':'none';
+  document.getElementById('mapInsightBar').style.display=isMap?'flex':'none';
+  document.getElementById('alScroll').style.display=isMap?'flex':'none';
+  document.getElementById('upScroll').style.display=isMap?'none':'block';
+  if(!isMap) renderUpcoming();
+}
+
+function renderUpcoming(){
+  const el=document.getElementById('upScroll');
+  const dateGroups=['Fri 16 May','Sat 17 May','Sun 18 May','Mon 19 May','Tue 20 May',
+                    'Wed 21 May','Thu 22 May','Fri 23 May','Sat 24 May','Sun 25 May'];
+  const cats=activeFilters.has('all')?null:[...activeFilters];
+  let html='';
+  dateGroups.forEach(d=>{
+    let acts=ACTIVITIES.filter(a=>a.city===currentCity&&a.date===d);
+    if(cats) acts=acts.filter(a=>cats.includes(a.category));
+    if(!acts.length) return;
+    // Format date header nicely
+    const parts=d.split(' '); // ["Fri","16","May"]
+    html+=`<div class="up-date-hdr">${parts[0]} · ${parts[1]} ${parts[2]}</div>`;
+    acts.forEach(a=>{
+      const col=CAT_COLOR[a.category];
+      html+=`<div class="up-item" style="--uc:${col}" onclick="showDetail(${a.id})">
+        <div class="up-item-body">
+          <div class="up-item-name">${a.name}</div>
+          <div class="up-item-meta">
+            <span style="background:${col};color:#fff;font-size:9px;font-weight:700;border-radius:7px;padding:1px 6px">${CAT_LABEL[a.category]}</span>
+            <span>📍 ${a.location.split(',')[0]}</span>
+            ${a.newcomer?'<span>🌟</span>':''}
+          </div>
+        </div>
+        <div class="up-item-time">${a.time}</div>
+        <div class="up-item-arr">›</div>
+      </div>`;
+    });
+  });
+  el.innerHTML=html||`<div style="padding:32px 16px;text-align:center;color:#94A3B8;font-size:12px">No upcoming activities match the current filter.</div>`;
+}
+
+// ── Distance filter ───────────────────────────────────────────────────────────
+function haversineKm(lat1,lng1,lat2,lng2){
+  const R=6371,dLat=(lat2-lat1)*Math.PI/180,dLng=(lng2-lng1)*Math.PI/180;
+  const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+function setDist(km){
+  distFilter=km;
+  const sel=document.getElementById('distSelect');
+  if(sel) sel.value=km===null?'':String(km);
+  renderMarkers();
+  updateActivityList();
+}
+function withinDist(a){
+  if(!distFilter||!map) return true;
+  const c=map.getCenter();
+  return haversineKm(c.lat,c.lng,a.lat,a.lng)<=distFilter;
+}
+
+// ── Toast notification system ─────────────────────────────────────────────────
+let _toastTimer=null;
+function showToast(title, msg='', type='success', duration=3500){
+  const el=document.getElementById('appToast');
+  const icons={success:'🎉',info:'💡',warn:'⚠️',copy:'✓'};
+  document.getElementById('atIcon').textContent=icons[type]||icons.success;
+  document.getElementById('atTitle').textContent=title;
+  document.getElementById('atMsg').textContent=msg;
+  el.className='show at-'+type;
+  clearTimeout(_toastTimer);
+  _toastTimer=setTimeout(hideToast, duration);
+}
+function hideToast(){
+  const el=document.getElementById('appToast');
+  if(el) el.classList.remove('show');
+}
+
+function updateMapInsight(visible){
+  const el=document.getElementById('mapInsightText');
+  if(!el)return;
+  if(visible.length===0){el.textContent='No activities in current view — try zooming out';return;}
+  // Find busiest area (last segment of location string)
+  const areaCount={};
+  visible.forEach(a=>{
+    const parts=a.location.split(',');
+    const area=(parts[parts.length-1]||parts[0]).trim();
+    areaCount[area]=(areaCount[area]||0)+1;
+  });
+  const [topArea,topN]=Object.entries(areaCount).sort((x,y)=>y[1]-x[1])[0];
+  const newcomerCount=visible.filter(a=>a.newcomer).length;
+  el.textContent=`Busiest area: ${topArea} · ${topN} event${topN>1?'s':''} · ${newcomerCount} newcomer-friendly`;
+}
+
+function copyActivity(id){
+  const a=ACTIVITIES.find(x=>x.id===id);
+  if(!a)return;
+  const text=`📍 ${a.name}\n📅 ${a.date} · ${a.time}\n🗺 ${a.location}\n👥 ${a.attendees} attending${a.newcomer?' · 🌟 Newcomer-friendly':''}`;
+  navigator.clipboard.writeText(text).catch(()=>{});
+  showToast('Copied to clipboard', a.name, 'copy', 2200);
+}
+
 function clearBrush(){
   activeFilters=new Set(['all']);
   updateChips();
+  timeBrushIds=null;
   renderMarkers();
   document.getElementById('brushBanner').classList.remove('show');
+  document.getElementById('mapTimeBanner').classList.remove('show');
+}
+
+// ── Timeline → Map: filter by day + time slot ────────────────────────────────
+function hmBrushTime(slotIdx, dayIdx){
+  const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const slotLabels=['6–9 AM','9–12 PM','12–3 PM','3–6 PM','6–9 PM','9 PM+'];
+  const slotHours=[[6,9],[9,12],[12,15],[15,18],[18,21],[21,24]];
+  const [h1,h2]=slotHours[slotIdx];
+  const targetDay=days[dayIdx];
+
+  function parseHour(t){
+    const m=t.match(/(\d+):(\d+)\s*(AM|PM)/i);
+    if(!m)return -1;
+    let h=parseInt(m[1]);
+    if(/PM/i.test(m[3])&&h!==12)h+=12;
+    if(/AM/i.test(m[3])&&h===12)h=0;
+    return h;
+  }
+
+  const matched=ACTIVITIES.filter(a=>{
+    if(a.city!==currentCity)return false;
+    if(!a.date.startsWith(targetDay))return false;
+    const h=parseHour(a.time);
+    return h>=h1&&h<h2;
+  });
+
+  // Use matched IDs (or a sentinel empty set if none match)
+  timeBrushIds=new Set(matched.map(a=>a.id));
+  // Clear any category brush banner
+  document.getElementById('brushBanner').classList.remove('show');
+  // Switch to map and refresh
+  switchTab('map');
+  renderMarkers();
+  // Show time-brush banner
+  document.getElementById('mapTimeLabel').textContent=`${targetDay}  ·  ${slotLabels[slotIdx]}`;
+  document.getElementById('mapTimeBanner').classList.add('show');
+  // Pan map to Hamilton if no activities visible to avoid empty view
+  if(matched.length===0) return;
+  const lats=matched.map(a=>a.lat), lngs=matched.map(a=>a.lng);
+  const bounds=L.latLngBounds(lats.map((la,i)=>L.latLng(la,lngs[i])));
+  map.fitBounds(bounds,{padding:[60,60],maxZoom:15});
+}
+
+function clearTimeBrush(){
+  timeBrushIds=null;
+  renderMarkers();
+  document.getElementById('mapTimeBanner').classList.remove('show');
+}
+
+// ── Network → Map: clicking a person node filters by their category ───────────
+function netBrushPerson(cat, label){
+  brushFilter(cat);
+  document.getElementById('brushLabel').textContent=`${label} · ${CAT_LABEL[cat]||cat}`;
+  document.getElementById('brushLabel').style.background=CAT_COLOR[cat]||'#0F6E56';
 }
 
 // ════════════════════════════════════════
@@ -1847,64 +2267,68 @@ function initGrowthTimeline(){
   const svg=d3.select('#growthSvg');
   svg.selectAll('*').remove();
   const el=document.getElementById('growthSvg');
-  const W=el.getBoundingClientRect().width||700, H=100;
+  const W=el.getBoundingClientRect().width||700, H=140;
   svg.attr('viewBox',`0 0 ${W} ${H}`);
 
-  // Fall back to hamilton data for cities without specific growth data
   const data=GROWTH_DATA[currentCity]||GROWTH_DATA.hamilton;
   const tip=document.getElementById('growthTip');
-  const xScale=d3.scalePoint().domain(data.map(d=>d.week)).range([40,W-40]).padding(.5);
-  const midY=H/2;
+  const xScale=d3.scalePoint().domain(data.map(d=>d.week)).range([50,W-50]).padding(.5);
+  // Axis sits at 62% of height — plenty of room above for people, below for labels
+  const midY=Math.round(H*0.58);
 
-  // Axis line
-  svg.append('line').attr('x1',40).attr('x2',W-40).attr('y1',midY).attr('y2',midY)
-    .attr('stroke','#E2E8F0').attr('stroke-width',2);
+  // Subtle axis
+  svg.append('line').attr('x1',50).attr('x2',W-50).attr('y1',midY).attr('y2',midY)
+    .attr('stroke','#CBD5E1').attr('stroke-width',1.5).attr('stroke-dasharray','4,3');
 
-  // Week ticks
   data.forEach(d=>{
     const x=xScale(d.week);
-    svg.append('circle').attr('cx',x).attr('cy',midY).attr('r',d.people.length?8:5)
-      .attr('fill',d.people.length?'#0369A1':'#E2E8F0').attr('stroke','#fff').attr('stroke-width',2);
-    svg.append('text').attr('x',x).attr('y',midY+22).attr('text-anchor','middle')
-      .attr('font-size',10).attr('fill','#94A3B8').attr('font-weight',600).text(d.week);
-    svg.append('text').attr('x',x).attr('y',midY+33).attr('text-anchor','middle')
-      .attr('font-size',9).attr('fill','#CBD5E1').text(d.label);
+    const hasP=d.people.length>0;
 
-    // People dots above/below
-    if(d.people.length){
+    // Axis node
+    svg.append('circle').attr('cx',x).attr('cy',midY).attr('r',hasP?9:5)
+      .attr('fill',hasP?'#0F6E56':'#E2E8F0').attr('stroke','#fff').attr('stroke-width',2.5)
+      .attr('filter',hasP?'drop-shadow(0 2px 4px rgba(15,110,86,.35))':'none');
+
+    // Week label (below axis with enough clearance)
+    svg.append('text').attr('x',x).attr('y',midY+24).attr('text-anchor','middle')
+      .attr('font-size',10).attr('fill','#475569').attr('font-weight',700).text(d.week);
+    svg.append('text').attr('x',x).attr('y',midY+37).attr('text-anchor','middle')
+      .attr('font-size',9).attr('fill','#94A3B8').text(d.label);
+
+    // Running +total ABOVE axis node (no collision)
+    if(hasP){
+      let running=0;
+      data.slice(0,data.indexOf(d)+1).forEach(dd=>running+=dd.people.length);
+      svg.append('text').attr('x',x).attr('y',midY-13).attr('text-anchor','middle')
+        .attr('font-size',9.5).attr('fill','#0F6E56').attr('font-weight',700).text('+'+running);
+    }
+
+    // People dots — all above axis, stacked cleanly
+    if(hasP){
       d.people.forEach((p,i)=>{
-        const dir=i%2===0?-1:1;
-        const py=midY+dir*(28+Math.floor(i/2)*20);
-        const px=x+(i>1?((i%2===0?-1:1)*14):0);
-        // connector
-        svg.append('line').attr('x1',x).attr('x2',px).attr('y1',midY+(dir*8)).attr('y2',py-(dir*9))
-          .attr('stroke',CAT_COLOR[p.cat]).attr('stroke-width',1.2).attr('stroke-opacity',.5);
+        const py=midY-(34+i*24);
+        // connector line
+        svg.append('line').attr('x1',x).attr('x2',x).attr('y1',midY-9).attr('y2',py+11)
+          .attr('stroke',CAT_COLOR[p.cat]).attr('stroke-width',1.5).attr('stroke-opacity',.4);
         const g=svg.append('g').attr('cursor','pointer');
-        g.append('circle').attr('cx',px).attr('cy',py).attr('r',10)
-          .attr('fill',CAT_COLOR[p.cat]).attr('stroke','#fff').attr('stroke-width',2)
+        // shadow ring
+        g.append('circle').attr('cx',x).attr('cy',py).attr('r',13)
+          .attr('fill',CAT_COLOR[p.cat]).attr('opacity',.12);
+        // main dot
+        g.append('circle').attr('cx',x).attr('cy',py).attr('r',11)
+          .attr('fill',CAT_COLOR[p.cat]).attr('stroke','#fff').attr('stroke-width',2.5)
           .attr('opacity',0)
-          .transition().delay(i*150+300).duration(400).attr('opacity',1);
-        g.append('text').attr('x',px).attr('y',py+4).attr('text-anchor','middle')
-          .attr('font-size',8).attr('font-weight',700).attr('fill','#fff').attr('pointer-events','none')
+          .transition().delay(i*160+250).duration(380).attr('opacity',1);
+        g.append('text').attr('x',x).attr('y',py+4).attr('text-anchor','middle')
+          .attr('font-size',8.5).attr('font-weight',700).attr('fill','#fff').attr('pointer-events','none')
           .text(p.name.slice(0,2))
-          .attr('opacity',0).transition().delay(i*150+300).duration(400).attr('opacity',1);
-        g.on('mouseover',(e)=>{
+          .attr('opacity',0).transition().delay(i*160+250).duration(380).attr('opacity',1);
+        g.on('mouseover',e=>{
           tip.innerHTML=`<strong>${p.name}</strong><br>Category: ${CAT_LABEL[p.cat]}<br>Met at: ${p.act}`;
           tip.style.display='block';tip.style.left=(e.clientX+12)+'px';tip.style.top=(e.clientY-8)+'px';
         }).on('mousemove',e=>{tip.style.left=(e.clientX+12)+'px';tip.style.top=(e.clientY-8)+'px';})
           .on('mouseout',()=>tip.style.display='none');
       });
-    }
-  });
-
-  // Running total label
-  let total=0;
-  data.forEach(d=>{
-    total+=d.people.length;
-    if(total>0){
-      const x=xScale(d.week);
-      svg.append('text').attr('x',x).attr('y',midY-14).attr('text-anchor','middle')
-        .attr('font-size',9).attr('fill','#0369A1').attr('font-weight',700).text('+'+total);
     }
   });
 }
@@ -1996,7 +2420,7 @@ function initBubbleScatter(){
 
     circle.on('mouseover',(e)=>{
       circle.attr('fill-opacity',1).attr('stroke-width',2.5);
-      tip.innerHTML=`<strong>${a.name}</strong><br>${CAT_LABEL[a.category]} · ${a.date} ${a.time}<br>👥 ${a.attendees} attending${a.newcomer?' · 🌟 Newcomer-friendly':''}`;
+      tip.innerHTML=`<strong>${a.name}</strong><br>${CAT_LABEL[a.category]} · ${a.date} ${a.time}<br>👥 ${a.attendees} attending${a.newcomer?' · 🌟 Newcomer-friendly':''}<br><span style="color:#5DCAA5;font-size:10px;margin-top:3px;display:block">Click → view on map</span>`;
       tip.style.display='block';tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-10)+'px';
     }).on('mousemove',e=>{
       tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-10)+'px';
@@ -2091,8 +2515,8 @@ function initCityComparison(){
         {
           label:'Overseas-born % (Census 2023)',
           data:migrantPcts,
-          backgroundColor:keys.map(k=>hl(k)?'#0369A1':'#38BDF888'),
-          borderColor:keys.map(k=>hl(k)?'#075985':'#38BDF8'),
+          backgroundColor:keys.map(k=>hl(k)?'#0F6E56':'#5DCAA588'),
+          borderColor:keys.map(k=>hl(k)?'#085041':'#5DCAA5'),
           borderWidth:keys.map(k=>hl(k)?2.5:1.5),
           yAxisID:'y'
         },{
@@ -2165,7 +2589,7 @@ function _setImgPreview(dataUrl){
 function handleImgSelect(input){
   const file = input.files[0];
   if(!file) return;
-  if(file.size > 5 * 1024 * 1024){ alert('Image too large — please use a file under 5 MB.'); return; }
+  if(file.size > 5 * 1024 * 1024){ showToast('Image too large','Please use a file under 5 MB.','warn'); return; }
   const reader = new FileReader();
   reader.onload = e => _setImgPreview(e.target.result);
   reader.readAsDataURL(file);
@@ -2176,7 +2600,7 @@ function handleImgDrop(e){
   document.getElementById('imgUploadZone').classList.remove('dragover');
   const file = e.dataTransfer.files[0];
   if(!file || !file.type.startsWith('image/')) return;
-  if(file.size > 5 * 1024 * 1024){ alert('Image too large — please use a file under 5 MB.'); return; }
+  if(file.size > 5 * 1024 * 1024){ showToast('Image too large','Please use a file under 5 MB.','warn'); return; }
   const reader = new FileReader();
   reader.onload = ev => _setImgPreview(ev.target.result);
   reader.readAsDataURL(file);
@@ -2198,7 +2622,7 @@ function openModal(){
   document.getElementById('modalOv').classList.add('open');
 }
 function closeModal(){document.getElementById('modalOv').classList.remove('open');}
-function submitAct(){closeModal();setTimeout(()=>alert('🎉 Activity published! (Full persistence in Milestone 3)'),200);}
+function submitAct(){closeModal();setTimeout(()=>showToast('Activity published! 🎉','It will appear on the map for others to discover.','success'),200);}
 document.getElementById('modalOv').addEventListener('click',function(e){if(e.target===this)closeModal();});
 
 // ════════════════════════════════════════
@@ -2263,5 +2687,14 @@ window.addEventListener('load',()=>{
   })();
 });
 </script>
+<!-- App toast — outside all views so it's always visible regardless of active tab -->
+<div id="appToast">
+  <div class="at-icon" id="atIcon">🎉</div>
+  <div class="at-body">
+    <div class="at-title" id="atTitle"></div>
+    <div class="at-msg" id="atMsg"></div>
+  </div>
+  <button class="at-close" onclick="hideToast()">✕</button>
+</div>
 </body>
 </html>
