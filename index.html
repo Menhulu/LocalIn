@@ -66,13 +66,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .chip .ico{font-size:13px;line-height:1;flex-shrink:0}
 .chip.active{color:#fff!important;border-color:transparent!important;box-shadow:0 3px 10px rgba(0,0,0,.18)}
 .chip-all{background:linear-gradient(135deg,#1e293b,#334155);color:#fff;border-color:transparent;box-shadow:0 2px 8px rgba(30,41,59,.3)}
-.chip-social{background:#F5F0FF;border-color:#DDD0FE;color:#7C3AED}
-.chip-sports{background:#FEF2F2;border-color:#FECACA;color:#B91C1C}
-.chip-culture{background:#F0FDFA;border-color:#99F6E4;color:#0F766E}
-.chip-learning{background:#EFF6FF;border-color:#BFDBFE;color:#1D4ED8}
-.chip-outdoor{background:#F0FDF4;border-color:#BBF7D0;color:#15803D}
-.chip-food{background:#FFF7ED;border-color:#FED7AA;color:#C2410C}
-.chip-volunteer{background:#FDF2F8;border-color:#FBCFE8;color:#BE185D}
+.chip-social{background:#F5EEFF;border-color:#D8B4FE;color:#9B59D0}
+.chip-sports{background:#FFF0F0;border-color:#FCA5A5;color:#E05252}
+.chip-culture{background:#E8FEFB;border-color:#5EEAD4;color:#0F9F8A}
+.chip-learning{background:#EEF6FF;border-color:#93C5FD;color:#4A8FE0}
+.chip-outdoor{background:#EDFFF3;border-color:#86EFAC;color:#38A05A}
+.chip-food{background:#FFF8ED;border-color:#FCD34D;color:#D4893A}
+.chip-volunteer{background:#FFF0F5;border-color:#F9A8D4;color:#D46E95}
 
 /* ── Map Layout ── */
 .map-wrap{flex:1;display:flex;overflow:hidden}
@@ -132,17 +132,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .dist-pill{padding:3px 8px;border-radius:20px;border:1.5px solid #CBD5E1;font-size:10.5px;font-weight:600;color:#475569;background:rgba(255,255,255,.7);cursor:pointer;transition:all .18s;white-space:nowrap}
 .dist-pill:hover{border-color:#5DCAA5;color:#0F6E56}
 .dist-pill.active{background:#0F6E56;color:#fff;border-color:#0F6E56}
-.al-scroll{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin;scrollbar-color:#e2e8f0 transparent}
+.al-scroll{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:12px;scrollbar-width:thin;scrollbar-color:#e2e8f0 transparent}
 /* ── Upcoming grouped list (in map panel) ── */
-.up-scroll{flex:1;overflow-y:auto;padding:10px 10px 16px;scrollbar-width:thin;scrollbar-color:#e2e8f0 transparent}
-.up-date-hdr{font-size:10px;font-weight:700;color:#0F6E56;text-transform:uppercase;letter-spacing:.6px;padding:10px 4px 5px;display:flex;align-items:center;gap:7px}
+.up-scroll{flex:1;overflow-y:auto;padding:14px 12px 20px;scrollbar-width:thin;scrollbar-color:#e2e8f0 transparent}
+.up-date-hdr{font-size:11px;font-weight:700;color:#0F6E56;text-transform:uppercase;letter-spacing:.7px;padding:16px 4px 7px;display:flex;align-items:center;gap:7px}
 .up-date-hdr::after{content:'';flex:1;height:1px;background:#9FE1CB;opacity:.6}
-.up-item{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:10px;margin-bottom:6px;background:#fff;border:1px solid #F1F5F9;border-left:3.5px solid var(--uc,#E2E8F0);box-shadow:0 1px 3px rgba(0,0,0,.05);cursor:pointer;transition:all .18s}
+.up-item{display:flex;align-items:center;gap:10px;padding:12px 13px;border-radius:12px;margin-bottom:8px;background:#fff;border:1px solid #F1F5F9;border-left:4px solid var(--uc,#E2E8F0);box-shadow:0 1px 4px rgba(0,0,0,.06);cursor:pointer;transition:all .18s}
 .up-item:hover{transform:translateX(2px);box-shadow:0 2px 8px rgba(15,110,86,.1);border-color:#9FE1CB;background:#F8FFFE}
 .up-item-body{flex:1;min-width:0}
-.up-item-name{font-size:12px;font-weight:700;color:#0F172A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.up-item-meta{font-size:10.5px;color:#64748B;margin-top:2px;display:flex;align-items:center;gap:5px}
-.up-item-time{font-size:11px;font-weight:600;color:#475569;white-space:nowrap;flex-shrink:0}
+.up-item-name{font-size:13px;font-weight:700;color:#0F172A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.up-item-meta{font-size:11px;color:#64748B;margin-top:3px;display:flex;align-items:center;gap:5px}
+.up-item-time{font-size:12px;font-weight:600;color:#475569;white-space:nowrap;flex-shrink:0}
 .up-item-arr{font-size:11px;color:#CBD5E1;flex-shrink:0;transition:all .18s}
 .up-item:hover .up-item-arr{color:#0F6E56;transform:translateX(2px)}
 /* ── Insight bars ── */
@@ -198,7 +198,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .ac-nc{font-size:10px;background:#ECFDF5;color:#065F46;border-radius:9px;padding:2px 7px;font-weight:600}
 
 /* Detail Panel — slides over the list pane */
-.detail-panel{position:absolute;left:0;right:0;top:0;bottom:0;background:#fff;border-left:1px solid #e2e8f0;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);z-index:200;overflow-y:auto}
+.detail-panel{position:absolute;left:0;right:0;top:0;bottom:0;background:#fff;border-left:1px solid #e2e8f0;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);z-index:200;overflow:hidden}
 .detail-panel.open{transform:translateX(0)}
 /* Hero header */
 .dp-hero{padding:16px 14px 14px;display:flex;flex-direction:column;gap:10px;position:relative;min-height:130px;overflow:hidden}
@@ -218,10 +218,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .cap-bar-bg{flex:1;height:5px;background:#F1F5F9;border-radius:3px;overflow:hidden}
 .cap-bar-fill{height:100%;border-radius:3px;transition:width .6s ease}
 /* Body sections */
-.dp-body{padding:0 14px;flex:1}
-.dp-section{padding:12px 0;border-bottom:1px solid #F8FAFC}
+.dp-body{padding:0 14px;flex:1;overflow-y:auto}
+.dp-section{padding:10px 0;border-bottom:1px solid #F8FAFC}
 .dp-section:last-child{border-bottom:none}
-.dp-sec-label{font-size:10px;font-weight:700;color:#CBD5E1;text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px}
+.dp-sec-label{font-size:9.5px;font-weight:700;color:#B0BEC5;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px}
 .pdesc{font-size:12px;color:#475569;line-height:1.7}
 /* Attendees */
 .att-row{display:flex;align-items:center;gap:9px}
@@ -230,26 +230,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .av:first-child{margin-left:0}
 .att-cnt{font-size:11px;color:#64748B}
 .ncbadge{background:#ECFDF5;border:1px solid #A7F3D0;border-radius:8px;padding:6px 10px;display:flex;align-items:center;gap:6px;font-size:11px;color:#065F46;font-weight:500}
-/* Demographics compact */
-.demo-legend{display:grid;grid-template-columns:1fr 1fr;gap:4px 8px;margin-top:7px}
-.demo-leg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:#475569}
-/* Age compact */
-.age-chart-wrap{display:flex;flex-direction:column;gap:2px}
-.age-bars-row{display:flex;align-items:flex-end;gap:4px;height:40px}
-.age-bar-cell{flex:1;border-radius:3px 3px 0 0;min-width:0}
-.age-meta-row{display:flex;gap:4px}
-.age-meta-cell{flex:1;display:flex;flex-direction:column;align-items:center;min-width:0}
-.age-meta-lbl{font-size:9px;color:#94A3B8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%;text-align:center}
-.age-meta-pct{font-size:10px;font-weight:700;color:#0F6E56}
+/* demographics + age-chart styles consolidated in rich-detail section below */
 /* Vibe + practical */
 .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .info-pill{background:#F8FAFC;border-radius:8px;padding:8px 10px;display:flex;align-items:center;gap:7px;font-size:11px;color:#334155}
 .info-pill strong{color:#1e293b}
 /* Actions */
-.pactions{padding:12px 14px 16px;display:flex;gap:7px;border-top:1px solid #F1F5F9}
+.pactions{padding:10px 14px 14px;display:flex;align-items:center;gap:8px;border-top:1px solid #F1F5F9}
 .btn-join{flex:1;background:linear-gradient(135deg,#0F6E56,#085041);color:#fff;border:none;padding:11px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 3px 10px rgba(15,110,86,.35);letter-spacing:.1px}
 .btn-join:hover{background:linear-gradient(135deg,#1D9E75,#0F6E56);box-shadow:0 5px 16px rgba(15,110,86,.45);transform:translateY(-1px)}
-.btn-save{background:#F8FAFC;color:#0F6E56;border:1.5px solid #e2e8f0;padding:10px 13px;border-radius:9px;font-size:16px;cursor:pointer;transition:all .2s}
+.btn-save{background:#F8FAFC;color:#0F6E56;border:1.5px solid #e2e8f0;padding:10px 13px;border-radius:9px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
 .btn-save:hover{background:#E1F5EE;border-color:#5DCAA5}
 
 /* ══════════ NETWORK VIEW ══════════ */
@@ -298,7 +288,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .ring-val{font-size:20px;font-weight:800;color:#0F6E56}
 .ring-lbl{font-size:9px;color:#94A3B8;font-weight:600;text-transform:uppercase}
 /* Progress bars */
-.pbar-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+/* pbar-row → merged below */
 .pbar-lbl{font-size:12px;font-weight:600;color:#334155;width:76px;flex-shrink:0}
 .pbar-bg{flex:1;height:10px;background:#E2E8F0;border-radius:5px;overflow:hidden}
 .pbar-fill{height:100%;border-radius:5px;transition:width 1s ease}
@@ -403,7 +393,7 @@ canvas{max-width:100%;display:block}
 .nc-tip::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#065F46;color:#fff;font-size:10px;font-weight:600;padding:4px 9px;border-radius:8px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .18s;z-index:9999;letter-spacing:.2px}
 .nc-tip::before{content:'';position:absolute;bottom:calc(100% + 1px);left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:#065F46;opacity:0;transition:opacity .18s;z-index:9999}
 .nc-tip:hover::after,.nc-tip:hover::before{opacity:1}
-.pbar-row{cursor:pointer;border-radius:6px;padding:3px 6px;margin:-3px -6px;transition:background .15s}
+.pbar-row{display:flex;align-items:center;gap:8px;cursor:pointer;border-radius:6px;padding:3px 6px;margin:0 -6px 4px;transition:background .15s}
 .pbar-row:hover{background:#E1F5EE}
 .pbar-row:hover .pbar-lbl{color:#0F6E56}
 
@@ -555,8 +545,7 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
 <!-- TABS -->
 <div class="tab-bar" role="tablist" aria-label="Main views">
   <div class="tab active" role="tab" tabindex="0" aria-selected="true"  id="tab-map"       onclick="switchTab('map')"       onkeydown="if(event.key==='Enter'){switchTab('map')}">🗺️ Discover</div>
-  <div class="tab"        role="tab" tabindex="0" aria-selected="false" id="tab-network"    onclick="switchTab('network')"   onkeydown="if(event.key==='Enter'){switchTab('network')}">🌐 My Network <span class="tab-badge" id="connBadge">7</span></div>
-  <div class="tab"        role="tab" tabindex="0" aria-selected="false" id="tab-dashboard"  onclick="switchTab('dashboard')" onkeydown="if(event.key==='Enter'){switchTab('dashboard')}">📊 Dashboard</div>
+  <div class="tab"        role="tab" tabindex="0" aria-selected="false" id="tab-network"    onclick="switchTab('network')"   onkeydown="if(event.key==='Enter'){switchTab('network')}">📊 My Progress <span class="tab-badge" id="connBadge">7</span></div>
   <div class="tab"        role="tab" tabindex="0" aria-selected="false" id="tab-timeline"   onclick="switchTab('timeline')"  onkeydown="if(event.key==='Enter'){switchTab('timeline')}">📅 Timeline</div>
 </div>
 
@@ -571,9 +560,7 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
     <div class="chip chip-outdoor"   id="chip-outdoor"   role="button" tabindex="0" aria-pressed="false" title="Outdoor walks &amp; nature activities" onclick="toggleFilter('outdoor')"   onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFilter('outdoor')}"><span class="ico">🌿</span>Outdoor</div>
     <div class="chip chip-food"      id="chip-food"      role="button" tabindex="0" aria-pressed="false" title="Food markets &amp; dining events"     onclick="toggleFilter('food')"      onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFilter('food')}"><span class="ico">🍜</span>Food &amp; Dining</div>
     <div class="chip chip-volunteer" id="chip-volunteer" role="button" tabindex="0" aria-pressed="false" title="Volunteering &amp; community service"  onclick="toggleFilter('volunteer')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFilter('volunteer')}"><span class="ico">🤝</span>Volunteer</div>
-    <div style="margin-left:auto;flex-shrink:0;padding-left:8px">
-      <button class="choro-btn" id="choroBtn" onclick="toggleChoropleth()" aria-pressed="false" aria-label="Toggle migrant density overlay">🌍 Migrant Density</button>
-    </div>
+
   </div>
   <!-- Time-brush banner: shows when Timeline → Map link is active -->
   <div class="map-time-banner" id="mapTimeBanner">
@@ -604,17 +591,6 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
       </div>
       <!-- Re-center button -->
       <button id="mapLocateBtn" title="Re-center map" onclick="map.setView([-37.787,175.279],13)">📍</button>
-      <!-- Choropleth Legend Overlay -->
-      <div class="choro-legend" id="choroLegend">
-        <div class="choro-legend-title">🌍 Migrant Population %</div>
-        <div class="choro-legend-scale">
-          <div style="background:#E1F5EE"></div><div style="background:#5DCAA5"></div>
-          <div style="background:#1D9E75"></div><div style="background:#0F6E56"></div>
-          <div style="background:#064E3B"></div>
-        </div>
-        <div class="choro-legend-labels"><span>14%</span><span>~26%</span><span>39%</span></div>
-        <div class="choro-city-stat" id="choroCityStat">NZ 2023 Census data</div>
-      </div>
     </div>
 
     <!-- ── Resize Handle ── -->
@@ -674,6 +650,7 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
           <button class="pc" onclick="closePanel()">✕</button>
         </div>
         <div class="ptitle" id="ptitle"></div>
+      <a id="dpWebsite" href="#" target="_blank" rel="noopener" style="display:none;align-items:center;gap:4px;font-size:11px;font-weight:600;color:rgba(255,255,255,.82);text-decoration:none;margin-top:6px;letter-spacing:.1px">🌐 Website ↗</a>
       </div>
       <!-- Meta strip -->
       <div class="pmeta-strip" id="pmeta"></div>
@@ -693,61 +670,101 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
       </div>
       <div class="pactions">
         <button class="btn-join" onclick="joinActivity()">Join Activity</button>
-        <a id="dpWebsite" href="#" target="_blank" rel="noopener" style="display:none;align-items:center;justify-content:center;gap:5px;background:#F0FDF4;color:#0F6E56;border:1.5px solid #9FE1CB;padding:10px 12px;border-radius:9px;font-size:12px;font-weight:600;text-decoration:none;transition:all .2s;white-space:nowrap">🌐 Website</a>
+        <button id="dpSaveBtn" class="btn-save" onclick="toggleSave(currentDetailId)" title="Save this activity">♡ Save</button>
+        <a id="dpDirections" href="#" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;flex-shrink:0;background:#F0F9FF;color:#0369A1;border:1.5px solid #BAE6FD;border-radius:9px;font-size:19px;text-decoration:none;transition:all .2s" title="Get directions in Google Maps"><svg width="14" height="18" viewBox="0 0 14 18" fill="currentColor" aria-hidden="true"><path d="M7 0C3.13 0 0 3.13 0 7c0 5.25 7 11 7 11S14 12.25 14 7C14 3.13 10.87 0 7 0zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg></a>
       </div>
     </div><!-- /detail-panel -->
     </div><!-- /listPane -->
   </div><!-- /map-wrap -->
 </div><!-- /view-map -->
 
-<!-- ═══ NETWORK VIEW ═══ -->
+<!-- ═══ NETWORK VIEW / MY PROGRESS ═══ -->
 <div class="view" id="view-network">
-  <div class="net-wrap">
-    <svg id="netSvg"></svg>
-    <div class="net-side">
-      <div class="net-title">Your Social Network</div>
-      <div class="net-sub">Connections you've built by attending activities in <span id="netCity">Hamilton</span>. Drag nodes to explore.</div>
-      <!-- Network insight -->
-      <div class="net-insight" id="netInsight">
-        💡 <strong>Opportunity:</strong> <span id="netInsightText">You're 2 connections away from 3 Mandarin speakers. Join the next Language Exchange to expand your network.</span>
+
+  <!-- ── HERO: Integration Score + Key Stats ── -->
+  <div style="background:linear-gradient(135deg,#E1F5EE 0%,#D1FAE5 100%);border-bottom:1px solid #9FE1CB;padding:16px 24px;display:flex;align-items:center;gap:22px;flex-shrink:0">
+    <!-- Score ring -->
+    <div style="position:relative;width:84px;height:84px;flex-shrink:0">
+      <svg width="84" height="84" viewBox="0 0 84 84">
+        <circle cx="42" cy="42" r="34" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="7"/>
+        <circle cx="42" cy="42" r="34" fill="none" stroke="#0F6E56" stroke-width="7"
+          stroke-linecap="round" stroke-dasharray="214" stroke-dashoffset="81" transform="rotate(-90 42 42)"/>
+      </svg>
+      <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
+        <div style="font-size:22px;font-weight:800;color:#0F6E56">62</div>
+        <div style="font-size:8px;color:#047857;font-weight:700;text-transform:uppercase;letter-spacing:.5px">Score</div>
       </div>
-      <div class="net-stats">
-        <div class="ns-card c-teal">
-          <div class="ns-num" id="nsConn">7</div>
-          <div class="ns-lbl">Connections</div>
-          <div class="ns-trend" style="color:#047857">▲ +2 this week</div>
+    </div>
+    <!-- Title + progress bar -->
+    <div style="flex:1;min-width:0">
+      <div style="font-size:15px;font-weight:800;color:#085041;margin-bottom:3px">Integration Progress</div>
+      <div style="font-size:12px;color:#0F6E56;margin-bottom:9px">You're integrating well in <span id="netCity">Hamilton</span>. Try a new category to push past 70!</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="flex:1;height:6px;background:rgba(255,255,255,.55);border-radius:3px;overflow:hidden">
+          <div style="width:62%;height:100%;background:#0F6E56;border-radius:3px"></div>
         </div>
-        <div class="ns-card c-blue">
-          <div class="ns-num" id="nsAct">5</div>
-          <div class="ns-lbl">Activities</div>
-          <div class="ns-trend" style="color:#1D4ED8">▲ +1 this week</div>
-        </div>
-        <div class="ns-card c-purple">
-          <div class="ns-num" id="nsCat">4</div>
-          <div class="ns-lbl">Categories</div>
-          <div class="ns-trend" style="color:#6D28D9">of 7 total</div>
-        </div>
-        <div class="ns-card c-amber">
-          <div class="ns-num" id="nsScore">62</div>
-          <div class="ns-lbl">Int. Score</div>
-          <div class="ns-trend" style="color:#B45309">▲ +8 pts</div>
-        </div>
+        <span style="font-size:11px;font-weight:700;color:#085041;white-space:nowrap">62 / 100</span>
       </div>
-      <div class="pst" style="padding:0;margin-bottom:10px">Legend</div>
-      <div class="net-legend" id="netLegend"></div>
-      <div class="pst" style="padding:0;margin-bottom:10px;margin-top:14px">People you've met</div>
-      <div id="personList"></div>
+    </div>
+    <!-- Key stat cards -->
+    <div style="display:flex;gap:10px;flex-shrink:0">
+      <div style="background:rgba(255,255,255,.72);border-radius:12px;padding:10px 16px;text-align:center;min-width:72px">
+        <div style="font-size:26px;font-weight:800;color:#0F6E56;line-height:1" id="nsConn">7</div>
+        <div style="font-size:9px;font-weight:700;color:#047857;text-transform:uppercase;letter-spacing:.3px;margin-top:3px">Connections</div>
+        <div style="font-size:9px;color:#10B981;font-weight:600;margin-top:2px">▲ +2 this week</div>
+      </div>
+      <div style="background:rgba(255,255,255,.72);border-radius:12px;padding:10px 16px;text-align:center;min-width:72px">
+        <div style="font-size:26px;font-weight:800;color:#7EB8F7;line-height:1" id="nsAct">7</div>
+        <div style="font-size:9px;font-weight:700;color:#1D4ED8;text-transform:uppercase;letter-spacing:.3px;margin-top:3px">Activities</div>
+        <div style="font-size:9px;color:#3B82F6;font-weight:600;margin-top:2px">▲ +1 this week</div>
+      </div>
+      <div style="background:rgba(255,255,255,.72);border-radius:12px;padding:10px 16px;text-align:center;min-width:72px">
+        <div style="font-size:26px;font-weight:800;color:#B57BEE;line-height:1" id="nsCat">6</div>
+        <div style="font-size:9px;font-weight:700;color:#7C3AED;text-transform:uppercase;letter-spacing:.3px;margin-top:3px">Categories</div>
+        <div style="font-size:9px;color:#94A3B8;font-weight:600;margin-top:2px">of 7 total</div>
+      </div>
+      <div style="background:rgba(255,255,255,.72);border-radius:12px;padding:10px 16px;text-align:center;min-width:72px">
+        <div style="font-size:26px;font-weight:800;color:#FFB347;line-height:1" id="nsScore">62</div>
+        <div style="font-size:9px;font-weight:700;color:#D4893A;text-transform:uppercase;letter-spacing:.3px;margin-top:3px">Int. Score</div>
+        <div style="font-size:9px;color:#F97316;font-weight:600;margin-top:2px">▲ +8 pts</div>
+      </div>
     </div>
   </div>
-  <div class="net-tooltip" id="netTip"></div>
-  <!-- Growth Timeline -->
-  <div class="growth-wrap">
-    <div class="growth-title">Your Connection Growth — How your network expanded over time</div>
+
+  <!-- ── MIDDLE: Connection Growth (main story) ── -->
+  <div class="growth-wrap" style="height:210px">
+    <div class="growth-title">Your Integration Journey — Who you've met and when</div>
     <svg id="growthSvg"></svg>
   </div>
   <div class="growth-tooltip" id="growthTip"></div>
-</div>
 
+  <!-- ── BOTTOM: Network graph (left) + Sidebar (right) ── -->
+  <div style="flex:1;display:flex;overflow:hidden;min-height:0">
+    <!-- Network graph area -->
+    <div style="flex:1;position:relative;overflow:hidden;background:linear-gradient(160deg,#EDF5EF 0%,#E8F0E8 50%,#EDF2F0 100%)">
+      <div style="position:absolute;top:10px;left:14px;font-size:11px;font-weight:700;color:#0F6E56;z-index:10;pointer-events:none">
+        Your Social Network &nbsp;<span style="font-weight:400;color:#94A3B8">· Drag nodes to explore</span>
+      </div>
+      <svg id="netSvg" style="width:100%;height:100%"></svg>
+    </div>
+    <!-- Right sidebar -->
+    <div class="net-side" style="overflow-y:auto">
+      <div class="net-insight" id="netInsight">
+        💡 <strong>Opportunity:</strong> <span id="netInsightText">You're 2 connections away from 3 Mandarin speakers. Join the next Language Exchange to expand your network.</span>
+      </div>
+      <div style="font-size:10px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">
+        Integration by Category
+        <span style="font-size:9px;color:#94A3B8;font-weight:400;text-transform:none;letter-spacing:0"> · click to filter map</span>
+      </div>
+      <div id="netCatBars"></div>
+      <div style="font-size:10px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.5px;margin-top:18px;margin-bottom:10px">People you've met</div>
+      <div id="personList"></div>
+      <div id="netLegend" style="display:none"></div>
+    </div>
+  </div>
+
+  <div class="net-tooltip" id="netTip"></div>
+</div>
 <!-- ═══ DASHBOARD VIEW ═══ -->
 <div class="view" id="view-dashboard">
   <!-- Brush indicator banner -->
@@ -838,53 +855,27 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
 <!-- ═══ TIMELINE VIEW ═══ -->
 <div class="view" id="view-timeline">
   <div class="tl-wrap">
-    <!-- Bubble Scatter -->
-    <div class="tl-card bubble-wrap">
-      <div class="tl-card-title">Activity Landscape — When &amp; What? <span style="font-size:11px;font-weight:400;color:#94A3B8">Bubble size = attendees · Hover for details · Click to view on map</span></div>
-      <svg id="bubbleSvg"></svg>
-    </div>
-    <!-- Heatmap -->
+
+    <!-- Category × Day Grid (merged) -->
     <div class="tl-card">
-      <div class="tl-card-title">Activity Density — When Do Things Happen?</div>
-      <div class="hm-grid" id="hmGrid"></div>
-      <div style="margin-top:10px;display:flex;align-items:center;gap:6px;font-size:11px;color:#94A3B8">
-        <span>Low</span>
-        <div style="display:flex;gap:3px">
-          <div style="width:14px;height:14px;border-radius:3px;background:#E1F5EE"></div>
-          <div style="width:14px;height:14px;border-radius:3px;background:#5DCAA5"></div>
-          <div style="width:14px;height:14px;border-radius:3px;background:#1D9E75"></div>
-          <div style="width:14px;height:14px;border-radius:3px;background:#0F6E56"></div>
-          <div style="width:14px;height:14px;border-radius:3px;background:#064E3B"></div>
-        </div>
-        <span>High</span>
-        <span style="margin-left:10px">● Green ring = Newcomer-friendly</span>
-      </div>
+      <div class="tl-card-title">📅 When &amp; What? <span style="font-size:11px;font-weight:400;color:#94A3B8">Category activity by day · darker = more events · click to filter map</span></div>
+      <p class="tl-chart-note">Weekends dominate outdoor &amp; sports · Friday evening = social &amp; food peak · Weekdays = learning &amp; culture indoors</p>
+      <div id="catDayGrid" style="margin-top:8px"></div>
     </div>
-    <!-- Timeline -->
-    <div class="tl-card">
-      <div class="tl-card-title">Upcoming Activities — Next 2 Weeks</div>
-      <div class="tl-events" id="tlEvents"></div>
-    </div>
+
     <!-- Seasonal Activity Trends -->
     <div class="tl-card">
       <div class="tl-card-title">🌏 Seasonal Activity Trends — Jan to Dec
         <span style="font-size:11px;font-weight:400;color:#94A3B8"> NZ climate shapes when activities peak</span>
       </div>
-      <p class="tl-chart-note">Summer (Dec–Feb) = outdoor & sports peak · Winter (Jun–Aug) = culture & learning season</p>
+      <p class="tl-chart-note">☀️ NZ summer (Dec–Feb): hot & dry → outdoor & sports peak &nbsp;·&nbsp; 🌧 Winter (Jun–Jul): Hamilton's rainiest months → indoor culture & learning surge &nbsp;·&nbsp; 🎄 December: Christmas social & food market peak</p>
       <div style="position:relative;height:230px"><canvas id="seasonalChart"></canvas></div>
     </div>
-    <!-- City Comparison -->
-    <div class="tl-card">
-      <div class="tl-card-title">🏙 City Comparison — How does <span id="compCityLabel">Hamilton</span> compare?
-        <span style="font-size:11px;font-weight:400;color:#94A3B8"> All 8 NZ cities · highlighted = current city</span>
-      </div>
-      <p class="tl-chart-note">Bars = Migrant % &amp; Newcomer-Friendly % (left axis) · Line = Activities per 10k residents (right axis)</p>
-      <div style="position:relative;height:290px"><canvas id="cityCompChart"></canvas></div>
-    </div>
+
   </div>
 </div>
 
-<div class="bubble-tooltip" id="bubbleTip"></div>
+
 
 <!-- MODAL -->
 <div class="modal-ov" id="modalOv">
@@ -944,9 +935,14 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
 //  SHARED DATA
 // ════════════════════════════════════════
 const CAT_COLOR = {
-  social:'#7C3AED', sports:'#EF4444', culture:'#0D9488',
-  learning:'#2563EB', outdoor:'#16A34A', food:'#EA580C',
-  volunteer:'#DB2777', other:'#6B7280'
+  social:'#B57BEE',   // soft lavender
+  sports:'#F87171',   // soft coral rose
+  culture:'#2DD4BF',  // soft mint teal
+  learning:'#7EB8F7', // soft sky blue
+  outdoor:'#6DCF8A',  // soft sage green
+  food:'#FFB347',     // soft peach orange
+  volunteer:'#F48FB1',// soft rose pink
+  other:'#A8B8C8'     // soft blue gray
 };
 const CAT_LABEL = {
   social:'Social', sports:'Sports', culture:'Culture',
@@ -959,10 +955,49 @@ const CAT_EMOJI = {
   volunteer:'🤝', other:'📌'
 };
 const CAT_BG = {
-  social:'#F5F0FF', sports:'#FEF2F2', culture:'#F0FDFA',
-  learning:'#EFF6FF', outdoor:'#F0FDF4', food:'#FFF7ED',
-  volunteer:'#FDF2F8', other:'#F8FAFC'
+  social:'#F5EEFF', sports:'#FFF0F0', culture:'#E8FEFB',
+  learning:'#EEF6FF', outdoor:'#EDFFF3', food:'#FFF8ED',
+  volunteer:'#FFF0F5', other:'#F1F5F9'
 };
+// ── Activity meta: recurring cadence + organiser type ──
+const ACTIVITY_META={
+  1:{r:null,o:'university'},  2:{r:'weekly',o:'org'},      3:{r:'monthly',o:'council'},
+  4:{r:'weekly',o:'org'},     5:{r:null,o:'council'},       6:{r:'weekly',o:'community'},
+  7:{r:null,o:'org'},         8:{r:'weekly',o:'community'}, 9:{r:'weekly',o:'community'},
+  10:{r:null,o:'community'},  11:{r:'weekly',o:'university'},12:{r:null,o:'community'},
+  13:{r:'monthly',o:'community'},14:{r:'weekly',o:'org'},   15:{r:'monthly',o:'community'},
+  16:{r:'weekly',o:'community'},17:{r:'weekly',o:'community'},18:{r:'weekly',o:'council'},
+  19:{r:'weekly',o:'org'},    20:{r:null,o:'community'},    21:{r:'weekly',o:'org'},
+  22:{r:'weekly',o:'org'},    23:{r:'weekly',o:'community'},24:{r:null,o:'council'},
+  25:{r:'weekly',o:'community'},26:{r:'monthly',o:'community'},27:{r:'weekly',o:'community'},
+  28:{r:'weekly',o:'community'},29:{r:'monthly',o:'council'},30:{r:null,o:'community'},
+  31:{r:'weekly',o:'community'},32:{r:'weekly',o:'council'}, 33:{r:'weekly',o:'org'},
+  34:{r:'weekly',o:'org'},    35:{r:null,o:'org'},           36:{r:'monthly',o:'community'},
+  37:{r:'weekly',o:'council'},38:{r:null,o:'community'},     39:{r:null,o:'community'},
+  40:{r:'weekly',o:'org'},    41:{r:'weekly',o:'community'}, 42:{r:'monthly',o:'council'},
+  43:{r:'monthly',o:'org'},   44:{r:'weekly',o:'org'},       45:{r:'weekly',o:'community'},
+  46:{r:'weekly',o:'community'},47:{r:'monthly',o:'council'},48:{r:'weekly',o:'community'},
+  49:{r:null,o:'org'},        50:{r:'monthly',o:'org'},      51:{r:'monthly',o:'university'},
+  52:{r:null,o:'council'},    53:{r:'monthly',o:'council'},  54:{r:'weekly',o:'community'},
+  55:{r:'weekly',o:'university'},56:{r:null,o:'council'},    57:{r:'monthly',o:'org'},
+  58:{r:'weekly',o:'community'},59:{r:'weekly',o:'community'},60:{r:'weekly',o:'community'},
+  61:{r:'weekly',o:'community'},62:{r:'weekly',o:'community'},
+};
+const ORG_META={
+  university:{icon:'🎓',label:'University', color:'#3B82F6'},
+  council:   {icon:'🏛',label:'City Council',color:'#0F6E56'},
+  org:       {icon:'🤝',label:'Organisation',color:'#9061F9'},
+  community: {icon:'👥',label:'Community',  color:'#94A3B8'},
+};
+const RECUR_META={weekly:{icon:'🔁',label:'Weekly'},monthly:{icon:'🗓',label:'Monthly'}};
+function metaBadges(id){
+  const m=ACTIVITY_META[id]||{r:null,o:'community'};
+  const rb=m.r?`<span style="font-size:9px;font-weight:600;color:#475569;background:#F1F5F9;border-radius:8px;padding:2px 7px;flex-shrink:0;white-space:nowrap">${RECUR_META[m.r].icon} ${RECUR_META[m.r].label}</span>`:'';
+  const oi=ORG_META[m.o]||ORG_META.community;
+  const ob=`<span style="font-size:9px;font-weight:600;color:${oi.color};background:${oi.color}18;border-radius:8px;padding:2px 7px;flex-shrink:0;white-space:nowrap">${oi.icon} ${oi.label}</span>`;
+  return rb+ob;
+}
+
 // Category photos — 4 per category, rotated by activity ID for visual variety
 const _UP = (id,w,h) => `https://images.unsplash.com/photo-${id}?w=${w}&h=${h}&fit=crop&auto=format&q=75`;
 const CAT_IMGS = {
@@ -1008,13 +1043,13 @@ const MIGRANT_STATS={
 const MONTHLY_DIST={
   labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
   cats:[
-    {label:'Social',   data:[8,7,9,10,8,7,6,7,9,9,10,9],  color:'#7C3AED'},
-    {label:'Sports',   data:[10,9,8,6,5,3,3,4,7,9,10,10], color:'#EF4444'},
-    {label:'Culture',  data:[4,4,5,6,7,8,9,8,6,5,5,4],    color:'#0D9488'},
-    {label:'Learning', data:[3,4,5,6,7,8,8,7,5,5,4,3],    color:'#2563EB'},
-    {label:'Outdoor',  data:[10,9,7,5,4,2,2,3,6,8,9,10],  color:'#16A34A'},
-    {label:'Food',     data:[9,8,7,6,6,5,5,6,7,8,9,10],   color:'#EA580C'},
-    {label:'Volunteer',data:[4,4,5,5,5,6,6,6,5,5,5,4],    color:'#DB2777'},
+    {label:'Social',   data:[8,7,9,10,8,7,6,7,9,9,10,9],  color:'#B57BEE'},
+    {label:'Sports',   data:[10,9,8,6,5,3,3,4,7,9,10,10], color:'#F87171'},
+    {label:'Culture',  data:[4,4,5,6,7,8,9,8,6,5,5,4],    color:'#2DD4BF'},
+    {label:'Learning', data:[3,4,5,6,7,8,8,7,5,5,4,3],    color:'#7EB8F7'},
+    {label:'Outdoor',  data:[10,9,7,5,4,2,2,3,6,8,9,10],  color:'#6DCF8A'},
+    {label:'Food',     data:[9,8,7,6,6,5,5,6,7,8,9,10],   color:'#FFB347'},
+    {label:'Volunteer',data:[4,4,5,5,5,6,6,6,5,5,5,4],    color:'#F48FB1'},
   ]
 };
 
@@ -1096,9 +1131,32 @@ const ACTIVITIES = [
 ];
 
 // ════════════════════════════════════════
+//  TILE STYLES
+// ════════════════════════════════════════
+const TILE_STYLES={
+  maptiler_streets:{
+    label:'🏙 MapTiler Streets',
+    url:'https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=9dCD6IYuhybQpRqpPdPo',
+    opts:{attribution:'© <a href="https://www.maptiler.com/copyright/">MapTiler</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:20,tileSize:256,crossOrigin:true}
+  },
+  google:{
+    label:'🗺 Google Maps',
+    url:'https://mt{s}.google.com/vt/lyrs=m&hl=en&gl=nz&x={x}&y={y}&z={z}',
+    opts:{subdomains:['0','1','2','3'],attribution:'© <a href="https://maps.google.com">Google Maps</a>',maxZoom:20,tileSize:256}
+  },
+  satellite:{
+    label:'🛰 Satellite',
+    url:'https://mt{s}.google.com/vt/lyrs=y&hl=en&gl=nz&x={x}&y={y}&z={z}',
+    opts:{subdomains:['0','1','2','3'],attribution:'© <a href="https://maps.google.com">Google Maps</a>',maxZoom:20,tileSize:256}
+  }
+};
+
+// ════════════════════════════════════════
 //  STATE
 // ════════════════════════════════════════
 let currentCity='hamilton', activeFilters=new Set(['all']);
+let savedActivities=new Set(), currentDetailId=null;
+let currentTile=null;
 let timeBrushIds=null; // Set<id> when Timeline→Map filter active, null = inactive
 let map, clusterGroup, netInitialized={};
 let dashCharts={};
@@ -1114,6 +1172,7 @@ const debouncedSearch = debounce(()=>renderMarkers(), 280);
 function closeOnboarding(){
   const ov=document.getElementById('obOv');
   if(ov){ ov.style.opacity='0'; ov.style.transition='opacity .3s'; setTimeout(()=>ov.remove(),300); }
+  try{ localStorage.setItem('localin_seen','1'); }catch(e){}
 }
 let markerRefs={}; // id → Leaflet marker, for hover cross-linking
 let choroLayer=null, choroActive=false;
@@ -1176,7 +1235,7 @@ document.addEventListener('click',e=>{
 //  TAB SWITCHING
 // ════════════════════════════════════════
 function switchTab(tab) {
-  const tabKeys=['map','network','dashboard','timeline'];
+  const tabKeys=['map','network','timeline'];
   document.querySelectorAll('.tab').forEach((t,i)=>{
     const active=tabKeys[i]===tab;
     t.classList.toggle('active', active);
@@ -1198,12 +1257,7 @@ function initMap(){
   const c=CITIES[currentCity];
   map=L.map('map',{center:c.center,zoom:c.zoom});
   // Google Maps tile service — exact Google color scheme
-  L.tileLayer('https://mt{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
-    subdomains:['0','1','2','3'],
-    attribution:'© <a href="https://maps.google.com">Google Maps</a>',
-    maxZoom:20,
-    tileSize:256
-  }).addTo(map);
+  switchTile('maptiler_streets');
   clusterGroup=L.markerClusterGroup({maxClusterRadius:50,showCoverageOnHover:false,
     iconCreateFunction:c=>{
       const n=c.getChildCount();
@@ -1219,19 +1273,30 @@ function initMap(){
   map.on('moveend zoomend', updateActivityList);
 }
 
-function renderMarkers(){
-  if(!map) return;
-  clusterGroup.clearLayers();
-  markerRefs={};
+function switchTile(key){
+  const s=TILE_STYLES[key];
+  if(!s||!map)return;
+  if(currentTile)map.removeLayer(currentTile);
+  currentTile=L.tileLayer(s.url,s.opts).addTo(map);
+  currentTile.bringToBack();
+}
+function getFilteredActivities({checkBounds=false,bounds=null}={}){
   const q=document.getElementById('searchInput').value.toLowerCase();
-  const list=ACTIVITIES.filter(a=>{
+  return ACTIVITIES.filter(a=>{
     if(a.city!==currentCity)return false;
     if(timeBrushIds!==null){if(!timeBrushIds.has(a.id))return false;}
     else if(!activeFilters.has('all')&&!activeFilters.has(a.category))return false;
     if(!withinDist(a))return false;
     if(q&&!a.name.toLowerCase().includes(q)&&!a.location.toLowerCase().includes(q)&&!a.desc.toLowerCase().includes(q))return false;
+    if(checkBounds&&bounds&&!bounds.contains(L.latLng(a.lat,a.lng)))return false;
     return true;
   });
+}
+function renderMarkers(){
+  if(!map) return;
+  clusterGroup.clearLayers();
+  markerRefs={};
+  const list=getFilteredActivities();
   list.forEach(a=>{
     const col=CAT_COLOR[a.category];
     const emoji=CAT_EMOJI[a.category]||'📌';
@@ -1286,25 +1351,13 @@ function updateActivityList(){
   if(!map) return;
   const bounds=map.getBounds();
   if(!bounds) { setTimeout(updateActivityList, 120); return; }
-  const q=document.getElementById('searchInput').value.toLowerCase();
-  let visible=ACTIVITIES.filter(a=>{
-    if(a.city!==currentCity) return false;
-    if(timeBrushIds!==null){if(!timeBrushIds.has(a.id))return false;}
-    else if(!activeFilters.has('all')&&!activeFilters.has(a.category)) return false;
-    if(!withinDist(a))return false;
-    if(!bounds.contains(L.latLng(a.lat,a.lng))) return false;
-    if(q&&!a.name.toLowerCase().includes(q)&&!a.location.toLowerCase().includes(q)) return false;
-    return true;
-  });
+  let visible=getFilteredActivities({checkBounds:true,bounds});
 
   // Sort
-  const DATE_ORDER={
-    'Fri 16 May':0,'Sat 17 May':1,'Sun 18 May':2,'Mon 19 May':3,
-    'Tue 20 May':4,'Wed 21 May':5,'Thu 22 May':6,'Fri 23 May':7,
-    'Sat 24 May':8,'Sun 25 May':9
-  };
   if(sortMode==='date'){
-    visible.sort((a,b)=>(DATE_ORDER[a.date]??99)-(DATE_ORDER[b.date]??99) || a.time.localeCompare(b.time));
+    const _mo={Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
+    const _pd=s=>{const[,d,m]=(s.match(/(\d+)\s+(\w+)/)||[]);return new Date(2025,_mo[m]??0,+d||1);};
+    visible.sort((a,b)=>_pd(a.date)-_pd(b.date)||a.time.localeCompare(b.time));
   } else {
     visible.sort((a,b)=>b.attendees-a.attendees);
   }
@@ -1345,6 +1398,7 @@ function updateActivityList(){
         </div>
         <div class="ac-footer">
           <span class="ac-cat-tag" style="background:${CAT_COLOR[a.category]}">${CAT_LABEL[a.category]}</span>
+          ${metaBadges(a.id)}
           <span class="ac-att">👥 ${a.attendees}</span>
           ${a.newcomer?'<span class="ac-nc">🌟 Newcomer ✓</span>':''}
           ${EVTFD_IDS.has(a.id)?'<span class="source-badge">✓ Real Event</span>':''}
@@ -1436,9 +1490,19 @@ function showDetail(id){
   const fullPct=Math.round(a.attendees/a.maxAttendees*100);
   const barW=Math.min(100,fullPct);
   const barCol=barW>80?'#EF4444':barW>50?'#EA580C':'#10B981';
+  const _dm=ACTIVITY_META[a.id]||{r:null,o:'community'};
+  const _oi=ORG_META[_dm.o]||ORG_META.community;
+  const _recurPill=_dm.r?`<span style="font-size:10px;font-weight:600;color:#475569;background:#F1F5F9;border-radius:20px;padding:2px 9px;white-space:nowrap;flex-shrink:0">${RECUR_META[_dm.r].icon} ${RECUR_META[_dm.r].label}</span>`:`<span style="font-size:10px;font-weight:600;color:#CBD5E1;background:#F8FAFC;border-radius:20px;padding:2px 9px;white-space:nowrap;flex-shrink:0">📅 One-time</span>`;
+  const _orgPill=`<span style="font-size:10px;font-weight:600;color:${_oi.color};background:${_oi.color}18;border-radius:20px;padding:2px 9px;white-space:nowrap;flex-shrink:0">${_oi.icon} ${_oi.label}</span>`;
   document.getElementById('pmeta').innerHTML=`
-    <div class="mrow">📅 <span>${a.date} · ${a.time}</span></div>
-    <div class="mrow">📍 <span>${a.location}</span></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px">
+      <div class="mrow" style="flex:1;min-width:0;overflow:hidden">📅 <span style="white-space:nowrap">${a.date} · ${a.time}</span></div>
+      ${_recurPill}
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px">
+      <div class="mrow" style="flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">📍 <span>${a.location.split(',').slice(0,2).join(',')}</span></div>
+      ${_orgPill}
+    </div>
     <div class="cap-row">
       <span>👥 ${a.attendees}</span>
       <div class="cap-bar-bg"><div class="cap-bar-fill" style="width:${barW}%;background:${barCol}"></div></div>
@@ -1466,23 +1530,26 @@ function showDetail(id){
   const success=a.newcomer?65+(a.id*3%25):40+(a.id*5%30);
 
   const demoBar=demo.map(d=>`<div style="flex:${d.p};background:${d.c};height:100%"></div>`).join('');
-  const demoLeg=demo.map(d=>`<div class="demo-leg-item"><div style="width:8px;height:8px;border-radius:50%;background:${d.c};flex-shrink:0"></div>${d.l} <b>${d.p}%</b></div>`).join('');
+  const demoLeg=demo.map(d=>`<span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;color:#475569;margin-right:8px;margin-bottom:3px"><span style="width:7px;height:7px;border-radius:50%;background:${d.c};flex-shrink:0;display:inline-block"></span>${d.l} <b style="color:#1e293b">${d.p}%</b></span>`).join('');
 
-  const ageBarCells=ageGroups.map(v=>{
-    const h=Math.round(v/maxAge*36)+4;
-    return `<div class="age-bar-cell" style="height:${h}px;background:linear-gradient(to top,${col},${col}88)"></div>`;
+  const ageBarCells=ageGroups.map((v,i)=>{
+    const h=Math.round(v/maxAge*48)+6;
+    const isMax=v===maxAge;
+    return `<div class="age-bar-cell" style="height:${h}px;background:linear-gradient(to bottom,${col} 0%,${col}50 100%);opacity:${isMax?1:.62};border-radius:5px 5px 0 0;${isMax?`box-shadow:0 -3px 10px ${col}55`:''}" title="${v}%"></div>`;
   }).join('');
-  const ageLblCells=ageLabels.map((l,i)=>`
-    <div class="age-meta-cell">
-      <span class="age-meta-lbl">${l}</span>
-      <span class="age-meta-pct" style="color:${col}">${ageGroups[i]}%</span>
-    </div>`).join('');
+  const ageLblCells=ageLabels.map((l,i)=>{
+    const isMax=ageGroups[i]===maxAge;
+    return `<div class="age-meta-cell">
+      <span class="age-meta-lbl" style="${isMax?`color:${col};font-weight:700`:''}">${l}</span>
+      <span class="age-meta-pct" style="color:${col};font-size:${isMax?'11px':'9px'};font-weight:${isMax?800:700}">${ageGroups[i]}%</span>
+    </div>`;
+  }).join('');
 
   document.getElementById('pextras').innerHTML=`
     <div class="dp-section">
       <div class="dp-sec-label">Who attends</div>
       <div style="display:flex;height:8px;border-radius:4px;overflow:hidden;margin-bottom:8px">${demoBar}</div>
-      <div class="demo-legend">${demoLeg}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:0;margin-top:5px">${demoLeg}</div>
     </div>
     <div class="dp-section">
       <div class="dp-sec-label">Age range</div>
@@ -1521,9 +1588,16 @@ function showDetail(id){
       </div>
     </div>`;
 
-  // Website button
+  // Website link in hero
   const wb=document.getElementById('dpWebsite');
-  if(wb){wb.href=a.website||'#';wb.style.display=a.website?'flex':'none';}
+  if(wb){wb.href=a.website||'#';wb.style.display=a.website?'inline-flex':'none';}
+  // Directions
+  const db=document.getElementById('dpDirections');
+  if(db) db.href=`https://maps.google.com/?q=${encodeURIComponent(a.location+', New Zealand')}`;
+  // Save state
+  currentDetailId=a.id;
+  const sb=document.getElementById('dpSaveBtn');
+  if(sb){const sv=savedActivities.has(a.id);sb.textContent=sv?'♥ Saved':'♡ Save';sb.style.background=sv?'#E1F5EE':'';}
 
   document.getElementById('detailPanel').classList.add('open');
   if(map) map.setView([a.lat,a.lng],Math.max(map.getZoom(),15),{animate:true});
@@ -1539,6 +1613,19 @@ function closePanel(){
   document.querySelectorAll('.act-card').forEach(c=>c.classList.remove('selected'));
 }
 function joinActivity(){showToast('You\'re in! 🎉','Your new connection will appear in the Network graph.','success');}
+function toggleSave(id){
+  if(!id)return;
+  const sb=document.getElementById('dpSaveBtn');
+  if(savedActivities.has(id)){
+    savedActivities.delete(id);
+    if(sb){sb.textContent='♡ Save';sb.style.background='';}
+    showToast('Removed from saved','','info',1800);
+  } else {
+    savedActivities.add(id);
+    if(sb){sb.textContent='♥ Saved';sb.style.background='#E1F5EE';}
+    showToast('Activity saved! ♥','Tap ♥ again to unsave.','success',2200);
+  }
+}
 
 function switchCity(city){
   currentCity=city;
@@ -1560,12 +1647,31 @@ function switchCity(city){
   if(dv.classList.contains('active')) initDashboard();
   const tv=document.getElementById('view-timeline');
   if(tv.classList.contains('active')) initTimeline();
-  // Update choropleth city stat if active
-  if(choroActive) updateChoroStat();
   // Rebuild dropdown list to update active state
   buildCityList(document.getElementById('citySearchInp')?.value||'');
 }
 
+function fitToFilter(){
+  if(!map||activeFilters.has('all'))return;
+  const cats=[...activeFilters];
+  const matching=ACTIVITIES.filter(a=>a.city===currentCity&&cats.some(c=>a.category===c));
+  if(!matching.length){
+    showToast('No '+cats.map(c=>CAT_LABEL[c]).join(' / ')+' activities','Try zooming out or switching city.','warn',2800);
+    return;
+  }
+  if(matching.length===1){
+    map.setView([matching[0].lat,matching[0].lng],15,{animate:true});
+  } else {
+    const bounds=L.latLngBounds(matching.map(a=>L.latLng(a.lat,a.lng)));
+    map.fitBounds(bounds,{padding:[72,72],maxZoom:15,animate:true});
+  }
+  const label=cats.map(c=>CAT_LABEL[c]).join(' + ');
+  showToast(
+    `${matching.length} ${label} ${matching.length===1?'activity':'activities'} in ${CITIES[currentCity].label}`,
+    'Map zoomed to show all results',
+    'success', 2600
+  );
+}
 function toggleFilter(cat){
   if(cat==='all'){activeFilters=new Set(['all']);}
   else{
@@ -1574,6 +1680,7 @@ function toggleFilter(cat){
     if(activeFilters.size===0)activeFilters.add('all');
   }
   updateChips(); renderMarkers();
+  if(!activeFilters.has('all')) setTimeout(fitToFilter,100);
 }
 function updateChips(){
   const ac=document.getElementById('chip-all');
@@ -1588,7 +1695,11 @@ function updateChips(){
     ch.setAttribute('aria-pressed', isActive);
     if(isActive){
       ch.classList.add('active');
-      ch.style.background=CAT_COLOR[c];ch.style.borderColor=CAT_COLOR[c];ch.style.color='#fff';
+      ch.style.background=CAT_COLOR[c];ch.style.borderColor=CAT_COLOR[c];
+      // 马卡龙浅色用深色文字保证对比度
+      const _hex=CAT_COLOR[c].replace('#','');
+      const _l=(0.299*parseInt(_hex.substr(0,2),16)+0.587*parseInt(_hex.substr(2,2),16)+0.114*parseInt(_hex.substr(4,2),16))/255;
+      ch.style.color=_l>0.62?'#334155':'#fff';
     } else {
       ch.classList.remove('active');
       ch.style.background='';ch.style.borderColor='';ch.style.color='';
@@ -1706,6 +1817,10 @@ function initNetwork(){
     links:[]
   };
   const data=NET_DATA[currentCity]||NET_DEFAULT;
+  if(!NET_DATA[currentCity]){
+    document.querySelector('.net-sub').innerHTML=`You're new to <strong>${CITIES[currentCity].label}</strong>! Join activities to start building connections here. Your network grows with each event you attend.`;
+    document.getElementById('personList').innerHTML=`<div style="text-align:center;padding:20px 10px;color:#94A3B8;font-size:12px;line-height:2">No connections yet in ${CITIES[currentCity].label}.<br><button onclick="switchTab('map')" style="margin-top:8px;background:#0F6E56;color:#fff;border:none;padding:7px 16px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer">Discover Activities →</button></div>`;
+  }
   const connCount=data.nodes.length-1;
   document.getElementById('nsConn').textContent=connCount;
   const cityActs=ACTIVITIES.filter(a=>a.city===currentCity);
@@ -1776,8 +1891,8 @@ function initNetwork(){
   const link=g.append('g').selectAll('path').data(data.links).enter().append('path')
     .attr('fill','none')
     .attr('stroke',d=>CAT_COLOR[d.cat]||'#CBD5E1')
-    .attr('stroke-opacity',.5)
-    .attr('stroke-width',d=>d.value*2.5);
+    .attr('stroke-opacity',d=>d.value===2?.52:.35)
+    .attr('stroke-width',d=>d.value===2?2:1.2);
 
   const node=g.append('g').selectAll('g').data(data.nodes).enter().append('g')
     .call(d3.drag()
@@ -1787,35 +1902,29 @@ function initNetwork(){
 
   // Outer pulse ring for "you"
   node.filter(d=>d.id==='you').append('circle')
-    .attr('r',d=>d.size+8)
+    .attr('r',d=>d.size+6)
     .attr('fill','none')
     .attr('stroke','#0F6E56')
-    .attr('stroke-width',2)
-    .attr('stroke-opacity',.25)
-    .attr('stroke-dasharray','4,4');
+    .attr('stroke-width',1.2)
+    .attr('stroke-opacity',.18)
+    .attr('stroke-dasharray','3,4');
 
-  // Shadow base circle
-  node.append('circle')
-    .attr('r',d=>d.size+1)
-    .attr('fill','rgba(0,0,0,.12)')
-    .attr('transform','translate(0,3)')
-    .style('pointer-events','none');
 
   // Main node circle with gradient
   node.append('circle')
     .attr('r',d=>d.size)
     .attr('fill',nodeFill)
-    .attr('stroke','rgba(255,255,255,.9)')
-    .attr('stroke-width',d=>d.id==='you'?3.5:2.5)
+    .attr('stroke','rgba(255,255,255,.95)')
+    .attr('stroke-width',d=>d.id==='you'?2.5:1.8)
     .attr('filter',d=>d.id==='you'?'url(#youGlow)':'url(#nodeShadow)')
     .style('cursor','pointer');
 
   // White inner highlight dot (gives sphere-like depth)
   node.filter(d=>d.id!=='you').append('circle')
-    .attr('r',d=>Math.round(d.size*0.32))
-    .attr('cx',d=>-Math.round(d.size*0.22))
-    .attr('cy',d=>-Math.round(d.size*0.22))
-    .attr('fill','rgba(255,255,255,.45)')
+    .attr('r',d=>Math.round(d.size*0.28))
+    .attr('cx',d=>-Math.round(d.size*0.2))
+    .attr('cy',d=>-Math.round(d.size*0.2))
+    .attr('fill','rgba(255,255,255,.5)')
     .style('pointer-events','none');
 
   // Label with white background pill
@@ -1864,12 +1973,76 @@ function initNetwork(){
 
   // Network growth timeline
   initGrowthTimeline();
+  // ── Merged dashboard content ──
+  initNetworkExtras();
+}
+function initNetworkExtras(){
+  // Category progress bars
+  const cats=[
+    {label:'Social',key:'social',pct:72,color:'#B57BEE'},
+    {label:'Learning',key:'learning',pct:55,color:'#7EB8F7'},
+    {label:'Outdoor',key:'outdoor',pct:40,color:'#6DCF8A'},
+    {label:'Culture',key:'culture',pct:35,color:'#2DD4BF'},
+    {label:'Sports',key:'sports',pct:30,color:'#F87171'},
+    {label:'Volunteer',key:'volunteer',pct:15,color:'#F48FB1'},
+  ];
+  const nb=document.getElementById('netCatBars');
+  if(nb) nb.innerHTML=cats.map(c=>`
+    <div class="pbar-row" onclick="brushFilter('${c.key}')" title="Click to filter map by ${c.label}">
+      <span class="pbar-lbl">${c.label}</span>
+      <div class="pbar-bg"><div class="pbar-fill" style="width:${c.pct}%;background:${c.color}"></div></div>
+      <span class="pbar-val">${c.pct}%</span>
+    </div>`).join('');
+
+  // Mini participation trend chart
+  const tc=document.getElementById('netTrendChart');
+  if(tc&&!tc._chart){
+    tc._chart=new Chart(tc.getContext('2d'),{
+      type:'line',
+      data:{
+        labels:['Wk 8','Wk 9','Wk 10','Wk 11','Wk 12','Now'],
+        datasets:[
+          {label:'Activities',data:[0,1,2,1,3,5],borderColor:'#2563EB',backgroundColor:'rgba(37,99,235,.08)',borderWidth:2,pointRadius:3,fill:true,tension:.4},
+          {label:'Connections',data:[0,1,3,3,5,7],borderColor:'#0F6E56',backgroundColor:'rgba(15,110,86,.07)',borderWidth:2,pointRadius:3,fill:true,tension:.4}
+        ]
+      },
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:8,font:{size:10},padding:6}}},scales:{y:{beginAtZero:true,grid:{color:'#F1F5F9'},ticks:{stepSize:2,font:{size:9}}},x:{grid:{display:false},ticks:{font:{size:9}}}}}
+    });
+  }
+
+  // Upcoming activities
+  const ul=document.getElementById('netUpcomingList');
+  const uc=document.getElementById('netUpCity');
+  if(uc) uc.textContent=CITIES[currentCity].label;
+  if(ul){
+    const upcoming=ACTIVITIES.filter(a=>a.city===currentCity).slice(0,4);
+    ul.innerHTML=upcoming.map(a=>`
+      <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #F8FAFC;cursor:pointer" onclick="switchTab('map');setTimeout(()=>showDetail(${a.id}),100)">
+        <div style="width:7px;height:7px;border-radius:50%;background:${CAT_COLOR[a.category]};flex-shrink:0"></div>
+        <div style="flex:1;min-width:0;font-size:11px;font-weight:600;color:#1e293b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${a.name}</div>
+        <div style="font-size:10px;color:#94A3B8;flex-shrink:0">${a.date.split(' ').slice(0,2).join(' ')}</div>
+      </div>`).join('');
+  }
 }
 
 // ════════════════════════════════════════
 //  DASHBOARD
 // ════════════════════════════════════════
+function buildDashInsight(){
+  const acts=ACTIVITIES.filter(a=>a.city===currentCity);
+  const userScores={social:72,learning:55,outdoor:40,culture:35,sports:30,volunteer:15};
+  const [lowestCat,lowestPct]=Object.entries(userScores).sort((a,b)=>a[1]-b[1])[0];
+  const suggestion=acts.find(a=>a.category===lowestCat&&a.newcomer);
+  const cityLabel=CITIES[currentCity].label;
+  if(suggestion){
+    const spots=suggestion.maxAttendees-suggestion.attendees;
+    return `<strong>Insight:</strong> Your <strong>${CAT_LABEL[lowestCat]}</strong> participation is lowest. Try <em>${suggestion.name}</em> on ${suggestion.date} in ${cityLabel} — newcomer-friendly, only ${spots} spot${spots!==1?'s':''} left!`;
+  }
+  const nc=acts.filter(a=>a.newcomer).length;
+  return `<strong>Insight:</strong> ${cityLabel} has <strong>${nc}</strong> newcomer-friendly activities this week. Join a new category to push your integration score past 70!`;
+}
 function initDashboard(){
+  document.getElementById('dashInsightText').innerHTML=buildDashInsight();
   // Streak days
   const days=['M','T','W','T','F','S','S'];
   const states=[0,1,2,1,2,1,0, 0,1,1,2,2,1,0, 0,0,1,0,2,1,1, 1,0,1,2,1,2,0];
@@ -1936,12 +2109,12 @@ function initDashboard(){
 
   // ── Progress bars (clickable for brushing) ──
   const cats=[
-    {label:'Social',key:'social',pct:72,color:'#7C3AED'},
-    {label:'Learning',key:'learning',pct:55,color:'#2563EB'},
-    {label:'Outdoor',key:'outdoor',pct:40,color:'#16A34A'},
-    {label:'Culture',key:'culture',pct:35,color:'#0D9488'},
-    {label:'Sports',key:'sports',pct:30,color:'#EF4444'},
-    {label:'Volunteer',key:'volunteer',pct:15,color:'#DB2777'},
+    {label:'Social',key:'social',pct:72,color:'#B57BEE'},
+    {label:'Learning',key:'learning',pct:55,color:'#7EB8F7'},
+    {label:'Outdoor',key:'outdoor',pct:40,color:'#6DCF8A'},
+    {label:'Culture',key:'culture',pct:35,color:'#2DD4BF'},
+    {label:'Sports',key:'sports',pct:30,color:'#F87171'},
+    {label:'Volunteer',key:'volunteer',pct:15,color:'#F48FB1'},
   ];
   document.getElementById('catBars').innerHTML=cats.map(c=>`
     <div class="pbar-row" onclick="brushFilter('${c.key}')" title="Click to filter map by ${c.label}">
@@ -1968,68 +2141,10 @@ function initDashboard(){
 //  TIMELINE
 // ════════════════════════════════════════
 function initTimeline(){
-  const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-  const slots=['6–9 AM','9–12','12–3 PM','3–6 PM','6–9 PM','9 PM+'];
-  // density matrix [slot][day]
-  const density=[
-    [0,0,0,0,0,1,2],
-    [0,0,0,0,0,3,4],
-    [0,1,1,0,0,2,3],
-    [1,1,1,1,2,3,4],
-    [2,2,3,3,5,4,3],
-    [0,1,0,1,1,2,1],
-  ];
-  const maxD=5;
-  const colors=['transparent','#D1FAE5','#5DCAA5','#1D9E75','#0F6E56','#064E3B'];
-
-  let html='<div></div>'+days.map(d=>`<div class="hm-dayh">${d}</div>`).join('');
-  slots.forEach((s,si)=>{
-    html+=`<div class="hm-timelbl">${s}</div>`;
-    days.forEach((_,di)=>{
-      const v=density[si][di];
-      const bg=v===0?'#F8FAFC':colors[v];
-      html+=`<div class="hm-cell" style="background:${bg}" title="${v} activities on ${days[di]} ${s} — click to filter map" onclick="hmBrushTime(${si},${di})">${v>0?v:''}</div>`;
-    });
-  });
-  document.getElementById('hmGrid').innerHTML=html;
-
-  // Timeline events
-  const grouped={};
-  const cityActs=ACTIVITIES.filter(a=>a.city===currentCity);
-  // Use mock date groups
-  const dateGroups=['Fri 16 May','Sat 17 May','Sun 18 May','Mon 19 May','Tue 20 May','Wed 21 May','Thu 22 May','Fri 23 May','Sat 24 May','Sun 25 May'];
-  dateGroups.forEach(d=>{
-    const acts=cityActs.filter(a=>a.date===d);
-    if(acts.length) grouped[d]=acts;
-  });
-
-  let tlHTML='';
-  Object.entries(grouped).forEach(([date,acts])=>{
-    tlHTML+=`<div class="tl-day-group"><div class="tl-day-label">${date}</div>`;
-    acts.forEach(a=>{
-      tlHTML+=`<div class="tl-event" style="--evt-col:${CAT_COLOR[a.category]}" onclick="switchTab('map');setTimeout(()=>showDetail(${a.id}),100)" title="Click to view on map">
-        <div class="tl-dot"></div>
-        <div class="tl-content">
-          <div class="tl-ename">${a.name}</div>
-          <div class="tl-emeta">
-            <span class="tl-cat-tag" style="background:${CAT_COLOR[a.category]}">${CAT_LABEL[a.category]}</span>
-            <span>📍 ${a.location.split(',')[0]}</span>
-            ${a.newcomer?'<span>🌟</span>':''}
-          </div>
-        </div>
-        <div class="tl-time">${a.time}</div>
-        <div class="tl-arrow">›</div>
-      </div>`;
-    });
-    tlHTML+='</div>';
-  });
-  document.getElementById('tlEvents').innerHTML=tlHTML;
-
-  // Bubble scatter — time-of-day vs day-of-week
-  initBubbleScatter();
-  // Data diversity charts
+  // Category × Day merged grid
+  initCategoryDayGrid();
+  // Seasonal trends chart
   initSeasonalChart();
-  initCityComparison();
 }
 
 // ════════════════════════════════════════
@@ -2047,6 +2162,7 @@ function brushFilter(cat){
   banner.classList.add('show');
   // Switch to map tab so user sees the result
   switchTab('map');
+  setTimeout(fitToFilter,220);
 }
 // ════════════════════════════════════════
 //  INSIGHT / COPY / EMPTY STATE
@@ -2155,9 +2271,13 @@ function updateMapInsight(visible){
 function copyActivity(id){
   const a=ACTIVITIES.find(x=>x.id===id);
   if(!a)return;
-  const text=`📍 ${a.name}\n📅 ${a.date} · ${a.time}\n🗺 ${a.location}\n👥 ${a.attendees} attending${a.newcomer?' · 🌟 Newcomer-friendly':''}`;
-  navigator.clipboard.writeText(text).catch(()=>{});
-  showToast('Copied to clipboard', a.name, 'copy', 2200);
+  const text=`📍 ${a.name}\n📅 ${a.date} · ${a.time}\n🗺 ${a.location}\n👥 ${a.attendees} attending${a.newcomer?' · 🌟 Newcomer-friendly':''}${a.website?'\n🌐 '+a.website:''}`;
+  if(navigator.share){
+    navigator.share({title:a.name,text,url:a.website||window.location.href}).catch(()=>{});
+  } else {
+    navigator.clipboard.writeText(text).catch(()=>{});
+    showToast('Copied to clipboard',a.name,'copy',2200);
+  }
 }
 
 function clearBrush(){
@@ -2442,6 +2562,127 @@ function initBubbleScatter(){
 }
 
 // ════════════════════════════════════════
+//  CATEGORY × DAY GRID (merged visualization)
+// ════════════════════════════════════════
+function initCategoryDayGrid(){
+  const el=document.getElementById('catDayGrid');
+  if(!el||el._built)return;
+  el._built=true;
+
+  // Tooltip element
+  let tip=document.getElementById('catDayTip');
+  if(!tip){
+    tip=document.createElement('div');
+    tip.id='catDayTip';
+    tip.style.cssText='position:fixed;background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:10px 14px;font-size:12px;pointer-events:none;z-index:9999;display:none;line-height:1.6;max-width:280px;box-shadow:0 6px 24px rgba(0,0,0,.12)';
+    document.body.appendChild(tip);
+  }
+
+  const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const cityActs=ACTIVITIES.filter(a=>a.city===currentCity);
+  const cats=[
+    {key:'social',   label:'Social',   emoji:'💬'},
+    {key:'sports',   label:'Sports',   emoji:'🏃'},
+    {key:'culture',  label:'Culture',  emoji:'🎭'},
+    {key:'learning', label:'Learning', emoji:'📚'},
+    {key:'outdoor',  label:'Outdoor',  emoji:'🌿'},
+    {key:'food',     label:'Food',     emoji:'🍜'},
+    {key:'volunteer',label:'Volunteer',emoji:'🤝'},
+  ].map(cat=>({...cat, data:days.map(d=>cityActs.filter(a=>a.category===cat.key&&a.date.startsWith(d)).length)}));
+
+  function hexAlpha(hex,a){
+    const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+    return `rgba(${r},${g},${b},${a})`;
+  }
+
+  el.style.cssText='display:grid;grid-template-columns:92px repeat(7,1fr);gap:4px;align-items:center';
+
+  const header='<div></div>'+days.map((d,i)=>{
+    const isWknd=i>=5;
+    return `<div style="text-align:center;font-size:10px;font-weight:${isWknd?700:600};color:${isWknd?'#0F6E56':'#64748B'};padding-bottom:4px">${d}</div>`;
+  }).join('');
+
+  const rows=cats.map(cat=>{
+    const col=CAT_COLOR[cat.key]||'#94A3B8';
+    // Label cell: colored left border for visual connection
+    const labelCell=`<div style="display:flex;align-items:center;gap:5px;height:32px;padding-left:7px;border-left:3px solid ${col};background:${hexAlpha(col,0.06)};border-radius:0 5px 5px 0">
+      <span style="font-size:12px;line-height:1">${cat.emoji}</span>
+      <span style="font-size:10px;font-weight:700;color:#1e293b;white-space:nowrap">${cat.label}</span>
+    </div>`;
+    const cells=cat.data.map((v,di)=>{
+      if(v===0) return `<div data-catday="${cat.key},${di},0" style="height:32px;border-radius:7px;background:#F8FAFC;display:flex;align-items:center;justify-content:center;font-size:11px;color:#E2E8F0;cursor:default">·</div>`;
+      const alpha=0.22+(v/4)*0.78;
+      const textCol=alpha>0.56?'#fff':col;
+      return `<div data-catday="${cat.key},${di},${v}" onclick="brushFilter('${cat.key}')"
+        style="height:32px;border-radius:7px;background:${hexAlpha(col,alpha)};display:flex;align-items:center;justify-content:center;
+        font-size:12px;font-weight:800;color:${textCol};cursor:pointer;transition:all .18s;border:1px solid ${hexAlpha(col,Math.min(1,alpha+0.15))}">${v}</div>`;
+    }).join('');
+    return labelCell+cells;
+  }).join('');
+
+  el.innerHTML=header+rows;
+
+  // Add rich hover tooltips via event listeners
+  el.querySelectorAll('[data-catday]').forEach(cell=>{
+    const [catKey,diStr,vStr]=cell.dataset.catday.split(',');
+    const v=parseInt(vStr);
+    if(v===0) return;
+    const di=parseInt(diStr);
+    const dayKey=days[di];
+    const cat=cats.find(c=>c.key===catKey);
+    const col=CAT_COLOR[catKey]||'#94A3B8';
+    // Find actual activities for this slot
+    const matched=ACTIVITIES.filter(a=>a.city===currentCity&&a.category===catKey&&a.date.startsWith(dayKey));
+    const actLines=matched.length
+      ? matched.map(a=>`<div style="margin-bottom:3px"><span style="font-weight:600;color:#1e293b">${a.name}</span><br><span style="color:#64748B;font-size:10px">⏰ ${a.time} &nbsp;·&nbsp; 📍 ${a.location.split(',')[0]}</span></div>`).join('')
+      : `<span style="color:#64748B">${v} ${cat.label} ${v===1?'activity':'activities'}</span>`;
+    const tipContent=`<div style="font-weight:700;color:${col};margin-bottom:7px;font-size:12px">${cat.emoji} ${cat.label} · ${dayKey}</div>${actLines}`;
+    cell.addEventListener('mouseover',e=>{tip.innerHTML=tipContent;tip.style.display='block';tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-10)+'px';});
+    cell.addEventListener('mousemove',e=>{tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-10)+'px';});
+    cell.addEventListener('mouseout',()=>tip.style.display='none');
+  });
+}
+
+// ════════════════════════════════════════
+//  CATEGORY BY DAY CHART
+// ════════════════════════════════════════
+function initCatByDayChart(){
+  const canvas=document.getElementById('catByDayChart');
+  if(!canvas||canvas._chart)return;
+  // Data based on Hamilton NZ activity patterns:
+  // Sports/Outdoor → weekends only; Social/Food → Friday peak; Learning → mid-week
+  const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const datasets=[
+    {label:'Social',   data:[0,0,1,1,3,2,1], backgroundColor:'#B57BEE99',borderColor:'#B57BEE',borderWidth:1.5,borderRadius:4},
+    {label:'Sports',   data:[0,1,0,1,0,4,2], backgroundColor:'#F8717199',borderColor:'#F87171',borderWidth:1.5,borderRadius:4},
+    {label:'Culture',  data:[0,0,1,1,1,1,2], backgroundColor:'#2DD4BF99',borderColor:'#2DD4BF',borderWidth:1.5,borderRadius:4},
+    {label:'Learning', data:[0,0,2,1,0,1,1], backgroundColor:'#7EB8F799',borderColor:'#7EB8F7',borderWidth:1.5,borderRadius:4},
+    {label:'Outdoor',  data:[0,0,0,0,0,2,3], backgroundColor:'#6DCF8A99',borderColor:'#6DCF8A',borderWidth:1.5,borderRadius:4},
+    {label:'Food',     data:[0,0,0,0,2,2,1], backgroundColor:'#FFB34799',borderColor:'#FFB347',borderWidth:1.5,borderRadius:4},
+    {label:'Volunteer',data:[0,0,1,0,0,2,1], backgroundColor:'#F48FB199',borderColor:'#F48FB1',borderWidth:1.5,borderRadius:4},
+  ];
+  canvas._chart=new Chart(canvas.getContext('2d'),{
+    type:'bar',
+    data:{labels:days,datasets},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{position:'bottom',labels:{boxWidth:10,font:{size:10},padding:8}},
+        tooltip:{mode:'index',intersect:false,callbacks:{
+          title:items=>`${items[0].label} — activities by category`
+        }}
+      },
+      scales:{
+        x:{grid:{display:false},ticks:{font:{size:11,weight:'600'},color:'#475569'}},
+        y:{beginAtZero:true,max:6,grid:{color:'#F1F5F9'},
+           ticks:{stepSize:1,font:{size:9}},
+           title:{display:true,text:'No. of activities',font:{size:9},color:'#94A3B8'}}
+      }
+    }
+  });
+}
+
+// ════════════════════════════════════════
 //  SEASONAL ACTIVITY TRENDS (stacked bar)
 // ════════════════════════════════════════
 function initSeasonalChart(){
@@ -2629,6 +2870,8 @@ document.getElementById('modalOv').addEventListener('click',function(e){if(e.tar
 //  BOOT
 // ════════════════════════════════════════
 window.addEventListener('load',()=>{
+  // 只在第一次访问时显示 onboarding
+  try{ if(localStorage.getItem('localin_seen')) closeOnboarding(); }catch(e){}
   // Init dropdown with Hamilton pre-selected
   document.getElementById('cityDdLabel').textContent=`${CITIES.hamilton.icon} Hamilton`;
   buildCityList();
