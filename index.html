@@ -60,12 +60,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 /* ══════════ MAP VIEW ══════════ */
 
 /* ── Filter Bar ── */
-.filter-bar{background:linear-gradient(to bottom,#ffffff,#f8fafc);border-bottom:1px solid #e2e8f0;padding:8px 16px;display:flex;align-items:center;gap:6px;overflow-x:auto;flex-shrink:0;scrollbar-width:none;box-shadow:0 1px 4px rgba(0,0,0,.04)}
-.filter-bar::-webkit-scrollbar{display:none}
+.filter-bar{background:linear-gradient(to bottom,#ffffff,#f8fafc);border-bottom:1px solid #e2e8f0;padding:8px 16px;display:flex;align-items:center;gap:6px;flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,.04);position:relative;z-index:700;overflow:visible}
+
 .chip{display:flex;align-items:center;gap:5px;padding:5px 13px;border-radius:20px;border:1.5px solid #e2e8f0;font-size:11px;font-weight:600;cursor:pointer;transition:all .18s;white-space:nowrap;color:#475569;background:#fff;user-select:none;box-shadow:0 1px 3px rgba(0,0,0,.05)}
 .chip:hover{transform:translateY(-1px);box-shadow:0 3px 8px rgba(0,0,0,.1)}
+
+
 .chip .ico{font-size:13px;line-height:1;flex-shrink:0}
 .chip.active{color:#fff!important;border-color:transparent!important;box-shadow:0 3px 10px rgba(0,0,0,.18)}
+
+
 .chip-all{background:linear-gradient(135deg,#1e293b,#334155);color:#fff;border-color:transparent;box-shadow:0 2px 8px rgba(30,41,59,.3)}
 .chip-social{background:#F5EEFF;border-color:#D8B4FE;color:#9B59D0}
 .chip-sports{background:#FFF0F0;border-color:#FCA5A5;color:#E05252}
@@ -74,8 +78,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .chip-outdoor{background:#EDFFF3;border-color:#86EFAC;color:#38A05A}
 .chip-food{background:#FFF8ED;border-color:#FCD34D;color:#D4893A}
 .chip-volunteer{background:#FFF0F5;border-color:#F9A8D4;color:#D46E95}
-.chip-english{background:#EFF6FF;border-color:#93C5FD;color:#2563EB}
-.chip-solo{background:#FFF7ED;border-color:#FCD34D;color:#B45309}
+
+
 .utl-date.joined-act{box-shadow:inset 0 0 0 2px #0F6E56 !important}
 .utl-date.joined-act .utl-date-num{color:#0F6E56;font-weight:800}
 .joined-tick{position:absolute;top:3px;right:4px;font-size:8px;color:#0F6E56;font-weight:900;line-height:1}
@@ -140,7 +144,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .dist-pill.active{background:#0F6E56;color:#fff;border-color:#0F6E56}
 .al-scroll{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:12px;scrollbar-width:thin;scrollbar-color:#e2e8f0 transparent}
 /* ── Upcoming grouped list (in map panel) ── */
-.up-scroll{flex:1;overflow-y:auto;padding:14px 12px 20px;scrollbar-width:thin;scrollbar-color:#e2e8f0 transparent}
 .up-date-hdr{font-size:11px;font-weight:700;color:#0F6E56;text-transform:uppercase;letter-spacing:.7px;padding:16px 4px 7px;display:flex;align-items:center;gap:7px}
 .up-date-hdr::after{content:'';flex:1;height:1px;background:#9FE1CB;opacity:.6}
 .up-item{display:flex;align-items:center;gap:10px;padding:12px 13px;border-radius:12px;margin-bottom:8px;background:#fff;border:1px solid #F1F5F9;border-left:4px solid var(--uc,#E2E8F0);box-shadow:0 1px 4px rgba(0,0,0,.06);cursor:pointer;transition:all .18s}
@@ -485,6 +488,47 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
 .choro-btn{display:flex;align-items:center;gap:5px;padding:4px 11px;border-radius:20px;border:1.5px solid #e2e8f0;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;color:#475569;background:#fff;transition:all .2s}
 .choro-btn:hover{background:#E1F5EE;color:#0F6E56;border-color:#5DCAA5}
 .choro-btn.active{background:#0F6E56;color:#fff;border-color:#0F6E56}
+/* ── Category dropdown ── */
+.cat-dd-wrap{position:relative;flex-shrink:0}
+.cat-dd-btn{display:flex;align-items:center;gap:6px;padding:5px 13px;border-radius:20px;border:1.5px solid #e2e8f0;font-size:11px;font-weight:600;color:#1e293b;cursor:pointer;background:#fff;transition:all .18s;white-space:nowrap;min-width:148px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.cat-dd-btn:hover,.cat-dd-btn.open{background:#E1F5EE;color:#0F6E56;border-color:#9FE1CB}
+.cat-dd-btn.is-filtered{background:linear-gradient(135deg,#0F6E56,#085041);color:#fff;border-color:transparent;box-shadow:0 2px 8px rgba(15,110,86,.35)}
+.cat-dd-btn.is-filtered .cat-dd-arrow{color:rgba(255,255,255,.7)}
+.cat-dd-arrow{font-size:8px;color:#94A3B8;margin-left:auto;transition:transform .2s}
+.cat-dd-btn.open .cat-dd-arrow{transform:rotate(180deg)}
+.cat-dd-menu{position:absolute;top:calc(100% + 7px);left:0;z-index:4000;background:#fff;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,.14),0 2px 8px rgba(0,0,0,.06);border:1px solid #e2e8f0;width:210px;overflow:hidden;opacity:0;transform:translateY(-5px);transition:opacity .15s,transform .15s;pointer-events:none}
+.cat-dd-menu.open{opacity:1;transform:translateY(0);pointer-events:auto}
+.cat-dd-item{display:flex;align-items:center;gap:9px;padding:8px 14px;cursor:pointer;font-size:12px;font-weight:600;color:#334155;transition:background .12s;border-bottom:1px solid #F8FAFC}
+.cat-dd-item:last-child{border-bottom:none}
+.cat-dd-item:hover{background:#F0FDF9;color:#0F6E56}
+.cat-dd-item.active{background:#E1F5EE;color:#0F6E56}
+.cat-dd-item .cat-dd-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+/* ── Date Picker ── */
+.dp-wrap{position:relative;flex-shrink:0}
+.dp-trigger{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:10px;border:1.5px solid #e2e8f0;font-size:11px;font-weight:600;cursor:pointer;background:#fff;color:#475569;transition:all .18s;white-space:nowrap}
+.dp-trigger:hover{background:#E1F5EE;color:#0F6E56;border-color:#9FE1CB}
+.dp-trigger.has-range{background:#0F6E56;color:#fff;border-color:#0F6E56;box-shadow:0 2px 6px rgba(15,110,86,.22)}
+.dp-caret{font-size:9px;opacity:.7}
+.dp-popover{position:absolute;top:calc(100% + 6px);left:0;z-index:900;background:#fff;border:1.5px solid #e2e8f0;border-radius:14px;box-shadow:0 8px 28px rgba(0,0,0,.13);padding:12px;min-width:246px}
+.dp-quicks{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
+.dp-quick{padding:4px 10px;border-radius:8px;border:1.5px solid #e2e8f0;font-size:11px;font-weight:600;cursor:pointer;background:#fff;color:#475569;transition:all .15s}
+.dp-quick:hover{background:#E1F5EE;color:#0F6E56;border-color:#9FE1CB}
+.dp-quick.active{background:#0F6E56;color:#fff;border-color:#0F6E56}
+.dp-cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.dp-cal-title{font-size:12px;font-weight:700;color:#1e293b}
+.dp-nav-btn{background:none;border:none;cursor:pointer;font-size:16px;color:#64748b;padding:0 6px;border-radius:6px;transition:background .15s}
+.dp-nav-btn:hover{background:#f1f5f9}
+.dp-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:8px}
+.dp-day-hdr{font-size:9px;font-weight:700;color:#94A3B8;text-align:center;padding:2px 0}
+.dp-day{font-size:11px;text-align:center;padding:4px 2px;border-radius:6px;cursor:pointer;color:#334155;transition:all .12s;line-height:1.2}
+.dp-day:hover:not(.dp-empty){background:#E1F5EE;color:#0F6E56}
+.dp-day.dp-empty{cursor:default;color:#cbd5e1}
+.dp-day.dp-range-start,.dp-day.dp-range-end{background:#0F6E56!important;color:#fff!important}
+.dp-day.dp-in-range{background:#d1fae5;color:#065f46}
+.dp-day.dp-today{font-weight:800;color:#0F6E56}
+.dp-range-hint{font-size:10px;color:#94A3B8;text-align:center;margin-bottom:4px;min-height:14px}
+.dp-clear-btn{font-size:10px;color:#94A3B8;background:none;border:none;cursor:pointer;text-decoration:underline}
+.dp-clear-btn:hover{color:#475569}
 .choro-legend{position:absolute;bottom:56px;left:14px;z-index:500;background:rgba(255,255,255,.97);backdrop-filter:blur(8px);border-radius:10px;padding:10px 13px;box-shadow:0 2px 14px rgba(0,0,0,.12);display:none;min-width:178px}
 .choro-legend.show{display:block}
 .choro-legend-title{font-size:10px;font-weight:700;color:#0F6E56;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
@@ -604,8 +648,19 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
 .utl-date.has-acts:hover{border-color:#5DCAA5;background:#E8FAF3;box-shadow:0 4px 14px rgba(15,110,86,.18);transform:translateY(-2px)}
 .utl-date.wknd{background:#EDFAF4}
 .utl-date.wknd.has-acts{background:#E0F5EA;border-color:#C6EEDD}
-.utl-date.is-today{border-color:#0F6E56!important;background:#E1F5EE!important;box-shadow:0 0 0 2px rgba(15,110,86,.15)!important}
+.utl-date.is-today{border-color:#0F6E56!important;background:#E1F5EE!important;box-shadow:0 0 0 2.5px rgba(15,110,86,.25)!important}
+.utl-date.is-today .utl-date-num::after{content:'TODAY';display:inline-block;margin-left:4px;font-size:7px;font-weight:800;background:#0F6E56;color:#fff;border-radius:4px;padding:0px 4px;vertical-align:middle;letter-spacing:.3px}
 .utl-date.empty{background:transparent;border:none;pointer-events:none}
+/* Past dates — attended */
+.utl-date.is-past{opacity:.72}
+.utl-date.is-past .utl-date-num{color:#94A3B8}
+.utl-date.is-past.has-acts .utl-date-num{color:#475569}
+/* Future dates — upcoming (macaron peach) */
+.utl-date.is-future{background:transparent}
+.utl-date.is-future .utl-date-num{color:#CBD5E1}
+.utl-date.is-future.has-acts{background:#FFF3E8;border-color:#FDBA74;border-style:dashed}
+.utl-date.is-future.has-acts .utl-date-num{color:#C2410C;font-weight:800}
+.utl-date.is-future.has-acts:hover{border-color:#FB923C;background:#FFE8D0;border-style:solid}
 .utl-date-num{font-size:10px;font-weight:700;color:#CBD5E1;line-height:1;margin-bottom:2px}
 .utl-date.has-acts .utl-date-num{color:#1e293b;font-weight:800}
 .utl-date.wknd .utl-date-num{color:#0F9F8A}
@@ -680,16 +735,34 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
 .jb-bar-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,#86EFAC,#34D399);transition:width .7s ease}
 
 /* ── ② My Journey Timeline ── */
-.journey-tl{display:flex;flex-direction:column;gap:0;position:relative;padding-left:26px}
-.journey-tl::before{content:'';position:absolute;left:8px;top:8px;bottom:8px;width:2px;background:linear-gradient(#0F6E56,#86EFAC)}
-.jtl-item{position:relative;padding-bottom:16px}
-.jtl-item:last-child{padding-bottom:0}
-.jtl-dot{position:absolute;left:-22px;top:4px;width:11px;height:11px;border-radius:50%;background:#0F6E56;border:2px solid #fff;box-shadow:0 0 0 2px #0F6E56;flex-shrink:0}
+.journey-tl{display:flex;flex-direction:row;align-items:flex-start;gap:0;position:relative;padding:36px 4px 4px;overflow-x:auto;-webkit-overflow-scrolling:touch;cursor:grab;user-select:none}
+.journey-tl::before{content:'';position:absolute;left:0;right:0;top:20px;height:2px;background:linear-gradient(90deg,#0F6E56 0%,#34D399 70%,#86EFAC 100%);pointer-events:none}
+.jtl-item{display:flex;flex-direction:column;align-items:center;flex:0 0 160px;min-width:160px;position:relative;padding:0 6px}
+.jtl-dot{width:13px;height:13px;border-radius:50%;background:#0F6E56;border:2.5px solid #fff;box-shadow:0 0 0 2px #0F6E56;flex-shrink:0;z-index:1;position:absolute;top:-29px}
 .jtl-dot.mine{background:#F59E0B;box-shadow:0 0 0 2px #F59E0B}
-.jtl-date{font-size:10px;color:#94A3B8;font-weight:600;margin-bottom:1px}
-.jtl-name{font-size:13px;font-weight:700;color:#0F3329;margin-bottom:1px}
-.jtl-meta{font-size:11px;color:#475569}
-.jtl-met{display:inline-block;background:#ECFDF5;color:#065F46;font-size:10px;font-weight:700;border-radius:8px;padding:1px 8px;margin-top:3px;border:1px solid #9FE1CB}
+.jtl-dot.milestone{width:16px;height:16px;top:-30px;background:#0F6E56;box-shadow:0 0 0 3px #86EFAC,0 0 0 5px #0F6E5622}
+.jtl-chip{display:inline-flex;align-items:center;gap:3px;background:#fff;border:1px solid #CBD5E1;border-radius:20px;padding:2px 8px;font-size:9px;font-weight:700;color:#64748B;white-space:nowrap;margin-bottom:6px;max-width:100%}
+.jtl-chip.milestone-chip{background:#0F6E56;border-color:#0F6E56;color:#fff}
+.jtl-chip.mine-chip{background:#F59E0B;border-color:#F59E0B;color:#fff}
+.jtl-card{background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:9px 10px;width:100%;box-sizing:border-box;transition:box-shadow .15s}
+.jtl-card:hover{box-shadow:0 2px 10px rgba(15,110,86,.1);border-color:#9FE1CB}
+.jtl-card.mine-card{background:#FFFBEB;border-color:#FCD34D}
+.jtl-card.milestone-card{background:#ECFDF5;border-color:#6EE7B7}
+.jtl-icon{font-size:18px;display:block;text-align:center;margin-bottom:5px;line-height:1}
+.jtl-name{font-size:11px;font-weight:700;color:#0F3329;line-height:1.35;text-align:center}
+.jtl-meta{font-size:10px;color:#64748B;margin-top:3px;line-height:1.4;text-align:center}
+.jtl-bottom{display:flex;align-items:center;gap:4px;margin-top:6px;flex-wrap:wrap;justify-content:center}
+.jtl-met{display:inline-flex;align-items:center;gap:2px;background:#0F6E56;color:#fff;font-size:9px;font-weight:700;border-radius:20px;padding:2px 7px}
+.jtl-cat-tag{display:inline-flex;align-items:center;gap:2px;border-radius:20px;padding:2px 7px;font-size:9px;font-weight:600;border:1px solid transparent}
+.jtl-connector{width:2px;height:14px;background:#CBD5E1;flex-shrink:0}
+/* Journey linkage & "now" states */
+.jtl-item.jtl-week-active .jtl-card{border-color:#0F6E56;box-shadow:0 0 0 2.5px rgba(15,110,86,.18);background:#F0FDF9}
+.jtl-item.jtl-week-active .jtl-dot{box-shadow:0 0 0 3px #0F6E56,0 0 0 6px rgba(15,110,86,.18)}
+.jtl-item.jtl-now .jtl-dot{background:#F59E0B;box-shadow:0 0 0 3px #F59E0B,0 0 0 6px rgba(245,158,11,.2);animation:nowPulse 2s ease-in-out infinite}
+@keyframes nowPulse{0%,100%{box-shadow:0 0 0 3px #F59E0B,0 0 0 6px rgba(245,158,11,.2)}50%{box-shadow:0 0 0 3px #F59E0B,0 0 0 10px rgba(245,158,11,.35)}}
+.jtl-now-badge{display:inline-flex;align-items:center;gap:2px;background:#F59E0B;color:#fff;font-size:8px;font-weight:800;border-radius:20px;padding:1px 6px;letter-spacing:.3px;margin-bottom:4px}
+.jtl-real-date{font-size:9px;color:#94A3B8;font-weight:600;margin-top:1px;text-align:center}
+.jtl-chip{display:inline-flex;align-items:center;gap:3px;background:#fff;border:1px solid #CBD5E1;border-radius:20px;padding:2px 8px;font-size:9.5px;font-weight:700;color:#334155;white-space:nowrap;margin-bottom:2px;max-width:100%}
 
 /* ── ④ Heatmap toggle ── */
 #heatmapToggleBtn{position:absolute;bottom:80px;right:12px;z-index:1000;background:#fff;border:2px solid #e2e8f0;border-radius:10px;padding:6px 10px;font-size:12px;font-weight:700;cursor:pointer;color:#0F6E56;box-shadow:0 2px 8px rgba(0,0,0,.12);transition:all .2s}
@@ -778,23 +851,81 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
 <!-- TABS -->
 <div class="tab-bar" role="tablist" aria-label="Main views">
   <div class="tab active" role="tab" tabindex="0" aria-selected="true"  id="tab-map"       onclick="switchTab('map')"       onkeydown="if(event.key==='Enter'){switchTab('map')}">🗺️ Discover</div>
-  <div class="tab"        role="tab" tabindex="0" aria-selected="false" id="tab-timeline"   onclick="switchTab('timeline')"  onkeydown="if(event.key==='Enter'){switchTab('timeline')}">📅 Timeline</div>
+  <div class="tab"        role="tab" tabindex="0" aria-selected="false" id="tab-timeline"   onclick="switchTab('timeline')"  onkeydown="if(event.key==='Enter'){switchTab('timeline')}">🗓️ Timeline</div>
 </div>
 
 <!-- ═══ MAP VIEW ═══ -->
 <div class="view active" id="view-map">
   <div class="filter-bar" role="group" aria-label="Filter activities by category">
-    <div class="chip chip-all" id="chip-all" role="button" tabindex="0" aria-pressed="true"  title="Show all activities" onclick="toggleFilter('all')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFilter('all')}">🗺️ All</div>
-    <div class="chip chip-social"    id="chip-social"    role="button" tabindex="0" aria-pressed="false" title="Social meetups &amp; mixers"         onclick="toggleFilter('social')"    onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFilter('social')}"><span class="ico">💬</span>Social</div>
-    <div class="chip chip-sports"    id="chip-sports"    role="button" tabindex="0" aria-pressed="false" title="Sports &amp; fitness activities"      onclick="toggleFilter('sports')"    onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFilter('sports')}"><span class="ico">🏃</span>Sports</div>
-    <div class="chip chip-culture"   id="chip-culture"   role="button" tabindex="0" aria-pressed="false" title="Cultural events &amp; arts"           onclick="toggleFilter('culture')"   onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFilter('culture')}"><span class="ico">🎭</span>Culture</div>
-    <div class="chip chip-learning"  id="chip-learning"  role="button" tabindex="0" aria-pressed="false" title="Language exchange &amp; workshops"    onclick="toggleFilter('learning')"  onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFilter('learning')}"><span class="ico">📚</span>Learning</div>
-    <div class="chip chip-outdoor"   id="chip-outdoor"   role="button" tabindex="0" aria-pressed="false" title="Outdoor walks &amp; nature activities" onclick="toggleFilter('outdoor')"   onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFilter('outdoor')}"><span class="ico">🌿</span>Outdoor</div>
-    <div class="chip chip-food"      id="chip-food"      role="button" tabindex="0" aria-pressed="false" title="Food markets &amp; dining events"     onclick="toggleFilter('food')"      onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFilter('food')}"><span class="ico">🍜</span>Food &amp; Dining</div>
-    <div class="chip chip-volunteer" id="chip-volunteer" role="button" tabindex="0" aria-pressed="false" title="Volunteering &amp; community service"  onclick="toggleFilter('volunteer')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFilter('volunteer')}"><span class="ico">🤝</span>Volunteer</div>
-    <div style="width:1px;height:18px;background:#e2e8f0;flex-shrink:0;margin:0 2px;align-self:center"></div>
-    <div class="chip chip-english" id="chip-english" role="button" tabindex="0" aria-pressed="false" title="English-friendly activities" onclick="toggleFilter('english')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFilter('english')}"><span class="ico">🌐</span>English-friendly</div>
-    <div class="chip chip-solo"    id="chip-solo"    role="button" tabindex="0" aria-pressed="false" title="Good for solo newcomers"     onclick="toggleFilter('solo')"    onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFilter('solo')}"><span class="ico">👤</span>Solo-friendly</div>
+    <!-- Category dropdown -->
+    <div class="cat-dd-wrap" id="catDdWrap">
+      <button class="cat-dd-btn" id="catDdBtn" onclick="toggleCatDrop(event)" aria-haspopup="listbox" aria-expanded="false">
+        <span id="catDdIcon">🗺️</span>
+        <span id="catDdLabel">All Categories</span>
+        <span class="cat-dd-arrow">▼</span>
+      </button>
+      <div class="cat-dd-menu" id="catDdMenu" role="listbox">
+        <div class="cat-dd-item active" data-cat="all"       onclick="pickCatFilter('all')">       <div class="cat-dd-dot" style="background:#334155"></div>All Categories</div>
+        <div class="cat-dd-item"        data-cat="social"    onclick="pickCatFilter('social')">    <div class="cat-dd-dot" style="background:#7C3AED"></div>💬 Social</div>
+        <div class="cat-dd-item"        data-cat="sports"    onclick="pickCatFilter('sports')">    <div class="cat-dd-dot" style="background:#EF4444"></div>🏃 Sports</div>
+        <div class="cat-dd-item"        data-cat="culture"   onclick="pickCatFilter('culture')">   <div class="cat-dd-dot" style="background:#0D9488"></div>🎭 Culture</div>
+        <div class="cat-dd-item"        data-cat="learning"  onclick="pickCatFilter('learning')">  <div class="cat-dd-dot" style="background:#2563EB"></div>📚 Learning</div>
+        <div class="cat-dd-item"        data-cat="outdoor"   onclick="pickCatFilter('outdoor')">   <div class="cat-dd-dot" style="background:#16A34A"></div>🌿 Outdoor</div>
+        <div class="cat-dd-item"        data-cat="food"      onclick="pickCatFilter('food')">      <div class="cat-dd-dot" style="background:#EA580C"></div>🍜 Food &amp; Dining</div>
+        <div class="cat-dd-item"        data-cat="volunteer" onclick="pickCatFilter('volunteer')"> <div class="cat-dd-dot" style="background:#DB2777"></div>🤝 Volunteer</div>
+      </div>
+    </div>
+    <!-- Hidden legacy chip IDs — kept so JS still finds them -->
+    <div id="chip-all" style="display:none" aria-pressed="true"></div>
+    <div id="chip-social"    style="display:none" aria-pressed="false"></div>
+    <div id="chip-sports"    style="display:none" aria-pressed="false"></div>
+    <div id="chip-culture"   style="display:none" aria-pressed="false"></div>
+    <div id="chip-learning"  style="display:none" aria-pressed="false"></div>
+    <div id="chip-outdoor"   style="display:none" aria-pressed="false"></div>
+    <div id="chip-food"      style="display:none" aria-pressed="false"></div>
+    <div id="chip-volunteer" style="display:none" aria-pressed="false"></div>
+
+    <div style="width:1px;height:18px;background:#e2e8f0;flex-shrink:0;margin:0 4px;align-self:center"></div>
+    <!-- Date picker -->
+    <div class="dp-wrap" id="dpWrap">
+      <button class="dp-trigger" id="dpTrigger" onclick="toggleDatePicker(event)">
+        <span id="dpLabel">All Dates</span>
+        <span class="dp-caret">&#9660;</span>
+      </button>
+      <div class="dp-popover" id="dpPopover" style="display:none">
+        <div class="dp-quicks">
+          <button class="dp-quick active" id="dpqAll"   onclick="dpQuick('all')">All</button>
+          <button class="dp-quick"        id="dpqToday" onclick="dpQuick('today')">Today</button>
+          <button class="dp-quick"        id="dpqWeek"  onclick="dpQuick('week')">This Week</button>
+          <button class="dp-quick"        id="dpqMonth" onclick="dpQuick('month')">This Month</button>
+        </div>
+        <div class="dp-cal-nav">
+          <button class="dp-nav-btn" onclick="dpNavMonth(-1)">&#8249;</button>
+          <span class="dp-cal-title" id="dpCalTitle"></span>
+          <button class="dp-nav-btn" onclick="dpNavMonth(1)">&#8250;</button>
+        </div>
+        <div class="dp-cal-grid" id="dpCalGrid"></div>
+        <div class="dp-range-hint" id="dpRangeHint">Click a date to start, click again to set end</div>
+        <div style="text-align:center;padding:6px 0 2px">
+          <button class="dp-clear-btn" onclick="dpClear()">Clear selection</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="width:1px;height:18px;background:#e2e8f0;flex-shrink:0;margin:0 4px;align-self:center"></div>
+    <!-- Distance filter -->
+    <div style="display:flex;align-items:center;gap:4px;flex-shrink:0">
+      <select id="distSelect" onchange="setDist(this.value===''?null:Number(this.value))"
+        style="padding:3px 10px;border-radius:10px;border:1.5px solid #e2e8f0;font-size:11px;font-weight:600;color:#475569;background:#fff;cursor:pointer;outline:none;appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%228%22 height=%225%22><path d=%22M0 0l4 5 4-5z%22 fill=%22%2364748b%22/></svg>');background-repeat:no-repeat;background-position:right 8px center;padding-right:22px">
+        <option value="">📍 Any</option>
+        <option value="2">📍 2 km</option>
+        <option value="5">📍 5 km</option>
+        <option value="10">📍 10 km</option>
+      </select>
+    </div>
+
+    <!-- Reset all filters -->
+    <button id="resetAllBtn" onclick="resetAllFilters()" style="display:none;align-items:center;gap:4px;margin-left:4px;padding:4px 11px;border-radius:10px;border:1.5px solid #CBD5E1;background:#F8FAFC;color:#64748B;font-size:11px;font-weight:600;cursor:pointer;flex-shrink:0;transition:all .15s" onmouseover="this.style.borderColor='#94A3B8';this.style.background='#F1F5F9'" onmouseout="this.style.borderColor='#CBD5E1';this.style.background='#F8FAFC'"><svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 2A5 5 0 1 0 11 6"/><polyline points="9,0 11,2 9,4"/></svg> Reset</button>
 
   </div>
   <!-- Time-brush banner: shows when Timeline → Map link is active -->
@@ -835,10 +966,7 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
           <div class="stat-num" id="statNC">—</div>
           <div class="stat-lbl">Newcomer ✓</div>
         </div>
-        <div class="stat-item">
-          <div class="stat-num" id="statNCPct">—%</div>
-          <div class="stat-lbl">Friendly Rate</div>
-        </div>
+
       </div>
       <!-- Re-center button -->
       <button id="mapLocateBtn" title="Re-center map" onclick="map.setView([-37.787,175.279],13)">📍</button>
@@ -856,27 +984,10 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
       <!-- Activity List -->
       <div class="act-list" id="actList">
         <div class="al-header">
-          <!-- Row 1: primary mode tabs — full width -->
-          <div class="al-header-row1">
-            <div class="panel-tabs">
-              <button class="panel-tab active" id="panelTabMap" onclick="setPanelMode('map')">🗺 Near Me</button>
-              <button class="panel-tab" id="panelTabUp" onclick="setPanelMode('upcoming')">📅 Upcoming 2 Wks</button>
-            </div>
-          </div>
-          <!-- Row 2: count + distance filter + sort (only in map mode) -->
+<!-- Row 2: count + distance filter + sort (only in map mode) -->
           <div class="al-header-row2" id="sortBtns">
             <div class="al-count" style="margin-right:2px"><strong id="alCount">—</strong></div>
-            <div class="dist-pills">
-              <span class="dist-lbl">📍</span>
-              <select id="distSelect" onchange="setDist(this.value===''?null:Number(this.value))"
-                style="padding:3px 8px;border-radius:8px;border:1.5px solid #9FE1CB;font-size:11px;font-weight:600;color:#0F6E56;background:#fff;cursor:pointer;outline:none;appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%228%22 height=%225%22><path d=%22M0 0l4 5 4-5z%22 fill=%22%230F6E56%22/></svg>');background-repeat:no-repeat;background-position:right 7px center;padding-right:20px">
-                <option value="">Any distance</option>
-                <option value="1">Within 1 km</option>
-                <option value="2">Within 2 km</option>
-                <option value="5">Within 5 km</option>
-              </select>
-            </div>
-            <div class="sort-btns">
+<div class="sort-btns">
               <button class="sort-btn active" id="sortDate" onclick="setSort('date')">📅 Date</button>
               <button class="sort-btn" id="sortPop" onclick="setSort('popularity')">🔥 Popular</button>
             </div>
@@ -889,8 +1000,6 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
         </div>
         <!-- In-view card list -->
         <div class="al-scroll" id="alScroll" aria-live="polite" aria-label="Activity list"></div>
-        <!-- Upcoming 2-week list -->
-        <div class="up-scroll" id="upScroll" style="display:none"></div>
       </div>
 
       <!-- Detail Panel — slides over list pane -->
@@ -1091,7 +1200,7 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
     <div class="tl-card" id="unifiedTimelineCard">
       <!-- Header row: title + note + month nav -->
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap">
-        <div class="tl-card-title" style="margin:0">📅 When &amp; What?</div>
+        <div class="tl-card-title" style="margin:0">📅 My Activity History</div>
         <span style="font-size:11px;color:#94A3B8;flex:1" id="tlGridNote">Loading…</span>
         <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
           <button onclick="shiftMonth(-1)" style="width:28px;height:28px;border-radius:50%;border:1.5px solid #e2e8f0;background:#fff;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;color:#475569;transition:all .18s" onmouseover="this.style.borderColor='#0F6E56';this.style.color='#0F6E56'" onmouseout="this.style.borderColor='#e2e8f0';this.style.color='#475569'">‹</button>
@@ -1152,7 +1261,7 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
           <div style="font-size:11px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px">People you've met</div>
           <div id="personList" style="flex:1"></div>
           <div id="netCatBars" style="display:none"></div>
-          <div style="margin-top:auto;padding-top:14px;border-top:1px solid #F1F5F9">
+          <div style="position:sticky;bottom:0;padding-top:14px;border-top:1px solid #F1F5F9;background:#fff;margin-top:auto">
             <button onclick="openLogMeet()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:6px;background:linear-gradient(135deg,#0F6E56,#085041);color:#fff;border:none;border-radius:10px;padding:11px;font-size:12px;font-weight:700;cursor:pointer;box-shadow:0 3px 10px rgba(15,110,86,.28)">
               🤝 Log a Meeting
             </button>
@@ -1163,28 +1272,15 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
       </div>
       <div class="net-tooltip" id="netTip"></div>
     </div>
-  </div>
 
-  </div>
-
-        <!-- Seasonal Activity Trends -->
+    <!-- Seasonal Activity Trends -->
     <div class="tl-card">
       <div class="tl-card-title">🌏 Seasonal Activity Trends — Jan to Dec
         <span style="font-size:11px;font-weight:400;color:#94A3B8"> NZ climate shapes when activities peak</span>
       </div>
       <p class="tl-chart-note">☀️ NZ summer (Dec–Feb): hot & dry → outdoor & sports peak &nbsp;·&nbsp; 🌧 Winter (Jun–Jul): Hamilton's rainiest months → indoor culture & learning surge &nbsp;·&nbsp; 🎄 December: Christmas social & food market peak</p>
+      <div id="seasonalCatFilter" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px"></div>
       <div style="position:relative;height:230px"><canvas id="seasonalChart"></canvas></div>
-    </div>
-
-    <!-- ② My Integration Journey Timeline -->
-    <div class="tl-card">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
-        <div class="tl-card-title" style="margin:0">🗺️ My Integration Journey</div>
-        <span style="font-size:11px;color:#94A3B8">Your personal story of settling in</span>
-      </div>
-      <div class="journey-tl" id="journeyTimeline">
-        <div style="font-size:12px;color:#94A3B8;padding:20px 0;text-align:center">Loading your journey…</div>
-      </div>
     </div>
   </div>
 
@@ -1491,27 +1587,28 @@ const CONNECTION_ACTS = {
 };
 // ── Activity meta: recurring cadence + organiser type ──
 const ACTIVITY_META={
-  1:{r:null,o:'university'},  2:{r:'weekly',o:'org'},      3:{r:'monthly',o:'council'},
-  4:{r:'weekly',o:'org'},     5:{r:null,o:'council'},       6:{r:'weekly',o:'community'},
-  7:{r:null,o:'org'},         8:{r:'weekly',o:'community'}, 9:{r:'weekly',o:'community'},
-  10:{r:null,o:'community'},  11:{r:'weekly',o:'university'},12:{r:null,o:'community'},
-  13:{r:'monthly',o:'community'},14:{r:'weekly',o:'org'},   15:{r:'monthly',o:'community'},
-  16:{r:'weekly',o:'community'},17:{r:'weekly',o:'community'},18:{r:'weekly',o:'council'},
+  1:{r:null,o:'university'},  2:{r:'weekly',o:'org'},      3:{r:null,o:'council'},
+  4:{r:'monthly',o:'org'},     5:{r:null,o:'council'},       6:{r:'weekly',o:'community'},
+  7:{r:null,o:'org'},         8:{r:null,o:'community'},     9:{r:null,o:'community'},
+  10:{r:null,o:'community'},  11:{r:null,o:'university'},   12:{r:null,o:'community'},
+  13:{r:null,o:'community'},  14:{r:null,o:'org'},          15:{r:null,o:'community'},
+  16:{r:'weekly',o:'community'},17:{r:'weekly',o:'community'},18:{r:null,o:'council'},
   19:{r:'weekly',o:'org'},    20:{r:null,o:'community'},    21:{r:'weekly',o:'org'},
-  22:{r:'weekly',o:'org'},    23:{r:'weekly',o:'community'},24:{r:null,o:'council'},
-  25:{r:'weekly',o:'community'},26:{r:'monthly',o:'community'},27:{r:'weekly',o:'community'},
-  28:{r:'weekly',o:'community'},29:{r:'monthly',o:'council'},30:{r:null,o:'community'},
+  22:{r:null,o:'org'},        23:{r:null,o:'community'},    24:{r:null,o:'council'},
+  25:{r:null,o:'community'},  26:{r:null,o:'community'},    27:{r:'weekly',o:'community'},
+  28:{r:'weekly',o:'community'},29:{r:null,o:'council'},    30:{r:null,o:'community'},
   31:{r:'weekly',o:'community'},32:{r:'weekly',o:'council'}, 33:{r:'weekly',o:'org'},
-  34:{r:'weekly',o:'org'},    35:{r:null,o:'org'},           36:{r:'monthly',o:'community'},
-  37:{r:'weekly',o:'council'},38:{r:null,o:'community'},     39:{r:null,o:'community'},
-  40:{r:'weekly',o:'org'},    41:{r:'weekly',o:'community'}, 42:{r:'monthly',o:'council'},
-  43:{r:'monthly',o:'org'},   44:{r:'weekly',o:'org'},       45:{r:'weekly',o:'community'},
-  46:{r:'weekly',o:'community'},47:{r:'monthly',o:'council'},48:{r:'weekly',o:'community'},
-  49:{r:null,o:'org'},        50:{r:'monthly',o:'org'},      51:{r:'monthly',o:'university'},
-  52:{r:null,o:'council'},    53:{r:'monthly',o:'council'},  54:{r:'weekly',o:'community'},
-  55:{r:'weekly',o:'university'},56:{r:null,o:'council'},    57:{r:'monthly',o:'org'},
-  58:{r:'weekly',o:'community'},59:{r:'weekly',o:'community'},60:{r:'weekly',o:'community'},
+  34:{r:'weekly',o:'org'},    35:{r:null,o:'org'},           36:{r:null,o:'community'},
+  37:{r:null,o:'council'},    38:{r:null,o:'community'},     39:{r:null,o:'community'},
+  40:{r:'weekly',o:'org'},    41:{r:'weekly',o:'community'}, 42:{r:null,o:'council'},
+  43:{r:null,o:'org'},        44:{r:'weekly',o:'org'},       45:{r:'weekly',o:'community'},
+  46:{r:'weekly',o:'community'},47:{r:null,o:'council'},    48:{r:'weekly',o:'community'},
+  49:{r:null,o:'org'},        50:{r:null,o:'org'},           51:{r:null,o:'university'},
+  52:{r:null,o:'council'},    53:{r:null,o:'council'},       54:{r:'weekly',o:'community'},
+  55:{r:'weekly',o:'university'},56:{r:null,o:'council'},    57:{r:null,o:'org'},
+  58:{r:'weekly',o:'community'},59:{r:'weekly',o:'community'},60:{r:null,o:'community'},
   61:{r:'weekly',o:'community'},62:{r:'weekly',o:'community'},
+  63:{r:null,o:'council'},      64:{r:null,o:'community'},
 };
 const ORG_META={
   university:{icon:'🎓',label:'University', color:'#3B82F6'},
@@ -1573,91 +1670,93 @@ const MIGRANT_STATS={
 const MONTHLY_DIST={
   labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
   cats:[
-    {label:'Social',   data:[8,7,9,10,8,7,6,7,9,9,10,9],  color:'#B57BEE'},
-    {label:'Sports',   data:[10,9,8,6,5,3,3,4,7,9,10,10], color:'#F87171'},
-    {label:'Culture',  data:[4,4,5,6,7,8,9,8,6,5,5,4],    color:'#2DD4BF'},
-    {label:'Learning', data:[3,4,5,6,7,8,8,7,5,5,4,3],    color:'#7EB8F7'},
-    {label:'Outdoor',  data:[10,9,7,5,4,2,2,3,6,8,9,10],  color:'#6DCF8A'},
-    {label:'Food',     data:[9,8,7,6,6,5,5,6,7,8,9,10],   color:'#FFB347'},
-    {label:'Volunteer',data:[4,4,5,5,5,6,6,6,5,5,5,4],    color:'#F48FB1'},
+    {label:'Social',   data:[5,4,5,6,5,4,3,4,5,5,6,5],  color:'#B57BEE'},
+    {label:'Sports',   data:[6,5,5,3,3,2,2,2,4,5,6,6],  color:'#F87171'},
+    {label:'Culture',  data:[2,2,3,4,4,5,5,4,3,3,3,2],  color:'#2DD4BF'},
+    {label:'Learning', data:[2,2,3,4,4,5,5,4,3,3,2,2],  color:'#7EB8F7'},
+    {label:'Outdoor',  data:[6,5,4,3,2,1,1,2,3,5,5,6],  color:'#6DCF8A'},
+    {label:'Food',     data:[5,4,4,3,3,3,3,3,4,4,5,5],  color:'#FFB347'},
+    {label:'Volunteer',data:[2,2,2,2,2,3,3,3,2,2,2,2],  color:'#F48FB1'},
   ]
 };
 
 const ACTIVITIES = [
-  {id:1,city:'hamilton',name:"International Coffee Chat @ UoW",category:"social",website:"https://www.waikato.ac.nz/international/",lat:-37.7872,lng:175.3122,date:"Fri 16 May",time:"3:00 PM",location:"University of Waikato, Student Union Café",attendees:14,maxAttendees:20,newcomer:true,desc:"A relaxed drop-in coffee session for international and domestic students to mingle, swap city tips, and practise conversational English — or any language! No agenda, just good people.",avatarColors:['#7C3AED','#EF4444','#0D9488','#2563EB','#EA580C']},
-  {id:2,city:'hamilton',name:"Hamilton Lake Parkrun",category:"sports",lat:-37.7962,lng:175.2713,date:"Sat 17 May",time:"8:00 AM",location:"Hamilton Lake Domain, Main Car Park",attendees:38,maxAttendees:100,newcomer:true,website:'https://www.parkrun.org.nz/hamilton/',desc:"Free, weekly, 5km timed run around the beautiful Hamilton Lake. All paces welcome — walkers too! Register once at parkrun.org.nz to get your barcode.",avatarColors:['#EF4444','#16A34A','#7C3AED','#EA580C','#0D9488']},
-  {id:3,city:'hamilton',name:"Waikato Museum Evening Talk",category:"culture",website:"https://waikatomuseum.co.nz/",lat:-37.7891,lng:175.2792,date:"Thu 22 May",time:"6:30 PM",location:"Waikato Museum Te Whare Taonga o Waikato",attendees:22,maxAttendees:50,newcomer:false,desc:"Monthly public lecture series exploring Māori history, colonial legacy, and contemporary NZ culture. This month: 'Waikato Land Wars — Contested Histories.'",avatarColors:['#0D9488','#7C3AED','#DB2777','#2563EB','#6B7280']},
-  {id:4,city:'hamilton',name:"English Conversation Club",category:"learning",website:"https://www.hamiltonlibrary.info/",lat:-37.7900,lng:175.2810,date:"Wed 21 May",time:"5:30 PM",location:"Hamilton City Library, Level 1 Meeting Room",attendees:11,maxAttendees:15,newcomer:true,desc:"Practice everyday English in a friendly, no-pressure environment. Topics change each week — this week: 'Talking about your hometown.' Facilitated by volunteer tutors.",avatarColors:['#2563EB','#7C3AED','#0D9488','#EA580C','#EF4444']},
-  {id:5,city:'hamilton',name:"Hamilton Gardens Guided Walk",category:"outdoor",website:"https://hamiltongardens.co.nz/",lat:-37.8049,lng:175.2893,date:"Sun 18 May",time:"10:00 AM",location:"Hamilton Gardens, Visitor Centre",attendees:9,maxAttendees:12,newcomer:true,desc:"Explore the internationally-renowned Hamilton Gardens with a volunteer guide. See the Japanese Garden, Italian Renaissance garden, and Māori Te Parapara garden.",avatarColors:['#16A34A','#0D9488','#7C3AED','#EF4444','#2563EB']},
-  {id:6,city:'hamilton',name:"Garden Place Night Market",category:"food",website:"https://www.hamiltongardensnightmarket.co.nz/",lat:-37.7889,lng:175.2793,date:"Fri 16 May",time:"5:00 PM",location:"Garden Place, Hamilton CBD",attendees:60,maxAttendees:200,newcomer:true,desc:"Hamilton's weekly night market — over 40 food stalls celebrating cuisines from around the world.",avatarColors:['#EA580C','#EF4444','#7C3AED','#16A34A','#0D9488']},
-  {id:7,city:'hamilton',name:"River Waikato Cleanup Day",category:"volunteer",website:"https://www.waikato.ac.nz/community/environment/",lat:-37.7850,lng:175.2715,date:"Sat 17 May",time:"9:00 AM",location:"Ferrybank Reserve, Hamilton",attendees:17,maxAttendees:30,newcomer:true,desc:"Join Waikato Cleanup Crew for a morning of litter picking along the river bank.",avatarColors:['#DB2777','#16A34A','#7C3AED','#2563EB','#EF4444']},
-  {id:8,city:'hamilton',name:"Board Games Café Night",category:"social",lat:-37.7902,lng:175.2855,date:"Sat 17 May",time:"7:00 PM",location:"Rocket Café, Victoria Street",attendees:8,maxAttendees:16,newcomer:true,desc:"Board games, card games, conversation and coffee — a relaxed social evening.",avatarColors:['#7C3AED','#EF4444','#EA580C','#0D9488','#2563EB']},
-  {id:9,city:'hamilton',name:"Open Badminton at Seddon Park",category:"sports",lat:-37.7820,lng:175.2930,date:"Tue 20 May",time:"6:30 PM",location:"Seddon Park Sports Complex",attendees:12,maxAttendees:24,newcomer:false,desc:"Casual badminton session — bring your racket or borrow one. All levels welcome.",avatarColors:['#EF4444','#7C3AED','#16A34A','#0D9488','#2563EB']},
-  {id:10,city:'hamilton',name:"Te Reo Māori Beginners Workshop",category:"culture",lat:-37.7875,lng:175.2800,date:"Mon 19 May",time:"6:00 PM",location:"Hamilton Central Community Centre",attendees:16,maxAttendees:25,newcomer:true,desc:"An introductory workshop to Te Reo Māori — greetings, pronunciation, basic phrases, and cultural context.",avatarColors:['#0D9488','#7C3AED','#DB2777','#EF4444','#6B7280']},
-  {id:11,city:'hamilton',name:"IELTS Study Group",category:"learning",lat:-37.7860,lng:175.2775,date:"Sun 18 May",time:"2:00 PM",location:"Hamilton City Library, Quiet Study Zone",attendees:6,maxAttendees:10,newcomer:true,desc:"Peer-led IELTS preparation group — practise writing tasks, reading comprehension, and speaking tests.",avatarColors:['#2563EB','#7C3AED','#0D9488','#EF4444','#EA580C']},
-  {id:12,city:'hamilton',name:"Sanctuary Mountain Hike",category:"outdoor",lat:-37.8200,lng:175.3010,date:"Sun 25 May",time:"9:00 AM",location:"Maungatautari (meet at UoW carpark)",attendees:7,maxAttendees:10,newcomer:false,desc:"Full-day hike to Sanctuary Mountain — NZ's largest pest-free ecosystem.",avatarColors:['#16A34A','#EF4444','#7C3AED','#2563EB','#0D9488']},
-  {id:13,city:'hamilton',name:"Multicultural Food Festival",category:"food",lat:-37.7880,lng:175.2820,date:"Sat 24 May",time:"11:00 AM",location:"Claudelands Events Centre Grounds",attendees:120,maxAttendees:500,newcomer:true,desc:"Hamilton's annual celebration of food from around the world — 80+ stalls, 30+ countries.",avatarColors:['#EA580C','#7C3AED','#EF4444','#0D9488','#16A34A']},
-  {id:14,city:'hamilton',name:"Volunteer English Tutoring",category:"volunteer",lat:-37.7895,lng:175.2795,date:"Wed 21 May",time:"10:00 AM",location:"Hamilton Multicultural Centre",attendees:5,maxAttendees:8,newcomer:false,desc:"Looking for volunteers to tutor adult migrants in conversational English.",avatarColors:['#DB2777','#2563EB','#7C3AED','#16A34A','#6B7280']},
-  {id:15,city:'hamilton',name:"Newcomers Social Mixer",category:"social",lat:-37.7870,lng:175.2855,date:"Fri 23 May",time:"6:00 PM",location:"The Loaded Hog, Hood Street",attendees:25,maxAttendees:40,newcomer:true,desc:"Fun casual mixer for anyone new to Hamilton. Icebreaker games, free nibbles, friendly crowd.",avatarColors:['#7C3AED','#0D9488','#EF4444','#EA580C','#DB2777']},
-  {id:16,city:'auckland',name:"Viaduct International Meetup",category:"social",lat:-36.8441,lng:174.7668,date:"Fri 16 May",time:"6:30 PM",location:"Viaduct Harbour, Event Space",attendees:45,maxAttendees:80,newcomer:true,desc:"Auckland's biggest weekly meetup for internationals, expats, and locals.",avatarColors:['#7C3AED','#EF4444','#0D9488','#2563EB','#EA580C']},
-  {id:17,city:'auckland',name:"Cornwall Park Morning Run",category:"sports",lat:-36.8847,lng:174.7742,date:"Sat 17 May",time:"7:30 AM",location:"Cornwall Park, Huia Lodge Gate",attendees:23,maxAttendees:50,newcomer:true,desc:"Scenic 6km run through Cornwall Park past One Tree Hill.",avatarColors:['#EF4444','#16A34A','#7C3AED','#EA580C','#0D9488']},
-  {id:18,city:'auckland',name:"Auckland Art Gallery Guided Tour",category:"culture",lat:-36.8521,lng:174.7647,date:"Sun 18 May",time:"1:00 PM",location:"Auckland Art Gallery Toi o Tāmaki",attendees:18,maxAttendees:30,newcomer:true,desc:"Free volunteer-led tour of the Gallery's permanent collection.",avatarColors:['#0D9488','#7C3AED','#DB2777','#2563EB','#6B7280']},
-  {id:19,city:'auckland',name:"Ponsonby Language Exchange",category:"learning",lat:-36.8571,lng:174.7478,date:"Thu 22 May",time:"6:00 PM",location:"Ponsonby Central, Common Room",attendees:20,maxAttendees:30,newcomer:true,desc:"Language exchange night — pair up with a native speaker.",avatarColors:['#2563EB','#7C3AED','#0D9488','#EA580C','#EF4444']},
-  {id:20,city:'auckland',name:"Harbour Kayaking Experience",category:"outdoor",lat:-36.8428,lng:174.7688,date:"Sun 18 May",time:"10:00 AM",location:"Auckland Harbour, Pier 21 Launch",attendees:10,maxAttendees:12,newcomer:false,desc:"Guided kayak tour of the Waitematā Harbour.",avatarColors:['#16A34A','#0D9488','#7C3AED','#EF4444','#2563EB']},
-  {id:21,city:'auckland',name:"Night Noodle Markets",category:"food",lat:-36.8585,lng:174.7762,date:"Fri 16 May",time:"5:30 PM",location:"Auckland Domain, Upper Terrace",attendees:200,maxAttendees:1000,newcomer:true,desc:"Auckland's famous Night Noodle Markets — 50+ stalls serving Asian street food.",avatarColors:['#EA580C','#EF4444','#7C3AED','#16A34A','#0D9488']},
-  {id:22,city:'auckland',name:"Volunteer at City Harvest",category:"volunteer",lat:-36.8701,lng:174.7555,date:"Sat 17 May",time:"8:00 AM",location:"City Harvest Warehouse, Penrose",attendees:12,maxAttendees:20,newcomer:true,desc:"Help sort and pack food parcels at Auckland's busiest food rescue organisation.",avatarColors:['#DB2777','#16A34A','#7C3AED','#2563EB','#EF4444']},
-  {id:23,city:'auckland',name:"CBD Photography Walk",category:"outdoor",lat:-36.8517,lng:174.7663,date:"Sat 17 May",time:"2:00 PM",location:"Meet at Sky Tower Base",attendees:14,maxAttendees:20,newcomer:true,desc:"Casual 3km photography walk through Auckland CBD.",avatarColors:['#16A34A','#EF4444','#7C3AED','#0D9488','#2563EB']},
-  {id:24,city:'auckland',name:"Python for Beginners Workshop",category:"learning",lat:-36.8635,lng:174.7721,date:"Sat 17 May",time:"10:00 AM",location:"Auckland Central Library, Digital Hub",attendees:15,maxAttendees:20,newcomer:true,desc:"Hands-on 3-hour introduction to Python. No experience needed.",avatarColors:['#2563EB','#7C3AED','#0D9488','#EF4444','#EA580C']},
-  {id:25,city:'auckland',name:"Sunday Cricket on the Domain",category:"sports",lat:-36.8600,lng:174.7706,date:"Sun 18 May",time:"1:00 PM",location:"Auckland Domain, Cricket Pitch",attendees:18,maxAttendees:30,newcomer:true,desc:"Informal Sunday cricket for all abilities.",avatarColors:['#EF4444','#7C3AED','#16A34A','#0D9488','#2563EB']},
-  {id:26,city:'auckland',name:"Flatmates Dinner Potluck",category:"social",lat:-36.8530,lng:174.7600,date:"Sat 17 May",time:"7:00 PM",location:"Britomart Community Space",attendees:16,maxAttendees:20,newcomer:true,desc:"Bring a dish from your home country and share it!",avatarColors:['#7C3AED','#0D9488','#EF4444','#EA580C','#DB2777']},
-  {id:27,city:'auckland',name:"Otara Saturday Market",category:"food",lat:-36.9505,lng:174.8662,date:"Sat 17 May",time:"6:00 AM",location:"Otara Town Centre Car Park",attendees:300,maxAttendees:2000,newcomer:true,desc:"Auckland's most culturally diverse food market.",avatarColors:['#EA580C','#7C3AED','#EF4444','#0D9488','#16A34A']},
-  {id:28,city:'auckland',name:"Ukulele Jam Session",category:"culture",lat:-36.8555,lng:174.7651,date:"Tue 20 May",time:"6:30 PM",location:"Ellen Melville Centre, CBD",attendees:20,maxAttendees:35,newcomer:true,desc:"Weekly ukulele jam — beginners learn 3 chords and join in immediately.",avatarColors:['#0D9488','#7C3AED','#DB2777','#EF4444','#6B7280']},
-  {id:29,city:'auckland',name:"Newcomer Welcome Evening",category:"social",lat:-36.8512,lng:174.7655,date:"Wed 21 May",time:"6:00 PM",location:"Auckland Council Community Hub, Level 2",attendees:30,maxAttendees:60,newcomer:true,desc:"Organised by Auckland Council's Welcoming Communities initiative.",avatarColors:['#7C3AED','#0D9488','#EF4444','#2563EB','#DB2777']},
-  {id:30,city:'auckland',name:"Waitematā Coastal Walk",category:"outdoor",lat:-36.8465,lng:174.7745,date:"Sun 25 May",time:"9:30 AM",location:"Wynyard Quarter, North Wharf",attendees:11,maxAttendees:15,newcomer:true,desc:"8km coastal walk from Wynyard Quarter to St Heliers.",avatarColors:['#16A34A','#0D9488','#7C3AED','#EF4444','#2563EB']},
+  {id:1,city:'hamilton',name:"International Coffee Chat @ UoW",category:"social",website:"https://www.waikato.ac.nz/international/",lat:-37.7872,lng:175.3122,date:"Fri 22 May",time:"3:00 PM",location:"University of Waikato, Student Union Café",attendees:14,maxAttendees:20,newcomer:true,desc:"A relaxed drop-in coffee session for international and domestic students to mingle, swap city tips, and practise conversational English — or any language! No agenda, just good people.",avatarColors:['#7C3AED','#EF4444','#0D9488','#2563EB','#EA580C']},
+  {id:2,city:'hamilton',name:"Hamilton Lake Parkrun",category:"sports",lat:-37.7962,lng:175.2713,date:"Sat 2 May",time:"8:00 AM",location:"Hamilton Lake Domain, Main Car Park",attendees:38,maxAttendees:100,newcomer:true,website:'https://www.parkrun.org.nz/hamilton/',desc:"Free, weekly, 5km timed run around the beautiful Hamilton Lake. All paces welcome — walkers too! Register once at parkrun.org.nz to get your barcode.",avatarColors:['#EF4444','#16A34A','#7C3AED','#EA580C','#0D9488']},
+  {id:3,city:'hamilton',name:"Waikato Museum Evening Talk",category:"culture",website:"https://waikatomuseum.co.nz/",lat:-37.7891,lng:175.2792,date:"Thu 21 May",time:"6:30 PM",location:"Waikato Museum Te Whare Taonga o Waikato",attendees:22,maxAttendees:50,newcomer:false,desc:"Monthly public lecture series exploring Māori history, colonial legacy, and contemporary NZ culture. This month: 'Waikato Land Wars — Contested Histories.'",avatarColors:['#0D9488','#7C3AED','#DB2777','#2563EB','#6B7280']},
+  {id:4,city:'hamilton',name:"English Conversation Club",category:"learning",website:"https://www.hamiltonlibrary.info/",lat:-37.7900,lng:175.2810,date:"Wed 13 May",time:"5:30 PM",location:"Hamilton City Library, Level 1 Meeting Room",attendees:11,maxAttendees:15,newcomer:true,desc:"Practice everyday English in a friendly, no-pressure environment. Topics change each week — this week: 'Talking about your hometown.' Facilitated by volunteer tutors.",avatarColors:['#2563EB','#7C3AED','#0D9488','#EA580C','#EF4444']},
+  {id:5,city:'hamilton',name:"Hamilton Gardens Guided Walk",category:"outdoor",website:"https://hamiltongardens.co.nz/",lat:-37.8049,lng:175.2893,date:"Sat 30 May",time:"10:00 AM",location:"Hamilton Gardens, Visitor Centre",attendees:9,maxAttendees:12,newcomer:true,desc:"Explore the internationally-renowned Hamilton Gardens with a volunteer guide. See the Japanese Garden, Italian Renaissance garden, and Māori Te Parapara garden.",avatarColors:['#16A34A','#0D9488','#7C3AED','#EF4444','#2563EB']},
+  {id:6,city:'hamilton',name:"Garden Place Night Market",category:"food",website:"https://www.hamiltongardensnightmarket.co.nz/",lat:-37.7889,lng:175.2793,date:"Fri 1 May",time:"5:00 PM",location:"Garden Place, Hamilton CBD",attendees:60,maxAttendees:200,newcomer:true,desc:"Hamilton's weekly night market — over 40 food stalls celebrating cuisines from around the world.",avatarColors:['#EA580C','#EF4444','#7C3AED','#16A34A','#0D9488']},
+  {id:7,city:'hamilton',name:"River Waikato Cleanup Day",category:"volunteer",website:"https://www.waikato.ac.nz/community/environment/",lat:-37.7850,lng:175.2715,date:"Sat 16 May",time:"9:00 AM",location:"Ferrybank Reserve, Hamilton",attendees:17,maxAttendees:30,newcomer:true,desc:"Join Waikato Cleanup Crew for a morning of litter picking along the river bank.",avatarColors:['#DB2777','#16A34A','#7C3AED','#2563EB','#EF4444']},
+  {id:8,city:'hamilton',name:"Board Games Café Night",category:"social",lat:-37.7902,lng:175.2855,date:"Sat 23 May",time:"7:00 PM",location:"Rocket Café, Victoria Street",attendees:8,maxAttendees:16,newcomer:true,desc:"Board games, card games, conversation and coffee — a relaxed social evening.",avatarColors:['#7C3AED','#EF4444','#EA580C','#0D9488','#2563EB']},
+  {id:9,city:'hamilton',name:"Open Badminton at Seddon Park",category:"sports",lat:-37.7820,lng:175.2930,date:"Tue 5 May",time:"6:30 PM",location:"Seddon Park Sports Complex",attendees:12,maxAttendees:24,newcomer:false,desc:"Casual badminton session — bring your racket or borrow one. All levels welcome.",avatarColors:['#EF4444','#7C3AED','#16A34A','#0D9488','#2563EB']},
+  {id:10,city:'hamilton',name:"Te Reo Māori Beginners Workshop",category:"culture",lat:-37.7875,lng:175.2800,date:"Mon 11 May",time:"6:00 PM",location:"Hamilton Central Community Centre",attendees:16,maxAttendees:25,newcomer:true,desc:"An introductory workshop to Te Reo Māori — greetings, pronunciation, basic phrases, and cultural context.",avatarColors:['#0D9488','#7C3AED','#DB2777','#EF4444','#6B7280']},
+  {id:11,city:'hamilton',name:"IELTS Study Group",category:"learning",lat:-37.7860,lng:175.2775,date:"Sun 24 May",time:"2:00 PM",location:"Hamilton City Library, Quiet Study Zone",attendees:6,maxAttendees:10,newcomer:true,desc:"Peer-led IELTS preparation group — practise writing tasks, reading comprehension, and speaking tests.",avatarColors:['#2563EB','#7C3AED','#0D9488','#EF4444','#EA580C']},
+  {id:12,city:'hamilton',name:"Sanctuary Mountain Hike",category:"outdoor",lat:-37.8200,lng:175.3010,date:"Mon 25 May",time:"9:00 AM",location:"Maungatautari (meet at UoW carpark)",attendees:7,maxAttendees:10,newcomer:false,desc:"Full-day hike to Sanctuary Mountain — NZ's largest pest-free ecosystem.",avatarColors:['#16A34A','#EF4444','#7C3AED','#2563EB','#0D9488']},
+  {id:13,city:'hamilton',name:"Multicultural Food Festival",category:"food",lat:-37.7880,lng:175.2820,date:"Sat 30 May",time:"11:00 AM",location:"Claudelands Events Centre Grounds",attendees:120,maxAttendees:500,newcomer:true,desc:"Hamilton's annual celebration of food from around the world — 80+ stalls, 30+ countries.",avatarColors:['#EA580C','#7C3AED','#EF4444','#0D9488','#16A34A']},
+  {id:14,city:'hamilton',name:"Volunteer English Tutoring",category:"volunteer",lat:-37.7895,lng:175.2795,date:"Wed 27 May",time:"10:00 AM",location:"Hamilton Multicultural Centre",attendees:5,maxAttendees:8,newcomer:false,desc:"Looking for volunteers to tutor adult migrants in conversational English.",avatarColors:['#DB2777','#2563EB','#7C3AED','#16A34A','#6B7280']},
+  {id:15,city:'hamilton',name:"Newcomers Social Mixer",category:"social",lat:-37.7870,lng:175.2855,date:"Fri 22 May",time:"6:00 PM",location:"The Loaded Hog, Hood Street",attendees:25,maxAttendees:40,newcomer:true,desc:"Fun casual mixer for anyone new to Hamilton. Icebreaker games, free nibbles, friendly crowd.",avatarColors:['#7C3AED','#0D9488','#EF4444','#EA580C','#DB2777']},
+  {id:16,city:'auckland',name:"Viaduct International Meetup",category:"social",lat:-36.8441,lng:174.7668,date:"Sat 16 May",time:"6:30 PM",location:"Viaduct Harbour, Event Space",attendees:45,maxAttendees:80,newcomer:true,desc:"Auckland's biggest weekly meetup for internationals, expats, and locals.",avatarColors:['#7C3AED','#EF4444','#0D9488','#2563EB','#EA580C']},
+  {id:17,city:'auckland',name:"Cornwall Park Morning Run",category:"sports",lat:-36.8847,lng:174.7742,date:"Sun 17 May",time:"7:30 AM",location:"Cornwall Park, Huia Lodge Gate",attendees:23,maxAttendees:50,newcomer:true,desc:"Scenic 6km run through Cornwall Park past One Tree Hill.",avatarColors:['#EF4444','#16A34A','#7C3AED','#EA580C','#0D9488']},
+  {id:18,city:'auckland',name:"Auckland Art Gallery Guided Tour",category:"culture",lat:-36.8521,lng:174.7647,date:"Mon 18 May",time:"1:00 PM",location:"Auckland Art Gallery Toi o Tāmaki",attendees:18,maxAttendees:30,newcomer:true,desc:"Free volunteer-led tour of the Gallery's permanent collection.",avatarColors:['#0D9488','#7C3AED','#DB2777','#2563EB','#6B7280']},
+  {id:19,city:'auckland',name:"Ponsonby Language Exchange",category:"learning",lat:-36.8571,lng:174.7478,date:"Fri 22 May",time:"6:00 PM",location:"Ponsonby Central, Common Room",attendees:20,maxAttendees:30,newcomer:true,desc:"Language exchange night — pair up with a native speaker.",avatarColors:['#2563EB','#7C3AED','#0D9488','#EA580C','#EF4444']},
+  {id:20,city:'auckland',name:"Harbour Kayaking Experience",category:"outdoor",lat:-36.8428,lng:174.7688,date:"Mon 18 May",time:"10:00 AM",location:"Auckland Harbour, Pier 21 Launch",attendees:10,maxAttendees:12,newcomer:false,desc:"Guided kayak tour of the Waitematā Harbour.",avatarColors:['#16A34A','#0D9488','#7C3AED','#EF4444','#2563EB']},
+  {id:21,city:'auckland',name:"Night Noodle Markets",category:"food",lat:-36.8585,lng:174.7762,date:"Sat 16 May",time:"5:30 PM",location:"Auckland Domain, Upper Terrace",attendees:200,maxAttendees:1000,newcomer:true,desc:"Auckland's famous Night Noodle Markets — 50+ stalls serving Asian street food.",avatarColors:['#EA580C','#EF4444','#7C3AED','#16A34A','#0D9488']},
+  {id:22,city:'auckland',name:"Volunteer at City Harvest",category:"volunteer",lat:-36.8701,lng:174.7555,date:"Sun 17 May",time:"8:00 AM",location:"City Harvest Warehouse, Penrose",attendees:12,maxAttendees:20,newcomer:true,desc:"Help sort and pack food parcels at Auckland's busiest food rescue organisation.",avatarColors:['#DB2777','#16A34A','#7C3AED','#2563EB','#EF4444']},
+  {id:23,city:'auckland',name:"CBD Photography Walk",category:"outdoor",lat:-36.8517,lng:174.7663,date:"Sun 17 May",time:"2:00 PM",location:"Meet at Sky Tower Base",attendees:14,maxAttendees:20,newcomer:true,desc:"Casual 3km photography walk through Auckland CBD.",avatarColors:['#16A34A','#EF4444','#7C3AED','#0D9488','#2563EB']},
+  {id:24,city:'auckland',name:"Python for Beginners Workshop",category:"learning",lat:-36.8635,lng:174.7721,date:"Sun 17 May",time:"10:00 AM",location:"Auckland Central Library, Digital Hub",attendees:15,maxAttendees:20,newcomer:true,desc:"Hands-on 3-hour introduction to Python. No experience needed.",avatarColors:['#2563EB','#7C3AED','#0D9488','#EF4444','#EA580C']},
+  {id:25,city:'auckland',name:"Sunday Cricket on the Domain",category:"sports",lat:-36.8600,lng:174.7706,date:"Mon 18 May",time:"1:00 PM",location:"Auckland Domain, Cricket Pitch",attendees:18,maxAttendees:30,newcomer:true,desc:"Informal Sunday cricket for all abilities.",avatarColors:['#EF4444','#7C3AED','#16A34A','#0D9488','#2563EB']},
+  {id:26,city:'auckland',name:"Flatmates Dinner Potluck",category:"social",lat:-36.8530,lng:174.7600,date:"Sun 17 May",time:"7:00 PM",location:"Britomart Community Space",attendees:16,maxAttendees:20,newcomer:true,desc:"Bring a dish from your home country and share it!",avatarColors:['#7C3AED','#0D9488','#EF4444','#EA580C','#DB2777']},
+  {id:27,city:'auckland',name:"Otara Saturday Market",category:"food",lat:-36.9505,lng:174.8662,date:"Sun 17 May",time:"6:00 AM",location:"Otara Town Centre Car Park",attendees:300,maxAttendees:2000,newcomer:true,desc:"Auckland's most culturally diverse food market.",avatarColors:['#EA580C','#7C3AED','#EF4444','#0D9488','#16A34A']},
+  {id:28,city:'auckland',name:"Ukulele Jam Session",category:"culture",lat:-36.8555,lng:174.7651,date:"Wed 20 May",time:"6:30 PM",location:"Ellen Melville Centre, CBD",attendees:20,maxAttendees:35,newcomer:true,desc:"Weekly ukulele jam — beginners learn 3 chords and join in immediately.",avatarColors:['#0D9488','#7C3AED','#DB2777','#EF4444','#6B7280']},
+  {id:29,city:'auckland',name:"Newcomer Welcome Evening",category:"social",lat:-36.8512,lng:174.7655,date:"Thu 21 May",time:"6:00 PM",location:"Auckland Council Community Hub, Level 2",attendees:30,maxAttendees:60,newcomer:true,desc:"Organised by Auckland Council's Welcoming Communities initiative.",avatarColors:['#7C3AED','#0D9488','#EF4444','#2563EB','#DB2777']},
+  {id:30,city:'auckland',name:"Waitematā Coastal Walk",category:"outdoor",lat:-36.8465,lng:174.7745,date:"Mon 25 May",time:"9:30 AM",location:"Wynyard Quarter, North Wharf",attendees:11,maxAttendees:15,newcomer:true,desc:"8km coastal walk from Wynyard Quarter to St Heliers.",avatarColors:['#16A34A','#0D9488','#7C3AED','#EF4444','#2563EB']},
 
   // ── Wellington ──
-  {id:31,city:'wellington',name:"Cuba Street Newcomers Meetup",category:"social",lat:-41.2942,lng:174.7760,date:"Fri 16 May",time:"6:00 PM",location:"Prefab Café, Cuba Street",attendees:28,maxAttendees:50,newcomer:true,desc:"Weekly informal gathering on Wellington's most vibrant street. Meet expats, students, and friendly locals over great coffee and good conversation.",avatarColors:['#7C3AED','#EF4444','#0D9488','#2563EB','#EA580C']},
-  {id:32,city:'wellington',name:"Te Papa Museum Free Guided Tour",category:"culture",lat:-41.2904,lng:174.7818,date:"Sat 17 May",time:"11:00 AM",location:"Te Papa Tongarewa, Cable Street",attendees:20,maxAttendees:25,newcomer:true,desc:"Free volunteer-led tour of NZ's national museum, covering Māori taonga, NZ history, and natural environment. All welcome.",avatarColors:['#0D9488','#7C3AED','#2563EB','#DB2777','#EF4444']},
-  {id:33,city:'wellington',name:"Oriental Bay Parkrun",category:"sports",lat:-41.2873,lng:174.7913,date:"Sat 17 May",time:"8:00 AM",location:"Oriental Bay, Frank Kitts Park end",attendees:45,maxAttendees:200,newcomer:true,desc:"Free 5km timed run along Wellington's beautiful waterfront. Walkers welcome. Register once at parkrun.org.nz.",avatarColors:['#EF4444','#16A34A','#7C3AED','#EA580C','#0D9488']},
-  {id:34,city:'wellington',name:"Newtown Language Café",category:"learning",lat:-41.3060,lng:174.7777,date:"Wed 21 May",time:"5:30 PM",location:"Newtown Community Centre, Hall 2",attendees:15,maxAttendees:20,newcomer:true,desc:"Language café connecting newcomers with volunteer conversational partners. All languages and levels welcome. Snacks provided.",avatarColors:['#2563EB','#7C3AED','#0D9488','#EF4444','#EA580C']},
-  {id:35,city:'wellington',name:"Zealandia Ecosanctuary Walk",category:"outdoor",lat:-41.2900,lng:174.7460,date:"Sun 18 May",time:"9:30 AM",location:"Zealandia Ecosanctuary, Waiapu Rd",attendees:12,maxAttendees:16,newcomer:false,desc:"Guided sunrise walk in the world's first fully-fenced urban ecosanctuary. See native tuatara, kākā, and little spotted kiwi.",avatarColors:['#16A34A','#0D9488','#7C3AED','#EF4444','#2563EB']},
-  {id:60,city:'wellington',name:"Harbourside Market",category:"food",lat:-41.2867,lng:174.7795,date:"Sun 18 May",time:"7:30 AM",location:"Waitangi Park, Cable Street",attendees:400,maxAttendees:2000,newcomer:true,desc:"Wellington's beloved Sunday farmers and food market along the waterfront. Over 60 stalls featuring fresh produce, artisan goods, and street food from Korean, Indian, Vietnamese, and Pacific Island vendors. A weekly ritual for many newcomers to find tastes of home.",avatarColors:['#EA580C','#EF4444','#7C3AED','#16A34A','#0D9488']},
+  {id:31,city:'wellington',name:"Cuba Street Newcomers Meetup",category:"social",lat:-41.2942,lng:174.7760,date:"Sat 16 May",time:"6:00 PM",location:"Prefab Café, Cuba Street",attendees:28,maxAttendees:50,newcomer:true,desc:"Weekly informal gathering on Wellington's most vibrant street. Meet expats, students, and friendly locals over great coffee and good conversation.",avatarColors:['#7C3AED','#EF4444','#0D9488','#2563EB','#EA580C']},
+  {id:32,city:'wellington',name:"Te Papa Museum Free Guided Tour",category:"culture",lat:-41.2904,lng:174.7818,date:"Sun 17 May",time:"11:00 AM",location:"Te Papa Tongarewa, Cable Street",attendees:20,maxAttendees:25,newcomer:true,desc:"Free volunteer-led tour of NZ's national museum, covering Māori taonga, NZ history, and natural environment. All welcome.",avatarColors:['#0D9488','#7C3AED','#2563EB','#DB2777','#EF4444']},
+  {id:33,city:'wellington',name:"Oriental Bay Parkrun",category:"sports",lat:-41.2873,lng:174.7913,date:"Sun 17 May",time:"8:00 AM",location:"Oriental Bay, Frank Kitts Park end",attendees:45,maxAttendees:200,newcomer:true,desc:"Free 5km timed run along Wellington's beautiful waterfront. Walkers welcome. Register once at parkrun.org.nz.",avatarColors:['#EF4444','#16A34A','#7C3AED','#EA580C','#0D9488']},
+  {id:34,city:'wellington',name:"Newtown Language Café",category:"learning",lat:-41.3060,lng:174.7777,date:"Thu 21 May",time:"5:30 PM",location:"Newtown Community Centre, Hall 2",attendees:15,maxAttendees:20,newcomer:true,desc:"Language café connecting newcomers with volunteer conversational partners. All languages and levels welcome. Snacks provided.",avatarColors:['#2563EB','#7C3AED','#0D9488','#EF4444','#EA580C']},
+  {id:35,city:'wellington',name:"Zealandia Ecosanctuary Walk",category:"outdoor",lat:-41.2900,lng:174.7460,date:"Mon 18 May",time:"9:30 AM",location:"Zealandia Ecosanctuary, Waiapu Rd",attendees:12,maxAttendees:16,newcomer:false,desc:"Guided sunrise walk in the world's first fully-fenced urban ecosanctuary. See native tuatara, kākā, and little spotted kiwi.",avatarColors:['#16A34A','#0D9488','#7C3AED','#EF4444','#2563EB']},
+  {id:60,city:'wellington',name:"Harbourside Market",category:"food",lat:-41.2867,lng:174.7795,date:"Mon 18 May",time:"7:30 AM",location:"Waitangi Park, Cable Street",attendees:400,maxAttendees:2000,newcomer:true,desc:"Wellington's beloved Sunday farmers and food market along the waterfront. Over 60 stalls featuring fresh produce, artisan goods, and street food from Korean, Indian, Vietnamese, and Pacific Island vendors. A weekly ritual for many newcomers to find tastes of home.",avatarColors:['#EA580C','#EF4444','#7C3AED','#16A34A','#0D9488']},
 
   // ── Christchurch ──
-  {id:36,city:'christchurch',name:"Hagley Park Newcomers Picnic",category:"social",lat:-43.5279,lng:172.6320,date:"Sat 17 May",time:"12:00 PM",location:"Hagley Park North, by the Rose Garden",attendees:22,maxAttendees:40,newcomer:true,desc:"BYO picnic on Christchurch's largest park. A relaxed way to meet other newcomers and locals. Frisbees and games provided!",avatarColors:['#7C3AED','#EF4444','#0D9488','#2563EB','#EA580C']},
-  {id:37,city:'christchurch',name:"Christchurch Art Gallery Tour",category:"culture",lat:-43.5318,lng:172.6353,date:"Sun 18 May",time:"1:00 PM",location:"Christchurch Art Gallery Te Puna o Waiwhetū",attendees:18,maxAttendees:25,newcomer:true,desc:"Free guided tour of the Gallery's permanent collection, including contemporary NZ and Canterbury landscape art.",avatarColors:['#0D9488','#7C3AED','#DB2777','#2563EB','#6B7280']},
-  {id:38,city:'christchurch',name:"New Brighton Beach Sports Day",category:"sports",lat:-43.5063,lng:172.7233,date:"Sat 17 May",time:"2:00 PM",location:"New Brighton Beach, Main Parking Area",attendees:25,maxAttendees:50,newcomer:true,desc:"Volleyball, cricket, touch rugby on the beach. All abilities welcome. Great way to meet active people in Christchurch.",avatarColors:['#EF4444','#16A34A','#7C3AED','#EA580C','#0D9488']},
-  {id:39,city:'christchurch',name:"Banks Peninsula Day Hike",category:"outdoor",lat:-43.7500,lng:172.9200,date:"Sun 25 May",time:"8:30 AM",location:"Akaroa Village (shuttle from Christchurch CBD)",attendees:10,maxAttendees:12,newcomer:false,desc:"Full-day hike around the beautiful volcanic Banks Peninsula. Stunning harbour views and native bush.",avatarColors:['#16A34A','#EF4444','#7C3AED','#2563EB','#0D9488']},
-  {id:40,city:'christchurch',name:"Canterbury English Language Exchange",category:"learning",lat:-43.5340,lng:172.6380,date:"Thu 22 May",time:"5:00 PM",location:"Tūranga Library, Level 4 Rooftop",attendees:14,maxAttendees:20,newcomer:true,desc:"Language exchange connecting English learners with native speakers. Pairs change every 15 minutes to maximise practice.",avatarColors:['#2563EB','#7C3AED','#0D9488','#EA580C','#EF4444']},
-  {id:61,city:'christchurch',name:"Riverside Market",category:"food",lat:-43.5321,lng:172.6389,date:"Sat 17 May",time:"9:00 AM",location:"Riverside Market, Oxford Terrace",attendees:350,maxAttendees:1500,newcomer:true,desc:"Christchurch's award-winning indoor food market beside the Avon River. Home to 50+ vendors including Asian dumpling kitchens, Middle Eastern bakeries, Pacific Island desserts, and a dedicated international cuisine hall. Many newcomers describe it as 'the first place that felt like home.'",avatarColors:['#EA580C','#7C3AED','#EF4444','#0D9488','#16A34A']},
+  {id:36,city:'christchurch',name:"Hagley Park Newcomers Picnic",category:"social",lat:-43.5279,lng:172.6320,date:"Sun 17 May",time:"12:00 PM",location:"Hagley Park North, by the Rose Garden",attendees:22,maxAttendees:40,newcomer:true,desc:"BYO picnic on Christchurch's largest park. A relaxed way to meet other newcomers and locals. Frisbees and games provided!",avatarColors:['#7C3AED','#EF4444','#0D9488','#2563EB','#EA580C']},
+  {id:37,city:'christchurch',name:"Christchurch Art Gallery Tour",category:"culture",lat:-43.5318,lng:172.6353,date:"Mon 18 May",time:"1:00 PM",location:"Christchurch Art Gallery Te Puna o Waiwhetū",attendees:18,maxAttendees:25,newcomer:true,desc:"Free guided tour of the Gallery's permanent collection, including contemporary NZ and Canterbury landscape art.",avatarColors:['#0D9488','#7C3AED','#DB2777','#2563EB','#6B7280']},
+  {id:38,city:'christchurch',name:"New Brighton Beach Sports Day",category:"sports",lat:-43.5063,lng:172.7233,date:"Sun 17 May",time:"2:00 PM",location:"New Brighton Beach, Main Parking Area",attendees:25,maxAttendees:50,newcomer:true,desc:"Volleyball, cricket, touch rugby on the beach. All abilities welcome. Great way to meet active people in Christchurch.",avatarColors:['#EF4444','#16A34A','#7C3AED','#EA580C','#0D9488']},
+  {id:39,city:'christchurch',name:"Banks Peninsula Day Hike",category:"outdoor",lat:-43.7500,lng:172.9200,date:"Mon 25 May",time:"8:30 AM",location:"Akaroa Village (shuttle from Christchurch CBD)",attendees:10,maxAttendees:12,newcomer:false,desc:"Full-day hike around the beautiful volcanic Banks Peninsula. Stunning harbour views and native bush.",avatarColors:['#16A34A','#EF4444','#7C3AED','#2563EB','#0D9488']},
+  {id:40,city:'christchurch',name:"Canterbury English Language Exchange",category:"learning",lat:-43.5340,lng:172.6380,date:"Fri 22 May",time:"5:00 PM",location:"Tūranga Library, Level 4 Rooftop",attendees:14,maxAttendees:20,newcomer:true,desc:"Language exchange connecting English learners with native speakers. Pairs change every 15 minutes to maximise practice.",avatarColors:['#2563EB','#7C3AED','#0D9488','#EA580C','#EF4444']},
+  {id:61,city:'christchurch',name:"Riverside Market",category:"food",lat:-43.5321,lng:172.6389,date:"Sun 17 May",time:"9:00 AM",location:"Riverside Market, Oxford Terrace",attendees:350,maxAttendees:1500,newcomer:true,desc:"Christchurch's award-winning indoor food market beside the Avon River. Home to 50+ vendors including Asian dumpling kitchens, Middle Eastern bakeries, Pacific Island desserts, and a dedicated international cuisine hall. Many newcomers describe it as 'the first place that felt like home.'",avatarColors:['#EA580C','#7C3AED','#EF4444','#0D9488','#16A34A']},
 
   // ── Tauranga ──
-  {id:41,city:'tauranga',name:"Mount Maunganui Sunrise Run",category:"sports",lat:-37.6333,lng:176.1860,date:"Sat 17 May",time:"7:00 AM",location:"Mount Maunganui Base Track, Main Car Park",attendees:30,maxAttendees:80,newcomer:true,desc:"Weekly sunrise run around the base of the iconic Mount. Flat, scenic, and great for all fitness levels. Coffee after!",avatarColors:['#EF4444','#16A34A','#7C3AED','#EA580C','#0D9488']},
-  {id:42,city:'tauranga',name:"Tauranga Multicultural Festival",category:"culture",lat:-37.6878,lng:176.1651,date:"Sat 24 May",time:"11:00 AM",location:"Tauranga Waterfront, The Strand",attendees:200,maxAttendees:2000,newcomer:true,desc:"Bay of Plenty's biggest multicultural celebration — music, dance, food stalls from 30+ cultures represented in the region.",avatarColors:['#0D9488','#7C3AED','#DB2777','#EF4444','#6B7280']},
-  {id:43,city:'tauranga',name:"Harbour Walk & Social",category:"social",lat:-37.6803,lng:176.1673,date:"Sun 18 May",time:"10:00 AM",location:"Tauranga Waterfront, Coronation Pier",attendees:16,maxAttendees:30,newcomer:true,desc:"Easy 4km harbour walk followed by brunch at a local café. Guided by Tauranga Newcomers Network volunteers.",avatarColors:['#7C3AED','#0D9488','#EF4444','#EA580C','#DB2777']},
-  {id:44,city:'tauranga',name:"Bay of Plenty Language Café",category:"learning",lat:-37.6878,lng:176.1651,date:"Wed 21 May",time:"6:00 PM",location:"Tauranga City Library, Meeting Room 1",attendees:12,maxAttendees:18,newcomer:true,desc:"Practice English and meet new people in a warm, welcoming environment. Topics change weekly.",avatarColors:['#2563EB','#7C3AED','#0D9488','#EA580C','#EF4444']},
-  {id:45,city:'tauranga',name:"Tauranga Night Markets",category:"food",lat:-37.6900,lng:176.1670,date:"Fri 16 May",time:"5:00 PM",location:"Tauranga Night Markets, Wharf Street",attendees:150,maxAttendees:1000,newcomer:true,desc:"Weekly outdoor food market on the Tauranga waterfront with cuisine from across Asia, Polynesia, and the Pacific.",avatarColors:['#EA580C','#EF4444','#7C3AED','#16A34A','#0D9488']},
+  {id:41,city:'tauranga',name:"Mount Maunganui Sunrise Run",category:"sports",lat:-37.6333,lng:176.1860,date:"Sun 17 May",time:"7:00 AM",location:"Mount Maunganui Base Track, Main Car Park",attendees:30,maxAttendees:80,newcomer:true,desc:"Weekly sunrise run around the base of the iconic Mount. Flat, scenic, and great for all fitness levels. Coffee after!",avatarColors:['#EF4444','#16A34A','#7C3AED','#EA580C','#0D9488']},
+  {id:42,city:'tauranga',name:"Tauranga Multicultural Festival",category:"culture",lat:-37.6878,lng:176.1651,date:"Sun 24 May",time:"11:00 AM",location:"Tauranga Waterfront, The Strand",attendees:200,maxAttendees:2000,newcomer:true,desc:"Bay of Plenty's biggest multicultural celebration — music, dance, food stalls from 30+ cultures represented in the region.",avatarColors:['#0D9488','#7C3AED','#DB2777','#EF4444','#6B7280']},
+  {id:43,city:'tauranga',name:"Harbour Walk & Social",category:"social",lat:-37.6803,lng:176.1673,date:"Mon 18 May",time:"10:00 AM",location:"Tauranga Waterfront, Coronation Pier",attendees:16,maxAttendees:30,newcomer:true,desc:"Easy 4km harbour walk followed by brunch at a local café. Guided by Tauranga Newcomers Network volunteers.",avatarColors:['#7C3AED','#0D9488','#EF4444','#EA580C','#DB2777']},
+  {id:44,city:'tauranga',name:"Bay of Plenty Language Café",category:"learning",lat:-37.6878,lng:176.1651,date:"Thu 21 May",time:"6:00 PM",location:"Tauranga City Library, Meeting Room 1",attendees:12,maxAttendees:18,newcomer:true,desc:"Practice English and meet new people in a warm, welcoming environment. Topics change weekly.",avatarColors:['#2563EB','#7C3AED','#0D9488','#EA580C','#EF4444']},
+  {id:45,city:'tauranga',name:"Tauranga Night Markets",category:"food",lat:-37.6900,lng:176.1670,date:"Sat 16 May",time:"5:00 PM",location:"Tauranga Night Markets, Wharf Street",attendees:150,maxAttendees:1000,newcomer:true,desc:"Weekly outdoor food market on the Tauranga waterfront with cuisine from across Asia, Polynesia, and the Pacific.",avatarColors:['#EA580C','#EF4444','#7C3AED','#16A34A','#0D9488']},
 
   // ── Rotorua ──
-  {id:46,city:'rotorua',name:"Rotorua Lakefront Social Run",category:"sports",lat:-38.1460,lng:176.2497,date:"Sat 17 May",time:"8:30 AM",location:"Rotorua Lakefront, near Sulphur Bay",attendees:20,maxAttendees:60,newcomer:true,desc:"5km lakefront run with views across Lake Rotorua. All paces welcome — walkers included. Free, no registration needed.",avatarColors:['#EF4444','#16A34A','#7C3AED','#EA580C','#0D9488']},
-  {id:47,city:'rotorua',name:"Te Puia Cultural Evening",category:"culture",lat:-38.1551,lng:176.2432,date:"Fri 16 May",time:"5:30 PM",location:"Te Puia, Hemo Road",attendees:35,maxAttendees:60,newcomer:true,desc:"Experience Māori culture at NZ's foremost geothermal and cultural attraction. Includes haka performance, traditional carving, and weaving demonstrations.",avatarColors:['#0D9488','#7C3AED','#DB2777','#EF4444','#6B7280']},
-  {id:48,city:'rotorua',name:"Rotorua Night Market",category:"food",lat:-38.1380,lng:176.2530,date:"Thu 22 May",time:"5:00 PM",location:"Tutanekai Street (Eat Streat)",attendees:120,maxAttendees:500,newcomer:true,desc:"Rotorua's famous weekly street food market along Eat Streat — Pacific Island, Asian, and NZ fusion cuisines.",avatarColors:['#EA580C','#EF4444','#7C3AED','#16A34A','#0D9488']},
-  {id:49,city:'rotorua',name:"Whakarewarewa Forest Walk",category:"outdoor",lat:-38.1730,lng:176.2710,date:"Sun 18 May",time:"9:00 AM",location:"Redwoods Visitor Centre, Long Mile Road",attendees:14,maxAttendees:20,newcomer:false,desc:"Guided walk through the iconic Redwood Forest with native bird spotting. The towering Californian redwoods are spectacular.",avatarColors:['#16A34A','#EF4444','#7C3AED','#2563EB','#0D9488']},
-  {id:50,city:'rotorua',name:"Rotorua Newcomers Kōrero",category:"social",lat:-38.1368,lng:176.2497,date:"Tue 20 May",time:"6:00 PM",location:"Rotorua Central Library, Community Room",attendees:10,maxAttendees:20,newcomer:true,desc:"Monthly gathering for people new to Rotorua. Share stories, find activities, and connect with support services. Māori welcome is always extended.",avatarColors:['#7C3AED','#0D9488','#EF4444','#EA580C','#DB2777']},
+  {id:46,city:'rotorua',name:"Rotorua Lakefront Social Run",category:"sports",lat:-38.1460,lng:176.2497,date:"Sun 17 May",time:"8:30 AM",location:"Rotorua Lakefront, near Sulphur Bay",attendees:20,maxAttendees:60,newcomer:true,desc:"5km lakefront run with views across Lake Rotorua. All paces welcome — walkers included. Free, no registration needed.",avatarColors:['#EF4444','#16A34A','#7C3AED','#EA580C','#0D9488']},
+  {id:47,city:'rotorua',name:"Te Puia Cultural Evening",category:"culture",lat:-38.1551,lng:176.2432,date:"Sat 16 May",time:"5:30 PM",location:"Te Puia, Hemo Road",attendees:35,maxAttendees:60,newcomer:true,desc:"Experience Māori culture at NZ's foremost geothermal and cultural attraction. Includes haka performance, traditional carving, and weaving demonstrations.",avatarColors:['#0D9488','#7C3AED','#DB2777','#EF4444','#6B7280']},
+  {id:48,city:'rotorua',name:"Rotorua Night Market",category:"food",lat:-38.1380,lng:176.2530,date:"Fri 22 May",time:"5:00 PM",location:"Tutanekai Street (Eat Streat)",attendees:120,maxAttendees:500,newcomer:true,desc:"Rotorua's famous weekly street food market along Eat Streat — Pacific Island, Asian, and NZ fusion cuisines.",avatarColors:['#EA580C','#EF4444','#7C3AED','#16A34A','#0D9488']},
+  {id:49,city:'rotorua',name:"Whakarewarewa Forest Walk",category:"outdoor",lat:-38.1730,lng:176.2710,date:"Mon 18 May",time:"9:00 AM",location:"Redwoods Visitor Centre, Long Mile Road",attendees:14,maxAttendees:20,newcomer:false,desc:"Guided walk through the iconic Redwood Forest with native bird spotting. The towering Californian redwoods are spectacular.",avatarColors:['#16A34A','#EF4444','#7C3AED','#2563EB','#0D9488']},
+  {id:50,city:'rotorua',name:"Rotorua Newcomers Kōrero",category:"social",lat:-38.1368,lng:176.2497,date:"Wed 20 May",time:"6:00 PM",location:"Rotorua Central Library, Community Room",attendees:10,maxAttendees:20,newcomer:true,desc:"Monthly gathering for people new to Rotorua. Share stories, find activities, and connect with support services. Māori welcome is always extended.",avatarColors:['#7C3AED','#0D9488','#EF4444','#EA580C','#DB2777']},
 
   // ── Dunedin ──
-  {id:51,city:'dunedin',name:"Otago Uni International Student Mixer",category:"social",lat:-45.8642,lng:170.5143,date:"Fri 16 May",time:"6:00 PM",location:"Otago University, Union Hall",attendees:40,maxAttendees:80,newcomer:true,desc:"Welcome mixer hosted by the Otago International Student Association — games, prizes, and a great chance to meet people from 50+ countries.",avatarColors:['#7C3AED','#EF4444','#0D9488','#2563EB','#EA580C']},
-  {id:52,city:'dunedin',name:"Dunedin Botanic Garden Walk",category:"outdoor",lat:-45.8680,lng:170.5070,date:"Sat 17 May",time:"10:00 AM",location:"Dunedin Botanic Garden, Opoho Road",attendees:9,maxAttendees:15,newcomer:true,desc:"Guided autumn walk through NZ's oldest botanic garden. See the spectacular rhododendron dell and Victorian glasshouses.",avatarColors:['#16A34A','#0D9488','#7C3AED','#EF4444','#2563EB']},
-  {id:53,city:'dunedin',name:"Otago Museum Night Tour",category:"culture",lat:-45.8654,lng:170.5152,date:"Thu 22 May",time:"6:30 PM",location:"Otago Museum, Great King Street",attendees:22,maxAttendees:35,newcomer:true,desc:"After-hours museum tour covering Māori and Pacific Island taonga, Discovery World science exhibits, and the famous butterfly house.",avatarColors:['#0D9488','#7C3AED','#DB2777','#2563EB','#6B7280']},
-  {id:54,city:'dunedin',name:"St Clair Beach Volleyball",category:"sports",lat:-45.9080,lng:170.5018,date:"Sat 17 May",time:"2:00 PM",location:"St Clair Beach, Beach Volleyball Courts",attendees:14,maxAttendees:24,newcomer:true,desc:"Casual beach volleyball on Dunedin's famous surf beach. All levels welcome — newbies actively encouraged!",avatarColors:['#EF4444','#7C3AED','#16A34A','#0D9488','#2563EB']},
-  {id:62,city:'dunedin',name:"Dunedin Farmers & Asian Food Market",category:"food",lat:-45.8745,lng:170.5035,date:"Sat 17 May",time:"8:00 AM",location:"Otago Farmers Market, Railway Station Grounds",attendees:180,maxAttendees:800,newcomer:true,desc:"Dunedin's Saturday institution — fresh South Island produce alongside a growing international food section. Vietnamese bánh mì, Japanese onigiri, Indian curries, and homemade dumplings. Beloved by the city's international student community as an affordable and social weekend ritual.",avatarColors:['#EA580C','#EF4444','#7C3AED','#0D9488','#16A34A']},
+  {id:51,city:'dunedin',name:"Otago Uni International Student Mixer",category:"social",lat:-45.8642,lng:170.5143,date:"Sat 16 May",time:"6:00 PM",location:"Otago University, Union Hall",attendees:40,maxAttendees:80,newcomer:true,desc:"Welcome mixer hosted by the Otago International Student Association — games, prizes, and a great chance to meet people from 50+ countries.",avatarColors:['#7C3AED','#EF4444','#0D9488','#2563EB','#EA580C']},
+  {id:52,city:'dunedin',name:"Dunedin Botanic Garden Walk",category:"outdoor",lat:-45.8680,lng:170.5070,date:"Sun 17 May",time:"10:00 AM",location:"Dunedin Botanic Garden, Opoho Road",attendees:9,maxAttendees:15,newcomer:true,desc:"Guided autumn walk through NZ's oldest botanic garden. See the spectacular rhododendron dell and Victorian glasshouses.",avatarColors:['#16A34A','#0D9488','#7C3AED','#EF4444','#2563EB']},
+  {id:53,city:'dunedin',name:"Otago Museum Night Tour",category:"culture",lat:-45.8654,lng:170.5152,date:"Fri 22 May",time:"6:30 PM",location:"Otago Museum, Great King Street",attendees:22,maxAttendees:35,newcomer:true,desc:"After-hours museum tour covering Māori and Pacific Island taonga, Discovery World science exhibits, and the famous butterfly house.",avatarColors:['#0D9488','#7C3AED','#DB2777','#2563EB','#6B7280']},
+  {id:54,city:'dunedin',name:"St Clair Beach Volleyball",category:"sports",lat:-45.9080,lng:170.5018,date:"Sun 17 May",time:"2:00 PM",location:"St Clair Beach, Beach Volleyball Courts",attendees:14,maxAttendees:24,newcomer:true,desc:"Casual beach volleyball on Dunedin's famous surf beach. All levels welcome — newbies actively encouraged!",avatarColors:['#EF4444','#7C3AED','#16A34A','#0D9488','#2563EB']},
+  {id:62,city:'dunedin',name:"Dunedin Farmers & Asian Food Market",category:"food",lat:-45.8745,lng:170.5035,date:"Sun 17 May",time:"8:00 AM",location:"Otago Farmers Market, Railway Station Grounds",attendees:180,maxAttendees:800,newcomer:true,desc:"Dunedin's Saturday institution — fresh South Island produce alongside a growing international food section. Vietnamese bánh mì, Japanese onigiri, Indian curries, and homemade dumplings. Beloved by the city's international student community as an affordable and social weekend ritual.",avatarColors:['#EA580C','#EF4444','#7C3AED','#0D9488','#16A34A']},
 
+  {id:63,city:'hamilton',name:"Waikato Museum Evening Talk",category:"culture",lat:-37.7891,lng:175.2792,date:"Wed 17 Jun",time:"6:30 PM",location:"Waikato Museum Te Whare Taonga o Waikato",attendees:18,maxAttendees:50,newcomer:true,desc:"Monthly public lecture exploring Māori history and NZ culture. This month: 'Pacific Migration — New Roots in Aotearoa.'",avatarColors:['#0D9488','#7C3AED','#DB2777','#2563EB','#6B7280']},
+  {id:64,city:'hamilton',name:"Multicultural Potluck Dinner",category:"social",lat:-37.7870,lng:175.2850,date:"Sat 20 Jun",time:"6:00 PM",location:"Hamilton Multicultural Centre, Tristram St",attendees:22,maxAttendees:35,newcomer:true,desc:"Bring a dish from your home country and share stories over food. A warm, inclusive evening for newcomers and locals alike.",avatarColors:['#7C3AED','#EA580C','#EF4444','#0D9488','#2563EB']},
   // ── Palmerston North ──
-  {id:55,city:'palmerston_north',name:"Massey Uni International Coffee Morning",category:"social",lat:-40.3752,lng:175.6113,date:"Fri 16 May",time:"10:00 AM",location:"Massey University, Student Union Café",attendees:18,maxAttendees:30,newcomer:true,desc:"Weekly drop-in coffee morning for international students, migrants, and locals at Massey University. Extremely welcoming!",avatarColors:['#7C3AED','#EF4444','#0D9488','#2563EB','#EA580C']},
-  {id:56,city:'palmerston_north',name:"Victoria Esplanade Walk",category:"outdoor",lat:-40.3591,lng:175.6198,date:"Sun 18 May",time:"9:00 AM",location:"Victoria Esplanade, Main Entrance",attendees:11,maxAttendees:20,newcomer:true,desc:"Guided walk through one of NZ's most beautiful urban parks, featuring sunken rose gardens, native aviary, and riverside trails.",avatarColors:['#16A34A','#EF4444','#7C3AED','#0D9488','#2563EB']},
-  {id:57,city:'palmerston_north',name:"Square Edge Community Arts Night",category:"culture",lat:-40.3563,lng:175.6108,date:"Sat 17 May",time:"6:00 PM",location:"Square Edge Community Arts, Princess St",attendees:15,maxAttendees:25,newcomer:true,desc:"Monthly arts evening featuring local artists, musicians, and spoken-word performers. Strong focus on multicultural expression.",avatarColors:['#0D9488','#7C3AED','#DB2777','#EF4444','#6B7280']},
-  {id:58,city:'palmerston_north',name:"Palmy Volleyball Social",category:"sports",lat:-40.3580,lng:175.6090,date:"Tue 20 May",time:"7:00 PM",location:"Lido Aquatic Centre, Sports Hall",attendees:16,maxAttendees:24,newcomer:true,desc:"Indoor volleyball social — fun and inclusive, no experience needed. Teams are mixed to help you meet new people.",avatarColors:['#EF4444','#7C3AED','#16A34A','#0D9488','#2563EB']},
-  {id:59,city:'palmerston_north',name:"Palmy Night Markets",category:"food",lat:-40.3560,lng:175.6100,date:"Fri 16 May",time:"5:00 PM",location:"The Square, Palmerston North",attendees:80,maxAttendees:500,newcomer:true,desc:"Weekly food market in the heart of Palmerston North featuring Vietnamese, Indian, Tongan, and NZ fusion cuisines.",avatarColors:['#EA580C','#EF4444','#7C3AED','#16A34A','#0D9488']},
+  {id:55,city:'palmerston_north',name:"Massey Uni International Coffee Morning",category:"social",lat:-40.3752,lng:175.6113,date:"Sat 16 May",time:"10:00 AM",location:"Massey University, Student Union Café",attendees:18,maxAttendees:30,newcomer:true,desc:"Weekly drop-in coffee morning for international students, migrants, and locals at Massey University. Extremely welcoming!",avatarColors:['#7C3AED','#EF4444','#0D9488','#2563EB','#EA580C']},
+  {id:56,city:'palmerston_north',name:"Victoria Esplanade Walk",category:"outdoor",lat:-40.3591,lng:175.6198,date:"Mon 18 May",time:"9:00 AM",location:"Victoria Esplanade, Main Entrance",attendees:11,maxAttendees:20,newcomer:true,desc:"Guided walk through one of NZ's most beautiful urban parks, featuring sunken rose gardens, native aviary, and riverside trails.",avatarColors:['#16A34A','#EF4444','#7C3AED','#0D9488','#2563EB']},
+  {id:57,city:'palmerston_north',name:"Square Edge Community Arts Night",category:"culture",lat:-40.3563,lng:175.6108,date:"Sun 17 May",time:"6:00 PM",location:"Square Edge Community Arts, Princess St",attendees:15,maxAttendees:25,newcomer:true,desc:"Monthly arts evening featuring local artists, musicians, and spoken-word performers. Strong focus on multicultural expression.",avatarColors:['#0D9488','#7C3AED','#DB2777','#EF4444','#6B7280']},
+  {id:58,city:'palmerston_north',name:"Palmy Volleyball Social",category:"sports",lat:-40.3580,lng:175.6090,date:"Wed 20 May",time:"7:00 PM",location:"Lido Aquatic Centre, Sports Hall",attendees:16,maxAttendees:24,newcomer:true,desc:"Indoor volleyball social — fun and inclusive, no experience needed. Teams are mixed to help you meet new people.",avatarColors:['#EF4444','#7C3AED','#16A34A','#0D9488','#2563EB']},
+  {id:59,city:'palmerston_north',name:"Palmy Night Markets",category:"food",lat:-40.3560,lng:175.6100,date:"Sat 16 May",time:"5:00 PM",location:"The Square, Palmerston North",attendees:80,maxAttendees:500,newcomer:true,desc:"Weekly food market in the heart of Palmerston North featuring Vietnamese, Indian, Tongan, and NZ fusion cuisines.",avatarColors:['#EA580C','#EF4444','#7C3AED','#16A34A','#0D9488']},
 ];
 
 // ════════════════════════════════════════
@@ -1685,6 +1784,7 @@ const TILE_STYLES={
 //  STATE
 // ════════════════════════════════════════
 let currentCity='hamilton', activeFilters=new Set(['all']);
+let timeFilter='all'; // 'week'|'month'|'all'|'range'|'today'
 let savedActivities=new Set(), currentDetailId=null;
 let currentTile=null;
 let timeBrushIds=null; // Set<id> when Timeline→Map filter active, null = inactive
@@ -1830,6 +1930,7 @@ function getFilteredActivities({checkBounds=false,bounds=null}={}){
       if(!catFilters.size&&!hasEnglish&&!hasSolo)return false;
     }
     if(!withinDist(a))return false;
+    if(!withinTimeFilter(a))return false;
     if(q&&!a.name.toLowerCase().includes(q)&&!a.location.toLowerCase().includes(q)&&!a.desc.toLowerCase().includes(q))return false;
     if(checkBounds&&bounds&&!bounds.contains(L.latLng(a.lat,a.lng)))return false;
     return true;
@@ -1891,8 +1992,6 @@ function renderMarkers(){
   document.getElementById('statCity').textContent=CITIES[currentCity].label;
   const _ncList=list.filter(a=>a.newcomer);
   document.getElementById('statNC').textContent=_ncList.length;
-  const _ncPctEl=document.getElementById('statNCPct');
-  if(_ncPctEl)_ncPctEl.textContent=(list.length>0?Math.round(_ncList.length/list.length*100):0)+'%';
   // defer list update until map settles
   setTimeout(updateActivityList, 80);
 }
@@ -2282,6 +2381,62 @@ function fitToFilter(){
     'success', 2600
   );
 }
+
+// ── Category dropdown ──────────────────────────────────────────────────────
+function toggleCatDrop(e){
+  e&&e.stopPropagation();
+  const menu=document.getElementById('catDdMenu');
+  const btn=document.getElementById('catDdBtn');
+  if(menu.classList.contains('open')){closeCatDrop();return;}
+  btn.classList.add('open');
+  btn.setAttribute('aria-expanded','true');
+  menu.classList.add('open');
+}
+function closeCatDrop(){
+  const btn=document.getElementById('catDdBtn');
+  const menu=document.getElementById('catDdMenu');
+  if(btn){btn.classList.remove('open');btn.setAttribute('aria-expanded','false');}
+  if(menu) menu.classList.remove('open');
+}
+function pickCatFilter(cat){
+  closeCatDrop();
+  toggleFilter(cat);
+  updateResetBtn();
+}
+function syncCatDropdown(){
+  const btn=document.getElementById('catDdBtn');
+  const icon=document.getElementById('catDdIcon');
+  const label=document.getElementById('catDdLabel');
+  if(!btn||!icon||!label) return;
+  const allActive=activeFilters.has('all');
+  const catFilters=[...activeFilters].filter(f=>f!=='all'&&f!=='english'&&f!=='solo');
+  if(allActive||catFilters.length===0){
+    icon.textContent='🗺️';
+    label.textContent='All Categories';
+    btn.classList.remove('is-filtered');
+  } else if(catFilters.length===1){
+    const cat=catFilters[0];
+    icon.textContent=CAT_EMOJI[cat]||'📌';
+    label.textContent=CAT_LABEL[cat]||cat;
+    btn.classList.add('is-filtered');
+    btn.style.background=`linear-gradient(135deg,${CAT_COLOR[cat]},${CAT_COLOR[cat]}cc)`;
+  } else {
+    icon.textContent='🔍';
+    label.textContent=`${catFilters.length} categories`;
+    btn.classList.add('is-filtered');
+    btn.style.background='';
+  }
+  // Update menu item active states
+  document.querySelectorAll('.cat-dd-item').forEach(item=>{
+    const dc=item.dataset.cat;
+    const isActive=dc==='all'?allActive:activeFilters.has(dc);
+    item.classList.toggle('active',isActive);
+  });
+}
+// Close on outside click
+document.addEventListener('click',e=>{
+  if(!document.getElementById('catDdWrap')?.contains(e.target)) closeCatDrop();
+});
 function toggleFilter(cat){
   if(cat==='all'){activeFilters=new Set(['all']);}
   else{
@@ -2323,6 +2478,8 @@ function updateChips(){
     ch.setAttribute('aria-pressed', isActive);
     if(isActive){ch.classList.add('active');} else {ch.classList.remove('active');}
   });
+  // Keep dropdown label in sync
+  syncCatDropdown();
 }
 
 function toggleScoreBreakdown(){
@@ -2457,6 +2614,8 @@ function showWeek(week) {
   // Force re-draw network with week data
   netInitialized[currentCity] = false;
   initNetworkWithWeek(week);
+  // Sync journey timeline highlight
+  syncJourneyToWeek(week);
 }
 
 function initNetworkWithWeek(week) {
@@ -2523,7 +2682,12 @@ function initNetworkWithWeek(week) {
     </div>`;
   }).join('');
 
-  drawNetworkGraph({nodes, links});
+  try {
+    drawNetworkGraph({nodes, links});
+  } catch(err) {
+    const sv = document.getElementById('netSvg');
+    if(sv) { sv.innerHTML = `<text x="20" y="40" fill="red" font-size="14">${err.message}</text>`; }
+  }
 }
 
 function drawNetworkGraph(data) {
@@ -2531,6 +2695,17 @@ function drawNetworkGraph(data) {
   svg.selectAll('*').remove();
   const W = 680, H = 460;
   svg.attr('viewBox', '0 0 680 460').attr('preserveAspectRatio','xMidYMid meet');
+
+  // Node size encoding: bigger = more shared activities
+  const _mc={};
+  data.links.forEach(l=>{
+    const s=typeof l.source==='object'?l.source.id:l.source;
+    const t=typeof l.target==='object'?l.target.id:l.target;
+    if(s==='you') _mc[t]=(l.sharedActs||[]).length||l.value;
+    if(t==='you') _mc[s]=(l.sharedActs||[]).length||l.value;
+  });
+  const _maxMc=Math.max(...Object.values(_mc),1);
+  const nodeR=d=>d.id==='you'?22:Math.round(13+(_mc[d.id]||0)/_maxMc*12);
 
   // Pin "You" at center
   const youNode = data.nodes.find(n => n.id === 'you');
@@ -2540,7 +2715,7 @@ function drawNetworkGraph(data) {
     .force('link', d3.forceLink(data.links).id(d => d.id).distance(Math.min(W, H) * 0.38))
     .force('charge', d3.forceManyBody().strength(-Math.min(W, H) * 2.2))
     .force('center', d3.forceCenter(W / 2, H / 2))
-    .force('collision', d3.forceCollide().radius(d => 52))
+    .force('collision', d3.forceCollide().radius(d => nodeR(d)+32))
     .alphaDecay(0.015);
 
   const defs = svg.append('defs');
@@ -2632,7 +2807,7 @@ function drawNetworkGraph(data) {
 
   // Main circle — dashed ring for inferred, solid for confirmed
   node.append('circle')
-    .attr('r', d => d.id==='you' ? 22 : 19)
+    .attr('r', d => nodeR(d))
     .attr('fill', d => d.id==='you' ? '#0F6E56' : '#fff')
     .attr('stroke', d => d.id==='you' ? 'rgba(255,255,255,.4)' : (CAT_COLOR[d.group]||'#94A3B8'))
     .attr('stroke-width', d => d.id==='you' ? 2 : 2.5)
@@ -2642,14 +2817,14 @@ function drawNetworkGraph(data) {
 
   // Confirmed badge (✦) for user-logged nodes
   node.filter(d => d.id!=='you' && !d.inferred).append('text')
-    .text('✦').attr('x',13).attr('y',13)
+    .text('✦').attr('x', d => nodeR(d)*0.68).attr('y', d => nodeR(d)*0.68)
     .attr('text-anchor','middle').attr('dominant-baseline','central')
     .attr('font-size',7).attr('fill','#0F6E56')
     .attr('filter','url(#kgShadow)').style('pointer-events','none');
 
   // Category dot badge on peer nodes (bottom-right)
   node.filter(d => d.id!=='you').append('circle')
-    .attr('cx',13).attr('cy',13).attr('r',6)
+    .attr('cx', d => nodeR(d)*0.68).attr('cy', d => nodeR(d)*0.68).attr('r',6)
     .attr('fill', d => CAT_COLOR[d.group]||'#94A3B8')
     .attr('stroke','#fff').attr('stroke-width',1.8)
     .style('pointer-events','none');
@@ -2800,6 +2975,59 @@ function updateTravelBanner(city){
 }
 function hideTravelBanner(){
   document.getElementById('travelBanner').classList.remove('show');
+}
+
+
+// ════════════════════════════════════════
+//  PERSONAL ATTENDANCE HISTORY
+// ════════════════════════════════════════
+// ISO date strings — used by the Timeline calendar to show personal activity records
+const ATTENDED_HISTORY = [
+  // ── March 2026 ──
+  {date:'2026-03-07', city:'hamilton', name:'Hamilton Lake Parkrun',       category:'sports'},
+  {date:'2026-03-11', city:'hamilton', name:'English Conversation Club',   category:'learning'},
+  {date:'2026-03-14', city:'hamilton', name:'Garden Place Night Market',   category:'food'},
+  {date:'2026-03-21', city:'hamilton', name:'Hamilton Lake Parkrun',       category:'sports'},
+  {date:'2026-03-25', city:'hamilton', name:'Te Reo Māori Workshop',       category:'culture'},
+  // ── April 2026 ──
+  {date:'2026-04-04', city:'hamilton', name:'Hamilton Lake Parkrun',       category:'sports'},
+  {date:'2026-04-08', city:'hamilton', name:'English Conversation Club',   category:'learning'},
+  {date:'2026-04-10', city:'hamilton', name:'Garden Place Night Market',   category:'food'},
+  {date:'2026-04-16', city:'hamilton', name:'Te Reo Māori Workshop',       category:'culture'},
+  {date:'2026-04-18', city:'hamilton', name:'Hamilton Lake Parkrun',       category:'sports'},
+  {date:'2026-04-22', city:'hamilton', name:'Newcomers Social Mixer',      category:'social'},
+  {date:'2026-04-24', city:'hamilton', name:'River Waikato Cleanup Day',   category:'volunteer'},
+  {date:'2026-04-30', city:'hamilton', name:'English Conversation Club',   category:'learning'},
+  // ── May 2026 ──
+  {date:'2026-05-03', city:'hamilton', name:'Hamilton Lake Parkrun',       category:'sports'},
+  {date:'2026-05-07', city:'hamilton', name:'English Conversation Club',   category:'learning'},
+  {date:'2026-05-10', city:'hamilton', name:'Hamilton Gardens Walk',       category:'outdoor'},
+  {date:'2026-05-14', city:'hamilton', name:'Board Games Café Night',      category:'social'},
+  {date:'2026-05-16', city:'hamilton', name:'Garden Place Night Market',   category:'food'},
+  {date:'2026-05-17', city:'hamilton', name:'Hamilton Lake Parkrun',       category:'sports'},
+  {date:'2026-05-17', city:'hamilton', name:'River Waikato Cleanup Day',   category:'volunteer'},
+  {date:'2026-05-19', city:'hamilton', name:'Te Reo Māori Workshop',       category:'culture'},
+  {date:'2026-05-21', city:'hamilton', name:'English Conversation Club',   category:'learning'},
+  {date:'2026-05-23', city:'hamilton', name:'Newcomers Social Mixer',      category:'social'},
+  // ── June 2026 (Hamilton) ──
+  {date:'2026-06-03', city:'hamilton', name:'English Conversation Club',   category:'learning'},
+  {date:'2026-06-05', city:'hamilton', name:'Garden Place Night Market',   category:'food'},
+  {date:'2026-06-06', city:'hamilton', name:'Hamilton Lake Parkrun',       category:'sports'},
+  {date:'2026-06-07', city:'hamilton', name:'Board Games Café Night',      category:'social'},
+  // ── Auckland ──
+  {date:'2026-05-16', city:'auckland', name:'Viaduct International Meetup',category:'social'},
+  {date:'2026-05-17', city:'auckland', name:'Cornwall Park Morning Run',   category:'sports'},
+  {date:'2026-05-21', city:'auckland', name:'Ponsonby Language Exchange',  category:'learning'},
+];
+
+function getAttendedCatsForCalDate(date){
+  const ds=`${tlYear}-${String(tlMonth+1).padStart(2,'0')}-${String(date).padStart(2,'0')}`;
+  const result={};
+  (ATTENDED_HISTORY||[]).filter(e=>e.city===currentCity && e.date===ds).forEach(e=>{
+    if(!result[e.category]) result[e.category]=[];
+    result[e.category].push(e);
+  });
+  return result;
 }
 
 // ════════════════════════════════════════
@@ -3159,48 +3387,13 @@ function brushFilter(cat){
 let panelMode='map';
 
 function setPanelMode(mode){
-  panelMode=mode;
-  const isMap=mode==='map';
-  document.getElementById('panelTabMap').classList.toggle('active',isMap);
-  document.getElementById('panelTabUp').classList.toggle('active',!isMap);
-  document.getElementById('sortBtns').style.display=isMap?'flex':'none';
-  document.getElementById('mapInsightBar').style.display=isMap?'flex':'none';
-  document.getElementById('alScroll').style.display=isMap?'flex':'none';
-  document.getElementById('upScroll').style.display=isMap?'none':'block';
-  if(!isMap) renderUpcoming();
+  panelMode='map';
+  document.getElementById('panelTabMap').classList.toggle('active',true);
+  document.getElementById('sortBtns').style.display='flex';
+  document.getElementById('mapInsightBar').style.display='flex';
+  document.getElementById('alScroll').style.display='flex';
 }
 
-function renderUpcoming(){
-  const el=document.getElementById('upScroll');
-  const dateGroups=['Fri 16 May','Sat 17 May','Sun 18 May','Mon 19 May','Tue 20 May',
-                    'Wed 21 May','Thu 22 May','Fri 23 May','Sat 24 May','Sun 25 May'];
-  const cats=activeFilters.has('all')?null:[...activeFilters];
-  let html='';
-  dateGroups.forEach(d=>{
-    let acts=ACTIVITIES.filter(a=>a.city===currentCity&&a.date===d);
-    if(cats) acts=acts.filter(a=>cats.includes(a.category));
-    if(!acts.length) return;
-    // Format date header nicely
-    const parts=d.split(' '); // ["Fri","16","May"]
-    html+=`<div class="up-date-hdr">${parts[0]} · ${parts[1]} ${parts[2]}</div>`;
-    acts.forEach(a=>{
-      const col=CAT_COLOR[a.category];
-      html+=`<div class="up-item" style="--uc:${col}" onclick="showDetail(${a.id})">
-        <div class="up-item-body">
-          <div class="up-item-name">${a.name}</div>
-          <div class="up-item-meta">
-            <span style="background:${col};color:#fff;font-size:9px;font-weight:700;border-radius:7px;padding:1px 6px">${CAT_LABEL[a.category]}</span>
-            <span>📍 ${a.location.split(',')[0]}</span>
-            ${a.newcomer?'<span>🌟</span>':''}
-          </div>
-        </div>
-        <div class="up-item-time">${a.time}</div>
-        <div class="up-item-arr">›</div>
-      </div>`;
-    });
-  });
-  el.innerHTML=html||`<div style="padding:32px 16px;text-align:center;color:#94A3B8;font-size:12px">No upcoming activities match the current filter.</div>`;
-}
 
 // ── Distance filter ───────────────────────────────────────────────────────────
 function haversineKm(lat1,lng1,lat2,lng2){
@@ -3214,7 +3407,107 @@ function setDist(km){
   if(sel) sel.value=km===null?'':String(km);
   renderMarkers();
   updateActivityList();
+  updateResetBtn();
 }
+
+function resetAllFilters(){
+  // Reset category
+  pickCatFilter('all');
+  // Reset date
+  dpClear();
+  // Reset distance
+  const ds=document.getElementById('distSelect');
+  if(ds){ds.value='';setDist(null);}
+  updateResetBtn();
+}
+
+function updateResetBtn(){
+  const btn=document.getElementById('resetAllBtn');
+  if(!btn) return;
+  const active = (typeof activeFilters!=='undefined' && !activeFilters.has('all'))
+    || (typeof timeFilter!=='undefined' && timeFilter!=='all')
+    || (typeof distFilter!=='undefined' && distFilter!==null);
+  btn.style.display = active ? 'inline-flex' : 'none';
+}
+
+// ── Time quick-filter for map ─────────────────────────────────────────────────
+// Mock date range: activities span Fri 16 May → Sun 25 May 2026
+// "This Week" = 16–22 May, "This Month" = all, "All" = no filter
+const _MONTHS={Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
+function _parseDateStr(s){
+  const m=s.match(/(\d+)\s+(\w+)/);
+  if(!m) return null;
+  return new Date(2026,_MONTHS[m[2]]??4,parseInt(m[1])||1);
+}
+const _WEEK_END = new Date(2026,4,22);   // 22 May (Sun)
+const _WEEK_START = new Date(2026,4,16); // 16 May (Fri) — start of data
+const _MONTH_END = new Date(2026,4,31);
+
+function withinTimeFilter(a){
+  if(timeFilter==='all') return true;
+  const d=_parseDateStr(a.date);
+  if(!d) return true;
+  if(timeFilter==='today') return d.getTime()===_WEEK_START.getTime();
+  if(timeFilter==='week')  return d>=_WEEK_START && d<=_WEEK_END;
+  if(timeFilter==='month') return d>=_WEEK_START && d<=_MONTH_END;
+  if(timeFilter==='range'){
+    if(_dpRangeStart&&_dpRangeEnd) return d>=_dpRangeStart&&d<=_dpRangeEnd;
+    if(_dpRangeStart) return d>=_dpRangeStart;
+    return true;
+  }
+  return true;
+}
+// ── Date picker state ─────────────────────────────────────────────────────
+let _dpRangeStart=null,_dpRangeEnd=null,_dpCalYear=2026,_dpCalMonth=4;
+function toggleDatePicker(e){
+  e.stopPropagation();
+  const pop=document.getElementById('dpPopover');
+  pop.style.display=(pop.style.display==='none'||!pop.style.display)?'block':'none';
+  if(pop.style.display==='block') _dpRenderCal();
+}
+function closeDatePicker(){const p=document.getElementById('dpPopover');if(p)p.style.display='none';}
+document.addEventListener('click',e=>{const w=document.getElementById('dpWrap');if(w&&!w.contains(e.target))closeDatePicker();});
+function dpQuick(q){_dpRangeStart=null;_dpRangeEnd=null;timeFilter=q;_dpUpdateQuickBtns();_dpUpdateTriggerLabel();_dpRenderCal();renderMarkers();if(typeof updateActivityList==='function')updateActivityList();updateResetBtn();}
+function dpClear(){_dpRangeStart=null;_dpRangeEnd=null;timeFilter='all';_dpUpdateQuickBtns();_dpUpdateTriggerLabel();_dpRenderCal();renderMarkers();if(typeof updateActivityList==='function')updateActivityList();updateResetBtn();}
+function dpNavMonth(dir){_dpCalMonth+=dir;if(_dpCalMonth<0){_dpCalMonth=11;_dpCalYear--;}if(_dpCalMonth>11){_dpCalMonth=0;_dpCalYear++;}  _dpRenderCal();}
+function _dpPickDay(yr,mo,day){
+  const d=new Date(yr,mo,day);
+  if(!_dpRangeStart||(_dpRangeStart&&_dpRangeEnd)){_dpRangeStart=d;_dpRangeEnd=null;document.getElementById('dpRangeHint').textContent='Now click an end date';}
+  else{if(d<_dpRangeStart){_dpRangeEnd=_dpRangeStart;_dpRangeStart=d;}else{_dpRangeEnd=d;}document.getElementById('dpRangeHint').textContent='';}
+  timeFilter='range';_dpUpdateQuickBtns();_dpUpdateTriggerLabel();_dpRenderCal();renderMarkers();if(typeof updateActivityList==='function')updateActivityList();
+}
+function _dpUpdateQuickBtns(){['all','today','week','month'].forEach(q=>{const el=document.getElementById('dpq'+q[0].toUpperCase()+q.slice(1));if(el)el.classList.toggle('active',timeFilter===q);});}
+function _dpUpdateTriggerLabel(){
+  const lbl=document.getElementById('dpLabel');const btn=document.getElementById('dpTrigger');if(!lbl||!btn)return;
+  const MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  if(timeFilter==='all'){lbl.textContent='All Dates';btn.classList.remove('has-range');}
+  else if(timeFilter==='today'){lbl.textContent='Today';btn.classList.add('has-range');}
+  else if(timeFilter==='week'){lbl.textContent='This Week';btn.classList.add('has-range');}
+  else if(timeFilter==='month'){lbl.textContent='This Month';btn.classList.add('has-range');}
+  else if(timeFilter==='range'){
+    if(_dpRangeStart&&_dpRangeEnd){const f=d=>d.getDate()+' '+MN[d.getMonth()];lbl.textContent=f(_dpRangeStart)+' – '+f(_dpRangeEnd);}
+    else if(_dpRangeStart){lbl.textContent='From '+_dpRangeStart.getDate()+' '+MN[_dpRangeStart.getMonth()]+'…';}
+    btn.classList.add('has-range');
+  }
+}
+function _dpRenderCal(){
+  const MN=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const DN=['Su','Mo','Tu','We','Th','Fr','Sa'];
+  document.getElementById('dpCalTitle').textContent=MN[_dpCalMonth]+' '+_dpCalYear;
+  const today=new Date(2026,4,16),first=new Date(_dpCalYear,_dpCalMonth,1).getDay(),days=new Date(_dpCalYear,_dpCalMonth+1,0).getDate();
+  let h=DN.map(d=>'<div class="dp-day-hdr">'+d+'</div>').join('');
+  for(let i=0;i<first;i++)h+='<div class="dp-day dp-empty"></div>';
+  for(let d=1;d<=days;d++){
+    const dt=new Date(_dpCalYear,_dpCalMonth,d);let c='dp-day';
+    if(dt.getTime()===today.getTime())c+=' dp-today';
+    if(_dpRangeStart&&dt.getTime()===_dpRangeStart.getTime())c+=' dp-range-start';
+    if(_dpRangeEnd&&dt.getTime()===_dpRangeEnd.getTime())c+=' dp-range-end';
+    if(_dpRangeStart&&_dpRangeEnd&&dt>_dpRangeStart&&dt<_dpRangeEnd)c+=' dp-in-range';
+    h+='<div class="'+c+'" onclick="_dpPickDay('+_dpCalYear+','+_dpCalMonth+','+d+')">'+d+'</div>';
+  }
+  document.getElementById('dpCalGrid').innerHTML=h;
+}
+function setTimeFilter(f){timeFilter=f;_dpUpdateQuickBtns();_dpUpdateTriggerLabel();renderMarkers();if(typeof updateActivityList==='function')updateActivityList();}
 function withinDist(a){
   if(!distFilter||!map) return true;
   const ref = homeLocation ? homeLocation : map.getCenter();
@@ -3370,9 +3663,10 @@ const GROWTH_DATA={
 };
 
 function initGrowthTimeline(){
+  const el=document.getElementById('growthSvg');
+  if(!el) return;  // element was removed; skip rendering
   const svg=d3.select('#growthSvg');
   svg.selectAll('*').remove();
-  const el=document.getElementById('growthSvg');
   const W=el.getBoundingClientRect().width||700, H=140;
   svg.attr('viewBox',`0 0 ${W} ${H}`);
 
@@ -3554,6 +3848,82 @@ function initBubbleScatter(){
 // ════════════════════════════════════════
 //  UNIFIED TIMELINE  (calendar + heatmap)
 // ════════════════════════════════════════
+
+
+function buildRing(val, max, color, trackColor, label){
+  const r=26, circ=2*Math.PI*r, pct=Math.min(val/max,1);
+  const offset=circ*(1-pct);
+  const done=val>=max;
+  return `<div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+    <svg width="72" height="72" viewBox="0 0 72 72" style="transform:rotate(-90deg)">
+      <circle cx="36" cy="36" r="${r}" fill="none" stroke="${trackColor}" stroke-width="7"/>
+      <circle cx="36" cy="36" r="${r}" fill="none" stroke="${color}" stroke-width="7"
+        stroke-dasharray="${circ.toFixed(2)}" stroke-dashoffset="${offset.toFixed(2)}"
+        stroke-linecap="round" style="transition:stroke-dashoffset .6s ease"/>
+    </svg>
+    <div style="margin-top:-56px;width:72px;text-align:center;pointer-events:none">
+      <div style="font-size:${val>=10?'18':'22'}px;font-weight:900;color:${done?color:'#0F172A'};line-height:1">${val}<span style="font-size:11px;font-weight:500;color:#94A3B8">/${max}</span></div>
+    </div>
+    <div style="margin-top:28px;font-size:9px;font-weight:800;color:${color};text-transform:uppercase;letter-spacing:.5px">${label}</div>
+  </div>`;
+}
+
+function buildMonthlyRadar(catCounts){
+  const CATS=['social','sports','culture','learning','outdoor','food','volunteer'];
+  const LABELS=['Social','Sports','Culture','Learning','Outdoor','Food','Volunteer'];
+  const COLORS={'social':'#B57BEE','sports':'#F87171','culture':'#2DD4BF','learning':'#7EB8F7','outdoor':'#6DCF8A','food':'#FFB347','volunteer':'#F48FB1'};
+  const EMOJIS={'social':'💬','sports':'🏃','culture':'🎭','learning':'📚','outdoor':'🌿','food':'🍜','volunteer':'🤝'};
+  const cx=140,cy=130,r=72,n=CATS.length;
+  const step=(2*Math.PI)/n;
+  const pt=(i,radius)=>{const a=-Math.PI/2+i*step;return[cx+radius*Math.cos(a),cy+radius*Math.sin(a)];};
+  const maxVal=Math.max(...CATS.map(c=>catCounts[c]||0),1);
+
+  // grid
+  let grid='';
+  [.25,.5,.75,1].forEach(f=>{
+    const pts=CATS.map((_,i)=>pt(i,r*f).join(',')).join(' ');
+    grid+=`<polygon points="${pts}" fill="none" stroke="#E2E8F0" stroke-width="${f===1?1.5:1}"/>`;
+  });
+
+  // axes
+  let axes='';
+  CATS.forEach((_,i)=>{
+    const[x,y]=pt(i,r);
+    axes+=`<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="#E2E8F0" stroke-width="1"/>`;
+  });
+
+  // data polygon
+  const dataPts=CATS.map((c,i)=>{
+    const val=catCounts[c]||0;
+    const dr=val>0?r*Math.max(0.08,val/maxVal):r*0.04;
+    return pt(i,dr).join(',');
+  }).join(' ');
+
+  // dots + labels
+  let dots='',lbls='';
+  CATS.forEach((c,i)=>{
+    const val=catCounts[c]||0;
+    const col=COLORS[c];
+    const a=-Math.PI/2+i*step;
+    const lRadius=r+30;
+    const[lx,ly]=[cx+lRadius*Math.cos(a),cy+lRadius*Math.sin(a)];
+    const anch=Math.abs(lx-cx)<12?'middle':lx<cx?'end':'start';
+    const active=val>0;
+    lbls+=`<text x="${lx.toFixed(1)}" y="${(ly-5).toFixed(1)}" text-anchor="${anch}" font-family="Calibri,Arial,sans-serif" font-size="9.5" font-weight="700" fill="${active?col:'#CBD5E1'}">${EMOJIS[c]} ${LABELS[i]}</text>`;
+    if(active){
+      lbls+=`<text x="${lx.toFixed(1)}" y="${(ly+7).toFixed(1)}" text-anchor="${anch}" font-family="Calibri,Arial,sans-serif" font-size="8.5" fill="${col}">${val}×</text>`;
+      const[dx,dy]=pt(i,r*val/maxVal);
+      dots+=`<circle cx="${dx.toFixed(1)}" cy="${dy.toFixed(1)}" r="4" fill="${col}" stroke="white" stroke-width="1.5"/>`;
+    }
+  });
+
+  return `<svg viewBox="0 0 280 260" width="100%" style="max-width:280px;display:block;margin:0 auto;overflow:visible">
+    ${grid}${axes}
+    <polygon points="${dataPts}" fill="#0F6E5618" stroke="#0F6E56" stroke-width="2" stroke-linejoin="round" stroke-opacity=".8"/>
+    ${dots}${lbls}
+  </svg>`;
+}
+
 function renderUnifiedTimeline(){
   const el = document.getElementById('unifiedGrid');
   if(!el) return;
@@ -3574,21 +3944,22 @@ function renderUnifiedTimeline(){
   const daysInMonth = new Date(tlYear, tlMonth+1, 0).getDate();
   const firstJsDay = new Date(tlYear, tlMonth, 1).getDay();
   const firstDayMon = (firstJsDay + 6) % 7; // 0=Mon
-  const today = new Date();
+  // Get real today in NZ timezone (Pacific/Auckland)
+  const _nzParts = new Intl.DateTimeFormat('en-NZ',{timeZone:'Pacific/Auckland',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
+  const _nzY=+_nzParts.find(p=>p.type==='year').value, _nzM=+_nzParts.find(p=>p.type==='month').value-1, _nzD=+_nzParts.find(p=>p.type==='day').value;
+  const today = new Date(_nzY, _nzM, _nzD);
   const isCurMon = (tlYear===today.getFullYear() && tlMonth===today.getMonth());
 
   // Update header text
-  const now2 = new Date();
+  const now2 = today;
   const isFuture = tlYear > now2.getFullYear() || (tlYear===now2.getFullYear() && tlMonth>now2.getMonth());
   const noteEl = document.getElementById('tlGridNote');
-  const totalActive = [...Array(daysInMonth)].reduce((s,_,i)=>{
-    const d=i+1, catMap=getCatsForCalDate(d);
-    return s + (Object.keys(catMap).length>0?1:0);
-  },0);
+  const monthStr=`${tlYear}-${String(tlMonth+1).padStart(2,'0')}`;
+  const totalActive=(ATTENDED_HISTORY||[]).filter(e=>e.city===currentCity&&e.date.startsWith(monthStr)).length;
   if(noteEl){
-    if(isCurMon) noteEl.textContent = `This month · ${totalActive} active days · click a date or pattern to filter map`;
-    else if(isFuture) noteEl.textContent = `Future · ${totalActive} projected active days · based on recurring activities`;
-    else noteEl.textContent = `Past · ${totalActive} active days · click to filter map`;
+    if(isCurMon) noteEl.textContent = `My history · ${totalActive} activities attended this month · click to view on map`;
+    else if(isFuture) noteEl.textContent = `No attended activities yet in this month`;
+    else noteEl.textContent = `My history · ${totalActive} activities attended · click to view on map`;
     noteEl.style.color = isFuture ? '#D97706' : '#94A3B8';
   }
   document.getElementById('tlMonthLabel').textContent = `${TL_MONTH_NAMES[tlMonth]} ${tlYear}`;
@@ -3609,14 +3980,23 @@ function renderUnifiedTimeline(){
   // Day headers with category dots
   DAY_NAMES.forEach((d, i) => {
     const isW = i >= 5;
-    const catDots = CATS.map(cat => {
-      const v = cityActs.filter(a => a.category === cat.key)
-        .reduce((s,a) => s + activityOccurrences(a, d, tlYear, tlMonth, wkCounts), 0);
-      if(!v) return '';
-      return `<div style="width:8px;height:8px;border-radius:50%;background:${CAT_COLOR[cat.key]};box-shadow:0 1px 2px rgba(0,0,0,.12)" title="${cat.label}: ${v}x"></div>`;
-    }).join('');
+    // Derive dots from getCatsForCalDate — always consistent with calendar cells
+    const catSet = new Set();
+    let activeDays = 0;
+    for(let date = 1; date <= daysInMonth; date++){
+      const jsDay = new Date(tlYear, tlMonth, date).getDay();
+      const dow = (jsDay + 6) % 7; // 0=Mon
+      if(dow !== i) continue;
+      const catMap = getAttendedCatsForCalDate(date);
+      const keys = Object.keys(catMap);
+      if(keys.length > 0) activeDays++;
+      keys.forEach(c => catSet.add(c));
+    }
+    const catDots = CATS.filter(cat => catSet.has(cat.key)).map(cat =>
+      `<div style="width:8px;height:8px;border-radius:50%;background:${CAT_COLOR[cat.key]};box-shadow:0 1px 2px rgba(0,0,0,.12)" title="${cat.label}"></div>`
+    ).join('');
     html += `<div class="utl-col-hd${isW?' wknd':''}">
-      <span>${d}</span><span class="utl-count">${wkCounts[d]}×</span>
+      <span>${d}</span><span class="utl-count">${activeDays}×</span>
       <div style="display:flex;gap:2px;flex-wrap:wrap;justify-content:center;margin-top:4px;min-height:10px">${catDots}</div>
     </div>`;
   });
@@ -3649,8 +4029,12 @@ function renderUnifiedTimeline(){
     }
 
     const isW = dow>=5;
-    const isToday = isCurMon && date===today.getDate();
-    const catMap = getCatsForCalDate(date);
+    const cellDate = new Date(tlYear, tlMonth, date);
+    const todayMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const isToday = cellDate.getTime() === todayMidnight.getTime();
+    const isPast   = cellDate < todayMidnight;
+    const isFuture = cellDate > todayMidnight;
+    const catMap = getAttendedCatsForCalDate(date);
     const catKeys = Object.keys(catMap);
     const hasCats = catKeys.length > 0;
 
@@ -3683,7 +4067,7 @@ function renderUnifiedTimeline(){
 
     const hasJoined = allActs.some(a => (typeof joinedActivities!=='undefined' && joinedActivities && joinedActivities.has(a.id)) || (typeof attendedActivities!=='undefined' && attendedActivities && attendedActivities.has(a.id)));
     const joinedTick = hasJoined ? `<span class="joined-tick">✓</span>` : '';
-    html += `<div class="utl-date${hasCats?' has-acts':''}${isW?' wknd':''}${isToday?' is-today':''}${hasJoined?' joined-act':''}"
+    html += `<div class="utl-date${hasCats?' has-acts':''}${isW?' wknd':''}${isToday?' is-today':''}${isPast?' is-past':''}${isFuture?' is-future':''}${hasJoined?' joined-act':''}"
       data-date="${date}" style="position:relative;padding-top:6px">
       ${stripeHtml}
       ${joinedTick}
@@ -3716,7 +4100,7 @@ function renderUnifiedTimeline(){
   // Date cell tooltips + click
   el.querySelectorAll('.utl-date[data-date]').forEach(cell => {
     const date = parseInt(cell.dataset.date);
-    const catMap = getCatsForCalDate(date);
+    const catMap = getAttendedCatsForCalDate(date);
     if(!Object.keys(catMap).length) return;
 
     const jsDay=new Date(tlYear,tlMonth,date).getDay();
@@ -3729,7 +4113,7 @@ function renderUnifiedTimeline(){
         tipHtml+=`<div style="display:flex;align-items:center;gap:6px;margin-bottom:2px">
           <div style="width:8px;height:8px;border-radius:50%;background:${CAT_COLOR[c]};flex-shrink:0"></div>
           <span style="font-weight:600;color:#1e293b;font-size:11px">${a.name}</span>${tag}
-        </div><div style="margin-left:14px;color:#64748B;font-size:10px;margin-bottom:4px">${a.time} · ${a.location.split(',')[0]}</div>`;
+        </div>${a.location?`<div style="margin-left:14px;color:#64748B;font-size:10px;margin-bottom:4px">${a.time||''} · ${a.location.split(',')[0]}</div>`:''}`;
       });
     });
     tipHtml+=`<div style="color:#0F6E56;font-size:10px;margin-top:4px;border-top:1px solid #F1F5F9;padding-top:4px">🗺 Click to filter map</div>`;
@@ -3746,7 +4130,7 @@ function renderUnifiedTimeline(){
   const legendEl=document.getElementById('mcalLegend');
   if(legendEl){
     const activeCats=new Set();
-    for(let d=1;d<=daysInMonth;d++) Object.keys(getCatsForCalDate(d)).forEach(c=>activeCats.add(c));
+    for(let d=1;d<=daysInMonth;d++) Object.keys(getAttendedCatsForCalDate(d)).forEach(c=>activeCats.add(c));
     legendEl.innerHTML=[...activeCats].map(c=>`
       <div class="mcal-leg-item"><div class="mcal-leg-dot" style="background:${CAT_COLOR[c]}"></div><span>${CAT_LABEL[c]}</span></div>`).join('');
   }
@@ -3759,7 +4143,10 @@ function renderUnifiedTimeline(){
 const TL_MONTH_NAMES=['January','February','March','April','May','June',
                       'July','August','September','October','November','December'];
 const TL_MONTH_SHORT=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-let tlYear=2026, tlMonth=4; // 0-indexed; 4 = May (default: today)
+// Default calendar to current NZ month
+const _tlNow=new Intl.DateTimeFormat('en-NZ',{timeZone:'Pacific/Auckland',year:'numeric',month:'2-digit'}).formatToParts(new Date());
+let tlYear=+_tlNow.find(p=>p.type==='year').value;
+let tlMonth=+_tlNow.find(p=>p.type==='month').value-1; // 0-indexed
 
 function initCategoryDayGrid(){
   // Set to current date on first load
@@ -3789,66 +4176,43 @@ function renderMonthlySummary(){
   if(!el) return;
 
   const CATS_LIST=['social','sports','culture','learning','outdoor','food','volunteer'];
-  const wkCounts=weekdayCountsInMonth(tlYear,tlMonth);
-  const cityActs=ACTIVITIES.filter(a=>a.city===currentCity);
+  // Use personal attendance history for the summary
+  const monthStr=`${tlYear}-${String(tlMonth+1).padStart(2,'0')}`;
+  const myActs=(ATTENDED_HISTORY||[]).filter(e=>e.city===currentCity && e.date.startsWith(monthStr));
 
   const catCounts={};
   CATS_LIST.forEach(c=>{catCounts[c]=0;});
-  cityActs.forEach(a=>{
-    const dow=a.date.split(' ')[0];
-    const occ=activityOccurrences(a,dow,tlYear,tlMonth,wkCounts);
-    if(occ>0 && CATS_LIST.includes(a.category)) catCounts[a.category]+=occ;
-  });
+  myActs.forEach(e=>{ if(CATS_LIST.includes(e.category)) catCounts[e.category]++; });
 
-  const totalSessions=Object.values(catCounts).reduce((s,v)=>s+v,0);
+  const totalSessions=myActs.length;
   const catsCount=CATS_LIST.filter(c=>catCounts[c]>0).length;
 
+  // Connections from attended activities
   const reachableConns=new Set();
-  cityActs.forEach(a=>{
-    const dow=a.date.split(' ')[0];
-    if(activityOccurrences(a,dow,tlYear,tlMonth,wkCounts)>0 && CONNECTION_ACTS[a.id]){
-      CONNECTION_ACTS[a.id].forEach(c=>reachableConns.add(c.name));
+  ACTIVITIES.filter(a=>a.city===currentCity).forEach(a=>{
+    if(myActs.some(e=>e.name===a.name||e.category===a.category)){
+      if(CONNECTION_ACTS[a.id]) CONNECTION_ACTS[a.id].forEach(cn=>reachableConns.add(cn.name));
     }
   });
   const connCount=reachableConns.size;
 
-  const connScore=Math.round(Math.min(connCount/8,1)*40);
-  const divScore=Math.round((catsCount/7)*35);
-  const freqScore=Math.round(Math.min(totalSessions/24,1)*25);
-  const monthScore=Math.min(connScore+divScore+freqScore,100);
+
 
   const missingCats=CATS_LIST.filter(c=>catCounts[c]===0);
   const weakCat=missingCats[0]||CATS_LIST.reduce((a,b)=>catCounts[a]<catCounts[b]?a:b);
-  const maxCount=Math.max(...Object.values(catCounts),1);
-  const scoreCol=monthScore>=75?'#0F6E56':monthScore>=50?'#F97316':'#EF4444';
-  const scoreLabel=monthScore>=75?'Strong 🌟':monthScore>=50?'Building 📈':'Starting 🌱';
 
-  const catBarsHtml=CATS_LIST.map(c=>{
-    const n=catCounts[c];
-    const pct=Math.round(n/maxCount*100);
-    const inactive=n===0;
-    return `<div style="display:grid;grid-template-columns:110px 1fr 52px;align-items:center;gap:10px;opacity:${inactive?'.35':'1'}">
-      <div style="display:flex;align-items:center;gap:6px">
-        <span style="font-size:13px;line-height:1;flex-shrink:0">${CAT_EMOJI[c]||'📌'}</span>
-        <span style="font-size:11px;font-weight:700;color:${inactive?'#94A3B8':CAT_COLOR[c]}">${CAT_LABEL[c]}</span>
-      </div>
-      <div style="height:7px;background:#F1F5F9;border-radius:4px;overflow:hidden">
-        <div style="width:${pct}%;height:100%;background:${CAT_COLOR[c]};border-radius:4px;transition:width .5s ease"></div>
-      </div>
-      <div style="text-align:right;font-size:11px;font-weight:${inactive?'400':'600'};color:${inactive?'#CBD5E1':'#475569'}">${n?n+'×':'—'}</div>
-    </div>`;
-  }).join('');
+  const radarSvg=buildMonthlyRadar(catCounts);
 
   const insightHtml=missingCats.length
     ?`<div style="display:flex;align-items:center;gap:8px;background:#FFF7ED;border:1px solid #FED7AA;border-radius:8px;padding:8px 12px;margin-top:12px">
         <span style="font-size:13px;flex-shrink:0">💡</span>
-        <div style="font-size:11px;color:#92400E;line-height:1.5">No <strong>${CAT_LABEL[weakCat]}</strong> events this month — joining one boosts score to <strong>${Math.min(monthScore+8,100)}</strong>.
+        <div style="font-size:11px;color:#92400E;line-height:1.5">No <strong>${CAT_LABEL[weakCat]}</strong> events this month.
           <span onclick="switchTab('map')" style="color:#0F6E56;font-weight:700;cursor:pointer;margin-left:4px">Find →</span>
         </div>
       </div>`
     :`<div style="display:flex;align-items:center;gap:8px;background:#ECFDF5;border:1px solid #9FE1CB;border-radius:8px;padding:8px 12px;margin-top:12px">
         <span style="font-size:13px;flex-shrink:0">✅</span>
-        <div style="font-size:11px;color:#065F46;line-height:1.5">All 7 categories this month — great diversity! Attend more to boost frequency score.</div>
+        <div style="font-size:11px;color:#065F46;line-height:1.5">All 7 categories this month — great diversity! Keep exploring new activities!</div>
       </div>`;
 
   el.innerHTML=`
@@ -3861,28 +4225,14 @@ function renderMonthlySummary(){
       <div style="font-size:10px;color:#94A3B8;font-weight:600">${currentCity&&CITIES[currentCity]?CITIES[currentCity].label:''}</div>
     </div>
 
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px">
-      <div style="background:linear-gradient(135deg,#ECFDF5,#D1FAE5);border-radius:10px;padding:10px 8px;text-align:center;border:1px solid #9FE1CB">
-        <div style="font-size:26px;font-weight:900;color:#0F6E56;line-height:1">${totalSessions}</div>
-        <div style="font-size:9px;color:#047857;font-weight:800;margin-top:4px;text-transform:uppercase;letter-spacing:.4px">Sessions</div>
-      </div>
-      <div style="background:linear-gradient(135deg,#F5EEFF,#EDE9FE);border-radius:10px;padding:10px 8px;text-align:center;border:1px solid #DDD6FE">
-        <div style="font-size:26px;font-weight:900;color:#7C3AED;line-height:1">${catsCount}<span style="font-size:13px;font-weight:600;color:#A78BFA">/7</span></div>
-        <div style="font-size:9px;color:#6D28D9;font-weight:800;margin-top:4px;text-transform:uppercase;letter-spacing:.4px">Categories</div>
-      </div>
-      <div style="background:linear-gradient(135deg,#EFF6FF,#DBEAFE);border-radius:10px;padding:10px 8px;text-align:center;border:1px solid #BFDBFE">
-        <div style="font-size:26px;font-weight:900;color:#2563EB;line-height:1">${connCount}</div>
-        <div style="font-size:9px;color:#1D4ED8;font-weight:800;margin-top:4px;text-transform:uppercase;letter-spacing:.4px">Connections</div>
-      </div>
-      <div style="background:linear-gradient(135deg,#F8FAFC,#fff);border-radius:10px;padding:10px 8px;text-align:center;border:2px solid ${scoreCol}35">
-        <div style="font-size:26px;font-weight:900;color:${scoreCol};line-height:1">${monthScore}</div>
-        <div style="font-size:9px;font-weight:800;margin-top:4px;color:${scoreCol};text-transform:uppercase;letter-spacing:.4px">Score</div>
-        <div style="font-size:8px;color:#94A3B8;margin-top:2px">${scoreLabel}</div>
-      </div>
+    <div style="display:flex;justify-content:space-around;align-items:flex-start;margin-bottom:16px;padding:8px 4px">
+      ${buildRing(totalSessions,8,'#0F6E56','#D1FAE5','Sessions')}
+      ${buildRing(catsCount,7,'#7C3AED','#EDE9FE','Categories')}
+      ${buildRing(connCount,10,'#2563EB','#DBEAFE','Connections')}
     </div>
 
-    <div style="font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:9px">Activity breakdown</div>
-    <div style="display:flex;flex-direction:column;gap:7px">${catBarsHtml}</div>
+    <div style="font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Activity breakdown</div>
+    <div style="padding:4px 0 2px">${radarSvg}</div>
     ${insightHtml}`;
 }
 
@@ -4044,19 +4394,41 @@ function hmBrushDay(catKey, dayOfWeek){
 const CAL_DAY_NAMES=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 const CAL_CATS=['social','sports','culture','learning','outdoor','food','volunteer'];
 
-function getCatsForCalDate(date){
-  const jsDay=new Date(tlYear,tlMonth,date).getDay(); // 0=Sun
-  const dayName=CAL_DAY_NAMES[(jsDay+6)%7];          // Mon=0
-  const monthShort=TL_MONTH_SHORT[tlMonth];
-  const result={};
-  ACTIVITIES.filter(a=>a.city===currentCity).forEach(a=>{
-    const parts=a.date.split(' ');
-    if(parts[0]!==dayName) return;
-    const meta=ACTIVITY_META[a.id]||{r:null};
-    const include=meta.r==='weekly'||meta.r==='monthly'||(parts[2]===monthShort);
-    if(include) result[a.category]=(result[a.category]||[]).concat(a);
-  });
-  return result;
+function getAttendedCatsForCalDate(date){
+  // Compute today in NZ timezone (no dependency on outer-scope 'today')
+  const _p=new Intl.DateTimeFormat('en-NZ',{timeZone:'Pacific/Auckland',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
+  const _nzY2=+_p.find(x=>x.type==='year').value, _nzM2=+_p.find(x=>x.type==='month').value-1, _nzD2=+_p.find(x=>x.type==='day').value;
+  const todayMidnight=new Date(_nzY2,_nzM2,_nzD2);
+  const cellDate=new Date(tlYear,tlMonth,date);
+  const daysAhead=Math.round((cellDate-todayMidnight)/(1000*60*60*24));
+
+  if(daysAhead<=0){
+    // Past / today: personal attendance history only
+    const ds=`${tlYear}-${String(tlMonth+1).padStart(2,'0')}-${String(date).padStart(2,'0')}`;
+    const result={};
+    (ATTENDED_HISTORY||[]).filter(e=>e.city===currentCity&&e.date===ds).forEach(e=>{
+      if(!result[e.category]) result[e.category]=[];
+      result[e.category].push(e);
+    });
+    return result;
+  } else {
+    // Future: show upcoming activities — recurring only within 7 days, one-offs this month
+    const jsDay=new Date(tlYear,tlMonth,date).getDay();
+    const dayName=CAL_DAY_NAMES[(jsDay+6)%7];
+    const monthShort=TL_MONTH_SHORT[tlMonth];
+    const result={};
+    ACTIVITIES.filter(a=>a.city===currentCity).forEach(a=>{
+      const parts=a.date.split(' ');
+      if(parts[0]!==dayName) return;
+      const meta=ACTIVITY_META[a.id]||{r:null};
+      let include=false;
+      if(meta.r==='weekly'&&daysAhead<=7) include=true;
+      else if(meta.r==='monthly'&&daysAhead<=30) include=true;
+      else if(!meta.r&&parts[2]===monthShort&&parseInt(parts[1])===date) include=true;
+      if(include) result[a.category]=(result[a.category]||[]).concat(a);
+    });
+    return result;
+  }
 }
 
 function renderMonthCalendar(){
@@ -4086,7 +4458,7 @@ function renderMonthCalendar(){
     const jsDay=new Date(tlYear,tlMonth,date).getDay();
     const isWknd=jsDay===0||jsDay===6;
     const isToday=isCurrentMonth&&date===today.getDate();
-    const catMap=getCatsForCalDate(date);
+    const catMap=getAttendedCatsForCalDate(date);
     const hasCats=Object.keys(catMap).length>0;
     if(hasCats){ totalActs++; Object.keys(catMap).forEach(c=>activeCats.add(c)); }
 
@@ -4114,7 +4486,7 @@ function renderMonthCalendar(){
   let tip=document.getElementById('catDayTip');
   gridEl.querySelectorAll('.mcal-cell[data-date]').forEach(cell=>{
     const date=parseInt(cell.dataset.date);
-    const catMap=getCatsForCalDate(date);
+    const catMap=getAttendedCatsForCalDate(date);
     if(!Object.keys(catMap).length) return;
 
     // Tooltip
@@ -4211,19 +4583,44 @@ function initSeasonalChart(){
   if(dashCharts.seasonal){try{dashCharts.seasonal.destroy();}catch(e){}dashCharts.seasonal=null;}
   const canvas=document.getElementById('seasonalChart');
   if(!canvas)return;
+
+  // Determine current month in NZ timezone
+  const _nzP=new Intl.DateTimeFormat('en-NZ',{timeZone:'Pacific/Auckland',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
+  const _nzMo=+_nzP.find(p=>p.type==='month').value-1; // 0-indexed
+  const _nzDay=+_nzP.find(p=>p.type==='day').value;
+  const _daysInCurMo=new Date(new Date().getFullYear(),_nzMo+1,0).getDate();
+  const _curFrac=_nzDay/_daysInCurMo; // how far through current month
+
+  // Scale factor per month: past=1.0, current=partial, future tapers
+  function monthScale(i){
+    if(i < _nzMo)  return 1.0;                // past — full
+    if(i === _nzMo) return _curFrac;           // current — partial
+    const ahead = i - _nzMo;
+    return Math.max(0, 0.25 - ahead * 0.04);  // future: 0.21→0.17→0.13… (projected estimate)
+  }
+  // Opacity per month
+  function monthAlpha(i){
+    if(i < _nzMo)  return 'CC';  // past — solid
+    if(i === _nzMo) return '99'; // current — mid
+    return '44';                  // future — faded
+  }
+
+  const datasets = MONTHLY_DIST.cats.map((c,ci)=>({
+    label: c.label,
+    data: c.data.map((v,i)=> +(v * monthScale(i)).toFixed(1)),
+    backgroundColor: c.color + '88',
+    borderColor: c.color,
+    borderWidth: 1.5,
+    fill: true,
+    tension: 0.4,
+    pointRadius: 0,
+    pointHoverRadius: 4,
+    stack: 'monthly'
+  }));
+
   dashCharts.seasonal=new Chart(canvas.getContext('2d'),{
-    type:'bar',
-    data:{
-      labels:MONTHLY_DIST.labels,
-      datasets:MONTHLY_DIST.cats.map(c=>({
-        label:c.label,
-        data:c.data,
-        backgroundColor:c.color+'AA',
-        borderColor:c.color,
-        borderWidth:1,
-        stack:'monthly'
-      }))
-    },
+    type:'line',
+    data:{ labels:MONTHLY_DIST.labels, datasets },
     options:{
       responsive:true,
       maintainAspectRatio:false,
@@ -4231,17 +4628,156 @@ function initSeasonalChart(){
         legend:{position:'bottom',labels:{boxWidth:9,font:{size:10},padding:6}},
         tooltip:{
           mode:'index',intersect:false,
-          callbacks:{title:items=>`${items[0].label} — NZ seasonal pattern`}
-        }
+          callbacks:{
+            title:items=>{
+              const i=items[0].dataIndex;
+              if(i<_nzMo) return `${items[0].label} — past`;
+              if(i===_nzMo) return `${items[0].label} — this month (${_nzDay}/${_daysInCurMo} days)`;
+              return `${items[0].label} — projected`;
+            }
+          }
+        },
+        // Vertical "today" divider annotation via afterDraw plugin
       },
       scales:{
-        x:{stacked:true,grid:{display:false},ticks:{font:{size:10}}},
+        x:{stacked:true,grid:{display:false},ticks:{font:{size:10},
+          color: (ctx)=> ctx.index > _nzMo ? '#94A3B8' : ctx.index===_nzMo ? '#0F6E56' : '#64748B'
+        }},
         y:{
           stacked:true,beginAtZero:true,
           grid:{color:'#F1F5F9'},
           ticks:{font:{size:9}},
           title:{display:true,text:'Relative activity volume',font:{size:9},color:'#94A3B8'}
         }
+      }
+    },
+    plugins:[{
+      id:'seasonalDivider',
+      afterDraw(chart){
+        const ctx2=chart.ctx, meta=chart.getDatasetMeta(0);
+        if(!meta.data.length) return;
+        const curPt=meta.data[_nzMo];
+        if(!curPt) return;
+        const x=curPt.x;
+        const {top,bottom}=chart.chartArea;
+        // Solid green "now" line
+        ctx2.save();
+        ctx2.strokeStyle='#0F6E56';
+        ctx2.lineWidth=1.5;
+        ctx2.setLineDash([4,3]);
+        ctx2.beginPath();
+        ctx2.moveTo(x,top);
+        ctx2.lineTo(x,bottom);
+        ctx2.stroke();
+        ctx2.restore();
+        // "NOW" pill — sits just above the chart top edge
+        const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        const nowLabel=months[_nzMo]+' · now';
+        ctx2.save();
+        ctx2.font='bold 10px -apple-system,sans-serif';
+        const tw=ctx2.measureText(nowLabel).width;
+        const pillW=tw+14, pillH=18, pillR=5;
+        const px=Math.min(Math.max(x-pillW/2, chart.chartArea.left), chart.chartArea.right-pillW);
+        const py=top+8;
+        ctx2.fillStyle='#0F6E56';
+        ctx2.beginPath();
+        ctx2.roundRect(px, py, pillW, pillH, pillR);
+        ctx2.fill();
+        // small triangle pointer
+        ctx2.beginPath();
+        ctx2.moveTo(x-5, py+pillH);
+        ctx2.lineTo(x+5, py+pillH);
+        ctx2.lineTo(x, py+pillH+5);
+        ctx2.closePath();
+        ctx2.fill();
+        ctx2.fillStyle='#fff';
+        ctx2.fillText(nowLabel, px+7, py+13);
+        ctx2.restore();
+        // "estimated →" label inside chart, bottom-right of line
+        ctx2.save();
+        ctx2.font='10px -apple-system,sans-serif';
+        ctx2.fillStyle='#94A3B8';
+        ctx2.fillText('estimated →', x+6, bottom-8);
+        ctx2.restore();
+      }
+    }]
+  });
+
+  // Build category filter pills
+  _buildSeasonalPills();
+}
+
+function _buildSeasonalPills(){
+  const wrap=document.getElementById('seasonalCatFilter');
+  if(!wrap||!dashCharts.seasonal) return;
+  const chart=dashCharts.seasonal;
+  const cats=chart.data.datasets.map(d=>({label:d.label,color:d.borderColor}));
+
+  // "All" pill
+  const allBtn=document.createElement('button');
+  allBtn.textContent='All';
+  allBtn.dataset.active='true';
+  allBtn.style.cssText='padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;cursor:pointer;border:1.5px solid #0F6E56;background:#0F6E56;color:#fff;transition:all .2s';
+  allBtn.onclick=()=>{ _seasonalFocus(null); };
+  wrap.innerHTML='';
+  wrap.appendChild(allBtn);
+
+  cats.forEach(c=>{
+    const btn=document.createElement('button');
+    btn.textContent=c.label;
+    btn.dataset.cat=c.label;
+    btn.style.cssText=`padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;cursor:pointer;border:1.5px solid ${c.color};background:transparent;color:${c.color};transition:all .2s`;
+    btn.onclick=()=>{ _seasonalFocus(c.label); };
+    wrap.appendChild(btn);
+  });
+}
+
+function _seasonalFocus(label){
+  const chart=dashCharts.seasonal;
+  if(!chart) return;
+  const wrap=document.getElementById('seasonalCatFilter');
+
+  chart.data.datasets.forEach((d,i)=>{
+    if(!label){
+      // reset all
+      d.backgroundColor=d._origBg||d.backgroundColor;
+      d.borderColor=d._origBorder||d.borderColor;
+      d.borderWidth=1.5;
+      d.fill=true;
+    } else if(d.label===label){
+      d._origBg=d._origBg||d.backgroundColor;
+      d._origBorder=d._origBorder||d.borderColor;
+      d.backgroundColor=d._origBorder+'CC';
+      d.borderColor=d._origBorder;
+      d.borderWidth=2.5;
+      d.fill=true;
+    } else {
+      d._origBg=d._origBg||d.backgroundColor;
+      d._origBorder=d._origBorder||d.borderColor;
+      d.backgroundColor=d._origBorder+'15';
+      d.borderColor=d._origBorder+'40';
+      d.borderWidth=0.5;
+      d.fill=true;
+    }
+  });
+  chart.update('none');
+
+  // Update pill styles
+  if(wrap) wrap.querySelectorAll('button').forEach(btn=>{
+    const isAll=!btn.dataset.cat;
+    const isActive= label ? btn.dataset.cat===label : isAll;
+    if(isActive){
+      if(isAll){ btn.style.background='#0F6E56'; btn.style.color='#fff'; btn.style.borderColor='#0F6E56'; }
+      else{
+        const col=chart.data.datasets.find(d=>d.label===btn.dataset.cat)?._origBorder||'#666';
+        btn.style.background=col; btn.style.color='#fff'; btn.style.borderColor=col;
+      }
+    } else {
+      btn.style.background='transparent';
+      if(isAll){ btn.style.color='#64748B'; btn.style.borderColor='#CBD5E1'; }
+      else{
+        const col=chart.data.datasets.find(d=>d.label===btn.dataset.cat)?._origBorder||'#CBD5E1';
+        btn.style.color=col; btn.style.borderColor=col;
       }
     }
   });
@@ -4759,33 +5295,81 @@ function updateJourneyBanner(){
 // ② My Journey Timeline
 // ═══════════════════════════════════════════════
 const JOURNEY_SEED=[
-  {date:'Week 1 · Day 3',name:'Arrived in the city',meta:'Moved in, starting fresh',met:0,mine:false},
-  {date:'Week 1 · Day 5',name:'Hamilton Lake Parkrun',meta:'First social activity',met:3,mine:false},
-  {date:'Week 2 · Day 9',name:'English Conversation Club',meta:'At Hamilton City Library',met:2,mine:false},
-  {date:'Week 2 · Day 12',name:'Garden Place Night Market',meta:'Tried local food, chatted with vendors',met:1,mine:false},
-  {date:'Week 3 · Day 16',name:'International Coffee Chat @ UoW',meta:'Biggest social event so far!',met:4,mine:false},
+  {date:'Week 1 · Day 3', realDate:'6 Mar',  netWeek:1, current:false, name:'Arrived in the city',           meta:'Moved in, starting fresh',                  met:0, mine:false, icon:'🏠', cat:'milestone'},
+  {date:'Week 1 · Day 5', realDate:'8 Mar',  netWeek:1, current:false, name:'Hamilton Lake Parkrun',          meta:'First social activity — 5 km with new faces',met:3, mine:false, icon:'🏃', cat:'sport'},
+  {date:'Week 2 · Day 9', realDate:'12 Mar', netWeek:3, current:false, name:'English Conversation Club',      meta:'At Hamilton City Library',                  met:2, mine:false, icon:'💬', cat:'language'},
+  {date:'Week 2 · Day 12',realDate:'15 Mar', netWeek:3, current:false, name:'Garden Place Night Market',      meta:'Tried local food, chatted with vendors',    met:1, mine:false, icon:'🍜', cat:'social'},
+  {date:'Week 3 · Day 16',realDate:'19 Mar', netWeek:3, current:false, name:'International Coffee Chat @ UoW',meta:'Biggest social event so far!',              met:4, mine:false, icon:'☕', cat:'social'},
+  {date:'Week 3 · Day 18',realDate:'21 Mar', netWeek:3, current:false, name:'Waikato Museum Visit',           meta:'Free entry, met a local art group',         met:2, mine:false, icon:'🏛️',cat:'culture'},
+  {date:'Week 4 · Day 22',realDate:'25 Mar', netWeek:6, current:false, name:'Te Reo Māori Class',             meta:'Council-run beginner session',              met:1, mine:false, icon:'📖', cat:'language'},
+  {date:'Week 4 · Day 25',realDate:'28 Mar', netWeek:6, current:false, name:'Badminton Club',                 meta:'Weekly game at Chartwell gym',              met:3, mine:false, icon:'🏸', cat:'sport'},
+  {date:'Week 5 · Day 30',realDate:'2 Apr',  netWeek:6, current:false, name:'Neighbours BBQ',                 meta:'Street community event, homemade food',    met:5, mine:false, icon:'🍖', cat:'social'},
+  {date:'Week 6 · Day 38',realDate:'10 Apr', netWeek:6, current:true,  name:'First Month Milestone',          meta:'1 month in Hamilton — 20 connections made!',met:0, mine:false, icon:'🎉', cat:'milestone'},
 ];
+const JTL_CAT_STYLE={
+  milestone:{bg:'#ECFDF5',border:'#6EE7B7',text:'#065F46'},
+  sport:    {bg:'#EFF6FF',border:'#93C5FD',text:'#1D4ED8'},
+  language: {bg:'#FDF4FF',border:'#D8B4FE',text:'#7E22CE'},
+  social:   {bg:'#FFF7ED',border:'#FBD38D',text:'#92400E'},
+  culture:  {bg:'#FFF1F2',border:'#FECDD3',text:'#9F1239'},
+};
 function renderJourneyTimeline(){
   const el=document.getElementById('journeyTimeline');
   if(!el)return;
   const userItems=ACTIVITIES.filter(a=>a._userPosted).map(a=>({
-    date:'This week · Just posted',name:a.name,meta:a.location||'Your posted activity',met:3,mine:true
+    date:'This week · Just posted',name:a.name,meta:a.location||'Your posted activity',met:3,mine:true,icon:'✦',cat:'mine'
   }));
   const all=[...userItems,...JOURNEY_SEED];
-  el.innerHTML=all.map(e=>`
-    <div class="jtl-item">
-      <div class="jtl-dot${e.mine?' mine':''}"></div>
-      <div class="jtl-date">${e.date}</div>
-      <div class="jtl-name">${e.mine?'✦ ':''}${e.name}</div>
-      <div class="jtl-meta">${e.meta}</div>
-      ${e.met>0?`<div class="jtl-met">+${e.met} connection${e.met>1?'s':''}</div>`:''}
-    </div>`).join('');
+  el.innerHTML=all.map(e=>{
+    const isMilestone=e.cat==='milestone';
+    const isMine=e.mine;
+    const style=JTL_CAT_STYLE[e.cat]||JTL_CAT_STYLE.social;
+    const chipCls=isMilestone?'milestone-chip':isMine?'mine-chip':'';
+    const cardCls=isMilestone?'milestone-card':isMine?'mine-card':'';
+    const dotCls=isMilestone?'milestone':isMine?'mine':'';
+    const catTag=!isMilestone&&!isMine?`<span class="jtl-cat-tag" style="background:${style.bg};border-color:${style.border};color:${style.text}">${e.icon} ${e.cat}</span>`:'';
+    const isNow=!!e.current;
+    const netWeek=e.netWeek||6;
+    const nowBadge=isNow?`<div class="jtl-now-badge">📍 NOW</div>`:'';
+    const realDateEl=e.realDate?`<div class="jtl-real-date">${e.realDate}</div>`:'';
+    return `<div class="jtl-item${isNow?' jtl-now':''}" data-net-week="${netWeek}">
+      <div class="jtl-dot ${dotCls}"></div>
+      ${nowBadge}
+      <span class="jtl-chip ${chipCls}">${isMilestone?'🏁 ':''}${e.date}</span>
+      ${realDateEl}
+      <div class="jtl-connector"></div>
+      <div class="jtl-card ${cardCls}">
+        <div class="jtl-icon">${e.icon}</div>
+        <div class="jtl-name">${e.name}</div>
+        <div class="jtl-meta">${e.meta}</div>
+        ${(e.met>0||catTag)?`<div class="jtl-bottom">${e.met>0?`<span class="jtl-met">👥 +${e.met} connection${e.met>1?'s':''}</span>`:''} ${catTag}</div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+  // drag-to-scroll
+  let isDown=false,startX,scrollLeft;
+  el.addEventListener('mousedown',e=>{isDown=true;el.style.cursor='grabbing';startX=e.pageX-el.offsetLeft;scrollLeft=el.scrollLeft});
+  el.addEventListener('mouseleave',()=>{isDown=false;el.style.cursor='grab'});
+  el.addEventListener('mouseup',()=>{isDown=false;el.style.cursor='grab'});
+  el.addEventListener('mousemove',e=>{if(!isDown)return;e.preventDefault();const x=e.pageX-el.offsetLeft;el.scrollLeft=scrollLeft-(x-startX)*1.2});
 }
 
 
 
 
-
+function jtlClick(week){
+  // scroll network into view then switch week
+  const netCard=document.querySelector('.tl-card');
+  if(netCard) netCard.scrollIntoView({behavior:'smooth',block:'nearest'});
+  showWeek(week);
+  syncJourneyToWeek(week);
+}
+function syncJourneyToWeek(week){
+  document.querySelectorAll('#journeyTimeline .jtl-item').forEach(el=>{
+    const w=parseInt(el.dataset.netWeek||'6');
+    el.classList.toggle('jtl-week-active', w===week);
+  });
+}
 
 // ═══════════════════════════════════════════════
 // ④ Activity Density Heatmap (self-contained canvas)
