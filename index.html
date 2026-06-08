@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F0F4F0;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F0F4F0;display:flex;flex-direction:column;min-height:100vh}
 
 /* ── NAV ── */
 .navbar{background:rgba(255,255,255,.97);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,0,0,.07);padding:0 20px;height:56px;display:flex;align-items:center;gap:14px;z-index:1000;flex-shrink:0;box-shadow:0 1px 0 rgba(0,0,0,.04),0 4px 16px rgba(0,0,0,.06)}
@@ -53,7 +53,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .tab-badge{background:linear-gradient(135deg,#D1FAE5,#A7F3D0);color:#065F46;border-radius:10px;padding:1px 7px;font-size:10px;font-weight:700;box-shadow:0 1px 3px rgba(16,185,129,.2)}
 
 /* ── VIEWS ── */
-.view{display:none;flex:1;overflow:hidden}
+.view{display:none}
+#view-map.active{height:calc(100vh - 90px);overflow:hidden}
 .view.active{display:flex;flex-direction:column}
 
 /* ══════════ MAP VIEW ══════════ */
@@ -73,6 +74,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .chip-outdoor{background:#EDFFF3;border-color:#86EFAC;color:#38A05A}
 .chip-food{background:#FFF8ED;border-color:#FCD34D;color:#D4893A}
 .chip-volunteer{background:#FFF0F5;border-color:#F9A8D4;color:#D46E95}
+.chip-english{background:#EFF6FF;border-color:#93C5FD;color:#2563EB}
+.chip-solo{background:#FFF7ED;border-color:#FCD34D;color:#B45309}
+.utl-date.joined-act{box-shadow:inset 0 0 0 2px #0F6E56 !important}
+.utl-date.joined-act .utl-date-num{color:#0F6E56;font-weight:800}
+.joined-tick{position:absolute;top:3px;right:4px;font-size:8px;color:#0F6E56;font-weight:900;line-height:1}
 
 /* ── Map Layout ── */
 .map-wrap{flex:1;display:flex;overflow:hidden}
@@ -149,7 +155,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .insight-bar{background:linear-gradient(135deg,#ECFDF5,#D1FAE5);border-bottom:1px solid #9FE1CB;padding:7px 14px;display:flex;align-items:center;gap:7px;font-size:11px;color:#065F46;flex-shrink:0}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
 .insight-dot{width:7px;height:7px;border-radius:50%;background:#10B981;flex-shrink:0;animation:blink 2.2s ease-in-out infinite}
-.net-insight{background:linear-gradient(135deg,#ECFDF5,#E1F5EE);border-radius:10px;padding:10px 12px;margin-bottom:14px;font-size:11.5px;color:#065F46;line-height:1.6;border:1px solid #9FE1CB}
+.net-insight{background:linear-gradient(135deg,#ECFDF5,#E1F5EE);border-radius:12px;padding:14px 16px;margin-bottom:16px;font-size:12px;color:#065F46;line-height:1.65;border:1px solid #9FE1CB}
 .dash-insight{grid-column:span 3;background:linear-gradient(135deg,#ECFDF5,#E1F5EE);border:1px solid #9FE1CB;border-radius:10px;padding:9px 14px;display:flex;align-items:center;gap:10px}
 /* ── Card share button ── */
 .ac-share{position:absolute;top:8px;left:10px;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.88);border:none;cursor:pointer;display:none;align-items:center;justify-content:center;font-size:12px;z-index:3;backdrop-filter:blur(4px);transition:background .15s}
@@ -196,6 +202,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .ac-cat-tag{font-size:10px;font-weight:700;border-radius:9px;padding:2px 8px;color:#fff}
 .ac-att{font-size:10px;color:#94A3B8;display:flex;align-items:center;gap:3px}
 .ac-nc{font-size:10px;background:#ECFDF5;color:#065F46;border-radius:9px;padding:2px 7px;font-weight:600}
+.ac-conn-bar{display:flex;align-items:center;gap:5px;padding:6px 10px 6px;border-top:1px solid #F0FDF9;background:#F8FFFE;flex-wrap:wrap}
+.ac-conn-pip{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:#0F6E56;background:#E6FAF4;border:1px solid #9FE1CB;border-radius:20px;padding:2px 7px 2px 3px;white-space:nowrap}
+.ac-conn-av{width:16px;height:16px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:7px;font-weight:900;color:#fff;flex-shrink:0}
 
 /* Detail Panel — slides over the list pane */
 .detail-panel{position:absolute;left:0;right:0;top:0;bottom:0;background:#fff;border-left:1px solid #e2e8f0;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);z-index:200;overflow:hidden}
@@ -243,9 +252,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .btn-save:hover{background:#E1F5EE;border-color:#5DCAA5}
 
 /* ══════════ NETWORK VIEW ══════════ */
-.net-wrap{flex:1;display:flex;overflow:hidden;background:linear-gradient(160deg,#EDF5EF 0%,#E8F0E8 50%,#EDF2F0 100%)}
+.net-wrap{flex:1;display:flex;overflow:hidden;background:#F8FAFB}
 #netSvg{flex:1;background:transparent}
-.net-side{width:280px;background:#fff;border-left:1px solid #e2e8f0;padding:18px;overflow-y:auto;flex-shrink:0}
+.net-side{width:360px;background:#fff;border-left:1px solid #e2e8f0;padding:20px 22px;overflow-y:auto;flex-shrink:0}
 .net-title{font-size:15px;font-weight:700;color:#1e293b;margin-bottom:4px}
 .net-sub{font-size:12px;color:#64748B;margin-bottom:16px;line-height:1.5}
 .net-legend{display:flex;flex-direction:column;gap:7px;margin-bottom:18px}
@@ -268,14 +277,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .ns-card.c-purple .ns-lbl{color:#6D28D9}
 .ns-card.c-amber .ns-lbl{color:#B45309}
 .ns-trend{font-size:10px;font-weight:600;margin-top:4px}
-.net-person{background:#F8FAFC;border-radius:10px;padding:10px 12px;margin-bottom:8px;cursor:pointer;transition:background .2s}
-.net-person:hover{background:#E1F5EE}
-.np-name{font-size:13px;font-weight:600;color:#1e293b}
-.np-detail{font-size:11px;color:#64748B;margin-top:2px}
+.net-person{background:#FAFBFC;border-radius:12px;padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:all .18s;border:1px solid #F1F5F9}
+.net-person:hover{background:#F0FDF9;border-color:#9FE1CB;transform:translateX(2px)}
+.np-name{font-size:12px;font-weight:700;color:#1e293b}
+.np-detail{font-size:10.5px;color:#94A3B8;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .net-tooltip{position:fixed;background:rgba(15,23,42,.92);color:#fff;padding:8px 12px;border-radius:8px;font-size:12px;pointer-events:none;z-index:9999;display:none;line-height:1.5}
 
 /* ══════════ DASHBOARD VIEW ══════════ */
-.dash-wrap{flex:1;overflow-y:auto;padding:20px;display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:auto auto auto;gap:16px;background:linear-gradient(160deg,#EDF5EF 0%,#E8F0E8 50%,#EDF2F0 100%)}
+.dash-wrap{padding:20px;display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:auto auto auto;gap:16px;background:#F8FAFB}
 .dash-card{background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-radius:16px;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,.06),0 6px 20px rgba(0,0,0,.07);border:1px solid rgba(255,255,255,.8)}
 .dc-title{font-size:12px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
 .dc-big{font-size:36px;font-weight:800;color:#1e293b}
@@ -312,7 +321,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 canvas{max-width:100%;display:block}
 
 /* ══════════ TIMELINE VIEW ══════════ */
-.tl-wrap{flex:1;overflow-y:auto;padding:20px;background:linear-gradient(160deg,#EDF5EF 0%,#E8F0E8 50%,#EDF2F0 100%);display:flex;flex-direction:column;gap:16px}
+.tl-wrap{padding:20px;background:#F8FAFB;display:flex;flex-direction:column;gap:16px}
 .tl-card{background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-radius:16px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.06),0 6px 20px rgba(0,0,0,.07);border:1px solid rgba(255,255,255,.8)}
 .tl-card-title{font-size:13px;font-weight:700;color:#1e293b;margin-bottom:16px}
 /* Heatmap */
@@ -401,7 +410,7 @@ canvas{max-width:100%;display:block}
 .radar-hint{font-size:10px;color:#94A3B8;margin-top:6px;text-align:center}
 
 /* ── Network Growth Timeline ── */
-.growth-wrap{background:rgba(255,255,255,.92);border-top:1px solid rgba(0,0,0,.07);padding:14px 20px 10px;flex-shrink:0;height:190px;overflow:hidden;backdrop-filter:blur(8px)}
+.growth-wrap{background:rgba(255,255,255,.92);border-top:1px solid rgba(0,0,0,.07);padding:14px 24px 10px;flex-shrink:0;height:190px;overflow:visible;backdrop-filter:blur(8px)}
 .growth-title{font-size:11px;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px}
 #growthSvg{width:100%;height:140px}
 .growth-tooltip{position:fixed;background:rgba(15,23,42,.92);color:#fff;padding:7px 11px;border-radius:8px;font-size:11px;pointer-events:none;z-index:9999;display:none;line-height:1.6}
@@ -487,6 +496,229 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
 .source-badge{font-size:9px;font-weight:700;border-radius:6px;padding:2px 6px;background:#DBEAFE;color:#1D4ED8;white-space:nowrap;flex-shrink:0}
 /* Seasonal/comparison chart section intro */
 .tl-chart-note{font-size:11px;color:#94A3B8;margin-bottom:10px;line-height:1.5}
+
+/* ── Travel-mode banner ── */
+.travel-banner{display:none;align-items:center;gap:9px;padding:7px 16px;background:linear-gradient(135deg,#FFFBEB,#FEF3C7);border-bottom:1px solid #FDE68A;font-size:12px;color:#92400E;flex-shrink:0;animation:slideDown .25s ease}
+.travel-banner.show{display:flex}
+.travel-banner-icon{font-size:18px;flex-shrink:0}
+.travel-banner strong{color:#78350F}
+.travel-banner-close{margin-left:auto;background:none;border:none;font-size:15px;color:#D97706;cursor:pointer;padding:0 2px;line-height:1}
+.travel-banner-dates{display:flex;align-items:center;gap:5px;margin-left:10px}
+.travel-date-inp{padding:3px 8px;border-radius:6px;border:1.5px solid #FDE68A;font-size:11px;color:#78350F;background:#FFFBEB;outline:none}
+.travel-date-inp:focus{border-color:#D97706}
+
+/* ── Connection detail side-panel (network view) ── */
+#connDetailPanel{position:absolute;top:12px;right:12px;width:240px;background:#fff;border-radius:14px;box-shadow:0 6px 28px rgba(0,0,0,.16);border:1px solid #e2e8f0;z-index:200;display:none;overflow:hidden;animation:slideDown .2s ease}
+#connDetailPanel.show{display:block}
+.cdp-header{background:linear-gradient(135deg,#E1F5EE,#D1FAE5);padding:12px 14px 10px;display:flex;align-items:center;gap:9px}
+.cdp-names{font-size:13px;font-weight:700;color:#065F46;flex:1}
+.cdp-count-badge{background:#0F6E56;color:#fff;border-radius:20px;padding:2px 9px;font-size:11px;font-weight:700;white-space:nowrap}
+.cdp-close{background:none;border:none;color:#64748B;cursor:pointer;font-size:16px;padding:0;line-height:1;flex-shrink:0}
+.cdp-body{padding:10px 14px 14px}
+.cdp-title{font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.cdp-event{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #F8FAFC}
+.cdp-event:last-child{border-bottom:none}
+.cdp-event-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.cdp-event-name{font-size:11.5px;font-weight:600;color:#1e293b;flex:1}
+.cdp-event-date{font-size:10px;color:#94A3B8;flex-shrink:0}
+.cdp-footer{background:#F8FAFC;padding:8px 14px;font-size:11px;color:#64748B;display:flex;align-items:center;gap:6px}
+
+/* ── Link highlight on hover ── */
+.net-link-hover{stroke-opacity:.9!important;filter:drop-shadow(0 0 4px rgba(15,110,86,.4))}
+
+/* ── Strongest connection badge ── */
+.np-strong{display:inline-flex;align-items:center;gap:3px;background:#ECFDF5;color:#065F46;border-radius:10px;padding:1px 7px;font-size:10px;font-weight:700;margin-left:4px}
+
+
+/* ── Week snapshot buttons ── */
+.week-bar{display:flex;align-items:center;gap:10px;padding:10px 22px;background:#fff;border-bottom:1px solid #F1F5F9;flex-shrink:0}
+.week-lbl{font-size:10px;font-weight:700;color:#CBD5E1;text-transform:uppercase;letter-spacing:.8px;margin-right:6px;white-space:nowrap}
+.week-btn{padding:6px 16px;border-radius:20px;border:1.5px solid #E2E8F0;font-size:12px;font-weight:600;color:#64748B;background:#fff;cursor:pointer;transition:all .2s;white-space:nowrap}
+.week-btn:hover{background:#F0FDF9;border-color:#9FE1CB;color:#0F6E56}
+.week-btn.active{background:#0F6E56;color:#fff;border-color:#0F6E56;box-shadow:0 2px 8px rgba(15,110,86,.25);font-weight:700}
+.week-milestone{font-size:10px;color:#94A3B8;font-style:italic;margin-left:6px}
+
+/* ── Recommendation badge (enhanced conn bar) ── */
+.rec-bar{display:flex;align-items:center;gap:5px;padding:5px 10px 7px;background:linear-gradient(135deg,#ECFDF5,#D1FAE5);border-top:1px solid #9FE1CB;flex-wrap:wrap}
+.rec-label{font-size:9px;font-weight:700;color:#065F46;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap}
+.rec-names{font-size:10.5px;font-weight:700;color:#0F6E56}
+
+/* ── Demo story guide ── */
+#demoGuide{position:absolute;bottom:18px;right:16px;z-index:600;width:270px;background:#fff;border-radius:14px;box-shadow:0 6px 28px rgba(0,0,0,.15);border:1px solid #e2e8f0;overflow:hidden;display:none}
+#demoGuide.show{display:block;animation:slideDown .25s ease}
+.dg-header{background:linear-gradient(135deg,#0F6E56,#085041);padding:10px 14px;display:flex;align-items:center;gap:8px}
+.dg-title{font-size:12px;font-weight:700;color:#fff;flex:1}
+.dg-close{background:none;border:none;color:rgba(255,255,255,.7);cursor:pointer;font-size:15px;padding:0;line-height:1}
+.dg-step{display:flex;align-items:flex-start;gap:9px;padding:9px 14px;border-bottom:1px solid #F1F5F9;cursor:pointer;transition:background .15s}
+.dg-step:last-child{border-bottom:none}
+.dg-step:hover{background:#F8FFFE}
+.dg-step.done{opacity:.45}
+.dg-step.active{background:#ECFDF5}
+.dg-num{width:20px;height:20px;border-radius:50%;background:#E1F5EE;color:#0F6E56;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.dg-step.active .dg-num{background:#0F6E56;color:#fff}
+.dg-step.done .dg-num{background:#9FE1CB;color:#065F46}
+.dg-text{font-size:11px;color:#334155;line-height:1.45}
+.dg-text strong{color:#0F6E56}
+#demoGuideBtn{position:absolute;bottom:18px;right:16px;z-index:600;background:linear-gradient(135deg,#0F6E56,#085041);color:#fff;border:none;border-radius:20px;padding:8px 16px;font-size:12px;font-weight:600;cursor:pointer;box-shadow:0 3px 12px rgba(15,110,86,.35);transition:all .2s;white-space:nowrap}
+#demoGuideBtn:hover{transform:translateY(-1px);box-shadow:0 5px 16px rgba(15,110,86,.45)}
+
+
+/* ── Timeline month note ── */
+#tlGridNote{margin:0 0 2px;font-size:11px;color:#94A3B8;min-height:16px;transition:color .2s}
+
+
+/* ── Month Calendar ── */
+.mcal-wrap{margin-top:10px}
+.mcal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.mcal-hd{text-align:center;font-size:10px;font-weight:700;color:#64748B;padding:4px 0 6px;letter-spacing:.3px}
+.mcal-hd.mcal-wknd{color:#0F6E56}
+.mcal-cell{border-radius:9px;padding:5px 4px 4px;min-height:56px;cursor:default;transition:all .18s;border:1.5px solid transparent;position:relative;background:#F8FAFC}
+.mcal-cell.mcal-has-acts{cursor:pointer;background:#fff;border-color:#F1F5F9;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.mcal-cell.mcal-has-acts:hover{border-color:#9FE1CB;background:#F0FDF9;box-shadow:0 2px 8px rgba(15,110,86,.12);transform:translateY(-1px)}
+.mcal-cell.mcal-wknd-cell{background:#F1F8F4}
+.mcal-cell.mcal-wknd-cell.mcal-has-acts{background:#EAF7F0}
+.mcal-cell.mcal-today{border-color:#0F6E56!important;background:#E1F5EE!important;box-shadow:0 0 0 2px rgba(15,110,86,.15)!important}
+.mcal-cell.mcal-empty{background:transparent;border:none;cursor:default;box-shadow:none}
+.mcal-date-num{font-size:11px;font-weight:600;color:#94A3B8;line-height:1;margin-bottom:4px}
+.mcal-cell.mcal-has-acts .mcal-date-num{color:#334155;font-weight:700}
+.mcal-cell.mcal-wknd-cell .mcal-date-num{color:#0F6E56}
+.mcal-today-num{color:#0F6E56!important;font-weight:800!important}
+.mcal-dots{display:flex;flex-wrap:wrap;gap:2px;margin-top:2px}
+.mcal-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.mcal-legend{display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:10px;padding-top:8px;border-top:1px solid #F1F5F9}
+.mcal-leg-item{display:flex;align-items:center;gap:4px;font-size:10px;font-weight:600;color:#64748B}
+.mcal-leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+
+/* ── Unified timeline grid ── */
+.utl-grid{display:grid;gap:2px}
+.utl-8col{grid-template-columns:52px repeat(7,1fr)}
+.utl-7col{grid-template-columns:repeat(7,1fr)}
+.utl-col-hd{text-align:center;padding:4px 3px 6px;font-size:10px;font-weight:700;color:#475569;line-height:1.3;border-bottom:2px solid #F1F5F9;margin-bottom:2px;display:flex;flex-direction:column;align-items:center}
+.utl-col-hd.wknd{color:#0F6E56;border-bottom-color:#9FE1CB}
+.utl-col-hd .utl-count{font-size:9px;font-weight:600;color:#94A3B8;margin-top:1px;display:block}
+.utl-wk-lbl{display:flex;align-items:flex-start;justify-content:center;padding-top:4px;font-size:7.5px;font-weight:700;color:#E2E8F0;letter-spacing:.5px;text-transform:uppercase}
+/* Calendar date cells */
+.utl-date{border-radius:8px;padding:4px 5px 3px;min-height:52px;background:#F8FAFC;border:1.5px solid transparent;transition:all .22s cubic-bezier(.2,0,.2,1);position:relative}
+.utl-date.has-acts{background:#fff;border-color:#E8EDF2;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.07),0 2px 8px rgba(0,0,0,.04)}
+.utl-date.has-acts:hover{border-color:#5DCAA5;background:#E8FAF3;box-shadow:0 4px 14px rgba(15,110,86,.18);transform:translateY(-2px)}
+.utl-date.wknd{background:#EDFAF4}
+.utl-date.wknd.has-acts{background:#E0F5EA;border-color:#C6EEDD}
+.utl-date.is-today{border-color:#0F6E56!important;background:#E1F5EE!important;box-shadow:0 0 0 2px rgba(15,110,86,.15)!important}
+.utl-date.empty{background:transparent;border:none;pointer-events:none}
+.utl-date-num{font-size:10px;font-weight:700;color:#CBD5E1;line-height:1;margin-bottom:2px}
+.utl-date.has-acts .utl-date-num{color:#1e293b;font-weight:800}
+.utl-date.wknd .utl-date-num{color:#0F9F8A}
+.utl-date.is-today .utl-date-num{color:#0F6E56;font-weight:800}
+.utl-dots{display:flex;flex-wrap:wrap;gap:2px}
+.utl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;box-shadow:0 1px 2px rgba(0,0,0,.12)}
+/* Separator between calendar and heatmap */
+.utl-sep{grid-column:1/-1;height:1px;background:linear-gradient(to right,transparent,#E2E8F0,transparent);margin:8px 0 6px}
+.utl-sep-label{grid-column:1/-1;font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+/* Heatmap pattern rows */
+.utl-cat-lbl{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:52px;padding:4px 2px;font-size:9px;font-weight:600;color:#94A3B8;white-space:nowrap;gap:1px;text-align:center}
+.utl-cat-lbl .cat-emoji{font-size:12px;line-height:1}
+.utl-heat{border-radius:8px;padding:4px 4px 3px;min-height:52px;background:#fff;border:1.5px solid #F1F5F9;border-left:3px solid var(--hc,#e2e8f0);cursor:pointer;transition:all .18s;display:flex;flex-direction:column;position:relative;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.utl-heat.empty-cell{background:#F8FAFC;border:1.5px solid transparent;cursor:default;box-shadow:none}
+.utl-heat:not(.empty-cell):hover{border-color:var(--hc,#9FE1CB);box-shadow:0 2px 8px rgba(15,110,86,.12);transform:translateY(-1px)}
+.utl-heat.wknd-cell{background:#EAF7F0}
+
+/* ── Log Meeting Modal ── */
+#logMeetModal{position:fixed;inset:0;background:rgba(0,0,0,.52);backdrop-filter:blur(6px);z-index:9999;display:none;align-items:center;justify-content:center;padding:16px;box-sizing:border-box}
+#logMeetModal.open{display:flex}
+.lmm-box{background:#fff;border-radius:18px;width:420px;max-width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.22);animation:slideDown .22s ease}
+.lmm-head{background:linear-gradient(135deg,#E1F5EE,#D1FAE5);padding:16px 20px 14px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0}
+.lmm-title{font-size:15px;font-weight:800;color:#065F46}
+.lmm-sub{font-size:11px;color:#0F6E56;margin-top:2px}
+.lmm-close{background:none;border:none;font-size:18px;color:#64748B;cursor:pointer;padding:0;line-height:1}
+.lmm-body{padding:18px 20px 20px;display:flex;flex-direction:column;gap:12px}
+.lmm-label{font-size:11px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
+.lmm-input{width:100%;padding:9px 12px;border:1.5px solid #E2E8F0;border-radius:9px;font-size:13px;color:#1e293b;outline:none;transition:border-color .18s;box-sizing:border-box}
+.lmm-input:focus{border-color:#0F6E56}
+.lmm-select{width:100%;padding:9px 12px;border:1.5px solid #E2E8F0;border-radius:9px;font-size:13px;color:#1e293b;outline:none;background:#fff;cursor:pointer;box-sizing:border-box}
+.lmm-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.lmm-submit{background:linear-gradient(135deg,#0F6E56,#085041);color:#fff;border:none;border-radius:10px;padding:11px;font-size:13px;font-weight:700;cursor:pointer;width:100%;margin-top:4px;box-shadow:0 3px 10px rgba(15,110,86,.3);transition:all .2s}
+.lmm-submit:hover{transform:translateY(-1px);box-shadow:0 5px 16px rgba(15,110,86,.4)}
+/* Attended strip */
+#dpAttendedStrip{background:#F0FDF9;border-top:1px solid #D1FAE5;padding:10px 16px;display:none}
+#dpAttendedStrip.show{display:block}
+.att-strip-q{font-size:12px;font-weight:700;color:#065F46;margin-bottom:8px}
+.att-strip-row{display:flex;gap:8px}
+.att-strip-input{flex:1;padding:7px 10px;border:1.5px solid #9FE1CB;border-radius:8px;font-size:12px;outline:none}
+.att-strip-input:focus{border-color:#0F6E56}
+.att-strip-btn{background:#0F6E56;color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
+.att-strip-skip{background:none;border:none;color:#94A3B8;font-size:11px;cursor:pointer;padding:4px 0;text-align:center;width:100%;margin-top:6px}
+
+
+/* Join action mini-menu */
+#dpJoinMenu{display:none;position:absolute;bottom:100%;right:0;background:#fff;border-radius:12px;box-shadow:0 6px 24px rgba(0,0,0,.16);border:1px solid #E2E8F0;overflow:hidden;z-index:50;min-width:200px;margin-bottom:6px;animation:slideDown .15s ease}
+#dpJoinMenu.show{display:block}
+.djm-item{display:flex;align-items:center;gap:10px;padding:11px 16px;font-size:12px;font-weight:600;cursor:pointer;border:none;background:none;width:100%;text-align:left;transition:background .15s}
+.djm-item:hover{background:#F8FAFC}
+.djm-item.danger{color:#EF4444}
+.djm-item.danger:hover{background:#FEF2F2}
+.pactions{position:relative}
+
+
+/* ── Knowledge Graph styles ── */
+@keyframes youPulse {
+  0%,100%{r:32;stroke-opacity:.25}
+  50%{r:38;stroke-opacity:.08}
+}
+.you-pulse{animation:youPulse 2.8s ease-in-out infinite}
+.net-link-hover{stroke-opacity:.9!important;stroke-width:2.5px!important}
+
+/* ── ① Integration Journey Banner ── */
+.journey-banner{background:linear-gradient(135deg,#0F6E56,#085041);color:#fff;padding:16px 20px;border-radius:14px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;grid-column:1/-1;box-shadow:0 4px 16px rgba(15,110,86,.28)}
+.jb-stat{text-align:center;min-width:52px;flex-shrink:0}
+.jb-num{font-size:22px;font-weight:800;line-height:1;letter-spacing:-1px}
+.jb-lbl{font-size:9px;font-weight:700;opacity:.65;text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.jb-div{width:1px;height:34px;background:rgba(255,255,255,.2);flex-shrink:0}
+.jb-status{flex:1;min-width:150px}
+.jb-status-label{font-size:12px;font-weight:700;margin-bottom:5px}
+.jb-bar-track{background:rgba(255,255,255,.2);border-radius:20px;height:7px;overflow:hidden}
+.jb-bar-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,#86EFAC,#34D399);transition:width .7s ease}
+
+/* ── ② My Journey Timeline ── */
+.journey-tl{display:flex;flex-direction:column;gap:0;position:relative;padding-left:26px}
+.journey-tl::before{content:'';position:absolute;left:8px;top:8px;bottom:8px;width:2px;background:linear-gradient(#0F6E56,#86EFAC)}
+.jtl-item{position:relative;padding-bottom:16px}
+.jtl-item:last-child{padding-bottom:0}
+.jtl-dot{position:absolute;left:-22px;top:4px;width:11px;height:11px;border-radius:50%;background:#0F6E56;border:2px solid #fff;box-shadow:0 0 0 2px #0F6E56;flex-shrink:0}
+.jtl-dot.mine{background:#F59E0B;box-shadow:0 0 0 2px #F59E0B}
+.jtl-date{font-size:10px;color:#94A3B8;font-weight:600;margin-bottom:1px}
+.jtl-name{font-size:13px;font-weight:700;color:#0F3329;margin-bottom:1px}
+.jtl-meta{font-size:11px;color:#475569}
+.jtl-met{display:inline-block;background:#ECFDF5;color:#065F46;font-size:10px;font-weight:700;border-radius:8px;padding:1px 8px;margin-top:3px;border:1px solid #9FE1CB}
+
+/* ── ④ Heatmap toggle ── */
+#heatmapToggleBtn{position:absolute;bottom:80px;right:12px;z-index:1000;background:#fff;border:2px solid #e2e8f0;border-radius:10px;padding:6px 10px;font-size:12px;font-weight:700;cursor:pointer;color:#0F6E56;box-shadow:0 2px 8px rgba(0,0,0,.12);transition:all .2s}
+#heatmapToggleBtn.on{background:#0F6E56;color:#fff;border-color:#0F6E56}
+
+
+
+
+/* ── My Location feature ────────────────────────────────────────────── */
+#setLocBtn{position:absolute;top:122px;left:14px;z-index:500;background:#fff;border:none;border-radius:10px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.14);transition:all .2s}
+#setLocBtn:hover{background:#E1F5EE;transform:scale(1.08)}
+#setLocBtn.loc-set{background:#0F6E56;color:#fff;box-shadow:0 2px 12px rgba(15,110,86,.4)}
+.loc-panel{position:fixed;z-index:9999;background:#fff;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,.16);border:1px solid #e2e8f0;padding:14px 16px;width:220px;display:none;animation:locSlideIn .15s ease}
+.loc-panel.open{display:block}
+@keyframes locSlideIn{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:translateX(0)}}
+.loc-panel-title{font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px}
+.loc-current-lbl{font-size:11px;color:#475569;background:#F8FAFC;border:1px solid #e2e8f0;border-radius:7px;padding:5px 9px;margin-bottom:10px;word-break:break-all}
+.loc-current-lbl.is-set{color:#0F6E56;background:#E1F5EE;border-color:#9FE1CB;font-weight:600}
+.loc-opt-btn{display:flex;align-items:center;gap:8px;width:100%;padding:8px 11px;border:1.5px solid #e2e8f0;border-radius:9px;background:#F8FAFC;font-size:12px;font-weight:600;color:#334155;cursor:pointer;transition:all .18s;margin-bottom:6px;text-align:left}
+.loc-opt-btn:hover{border-color:#0F6E56;background:#E1F5EE;color:#0F6E56}
+.loc-opt-btn:last-child{margin-bottom:0}
+.loc-opt-btn.danger:hover{border-color:#FCA5A5;background:#FFF0F0;color:#E05252}
+.loc-pin-mode-bar{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999;background:#0F6E56;color:#fff;padding:9px 20px;border-radius:30px;font-size:12px;font-weight:700;box-shadow:0 4px 16px rgba(15,110,86,.45);display:none;align-items:center;gap:10px;white-space:nowrap}
+.loc-pin-mode-bar.active{display:flex}
+.loc-pin-cancel{background:rgba(255,255,255,.2);border:none;color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;cursor:pointer}
+.loc-pin-cancel:hover{background:rgba(255,255,255,.35)}
+@keyframes homeRing{0%{transform:scale(1);opacity:.6}100%{transform:scale(2.5);opacity:0}}
+.home-ring{position:absolute;top:-8px;left:-8px;width:32px;height:32px;border:2px solid #0F6E56;border-radius:50%;animation:homeRing 2s ease-out infinite;pointer-events:none}
+.home-dot{width:16px;height:16px;background:#0F6E56;border:2.5px solid #fff;border-radius:50%;box-shadow:0 2px 10px rgba(15,110,86,.5);position:relative;z-index:1;display:flex;align-items:center;justify-content:center;font-size:9px;line-height:1}
 </style>
 </head>
 <body>
@@ -540,12 +772,12 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
   <div class="nav-right">
     <button class="btn-create" onclick="openModal()" aria-label="Post a new activity">＋ Post Activity</button>
   </div>
+
 </nav>
 
 <!-- TABS -->
 <div class="tab-bar" role="tablist" aria-label="Main views">
   <div class="tab active" role="tab" tabindex="0" aria-selected="true"  id="tab-map"       onclick="switchTab('map')"       onkeydown="if(event.key==='Enter'){switchTab('map')}">🗺️ Discover</div>
-  <div class="tab"        role="tab" tabindex="0" aria-selected="false" id="tab-network"    onclick="switchTab('network')"   onkeydown="if(event.key==='Enter'){switchTab('network')}">📊 My Progress <span class="tab-badge" id="connBadge">7</span></div>
   <div class="tab"        role="tab" tabindex="0" aria-selected="false" id="tab-timeline"   onclick="switchTab('timeline')"  onkeydown="if(event.key==='Enter'){switchTab('timeline')}">📅 Timeline</div>
 </div>
 
@@ -560,6 +792,9 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
     <div class="chip chip-outdoor"   id="chip-outdoor"   role="button" tabindex="0" aria-pressed="false" title="Outdoor walks &amp; nature activities" onclick="toggleFilter('outdoor')"   onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFilter('outdoor')}"><span class="ico">🌿</span>Outdoor</div>
     <div class="chip chip-food"      id="chip-food"      role="button" tabindex="0" aria-pressed="false" title="Food markets &amp; dining events"     onclick="toggleFilter('food')"      onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFilter('food')}"><span class="ico">🍜</span>Food &amp; Dining</div>
     <div class="chip chip-volunteer" id="chip-volunteer" role="button" tabindex="0" aria-pressed="false" title="Volunteering &amp; community service"  onclick="toggleFilter('volunteer')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFilter('volunteer')}"><span class="ico">🤝</span>Volunteer</div>
+    <div style="width:1px;height:18px;background:#e2e8f0;flex-shrink:0;margin:0 2px;align-self:center"></div>
+    <div class="chip chip-english" id="chip-english" role="button" tabindex="0" aria-pressed="false" title="English-friendly activities" onclick="toggleFilter('english')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFilter('english')}"><span class="ico">🌐</span>English-friendly</div>
+    <div class="chip chip-solo"    id="chip-solo"    role="button" tabindex="0" aria-pressed="false" title="Good for solo newcomers"     onclick="toggleFilter('solo')"    onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFilter('solo')}"><span class="ico">👤</span>Solo-friendly</div>
 
   </div>
   <!-- Time-brush banner: shows when Timeline → Map link is active -->
@@ -568,6 +803,18 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
     <span id="mapTimeLabel" style="background:#0F6E56;color:#fff;padding:2px 10px;border-radius:10px;font-size:11px"></span>
     <span style="color:#94A3B8;font-size:11px;font-weight:400">— map shows activities in this slot only</span>
     <button onclick="clearTimeBrush()" title="Clear time filter">✕</button>
+  </div>
+
+  <!-- Travel mode banner -->
+  <div class="travel-banner" id="travelBanner">
+    <span class="travel-banner-icon">🚗</span>
+    <span>Exploring <strong id="travelCityName">—</strong>! Filter by travel dates to find what's on during your visit.</span>
+    <div class="travel-banner-dates">
+      <input type="date" lang="en" class="travel-date-inp" id="travelFrom" title="Visit from"/>
+      <span style="color:#D97706;font-size:11px">→</span>
+      <input type="date" lang="en" class="travel-date-inp" id="travelTo" title="Visit to"/>
+    </div>
+    <button class="travel-banner-close" onclick="hideTravelBanner()" title="Dismiss">✕</button>
   </div>
   <div class="map-wrap" id="main-content" role="main">
 
@@ -588,9 +835,17 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
           <div class="stat-num" id="statNC">—</div>
           <div class="stat-lbl">Newcomer ✓</div>
         </div>
+        <div class="stat-item">
+          <div class="stat-num" id="statNCPct">—%</div>
+          <div class="stat-lbl">Friendly Rate</div>
+        </div>
       </div>
       <!-- Re-center button -->
       <button id="mapLocateBtn" title="Re-center map" onclick="map.setView([-37.787,175.279],13)">📍</button>
+      
+      <!-- My Location button (panel + pin-bar injected to body via JS) -->
+      <button id="setLocBtn" title="Set my home location" onclick="toggleLocPanel()">&#x2302;</button>
+      <button id="heatmapToggleBtn" onclick="toggleHeatmap()" title="Toggle activity heatmap">🔥 Heatmap</button>
     </div>
 
     <!-- ── Resize Handle ── -->
@@ -668,103 +923,62 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
         <!-- Rich extras: demographics, age, vibe, practical -->
         <div id="pextras"></div>
       </div>
-      <div class="pactions">
-        <button class="btn-join" onclick="joinActivity()">Join Activity</button>
+      <!-- Who did you meet strip (shown after Mark as Attended) -->
+      <div id="dpAttendedStrip">
+        <div class="att-strip-q">🤝 Who did you meet at this activity?</div>
+        <div class="att-strip-row">
+          <input class="att-strip-input" id="dpMeetName" type="text" placeholder="Enter their name…" maxlength="30"/>
+          <button class="att-strip-btn" onclick="submitAttendedMeet()">Add</button>
+        </div>
+        <button class="att-strip-skip" onclick="skipAttendedMeet()">Skip</button>
+      </div>
+      <div id="dpMarkAttendedRow" style="display:none;padding:6px 16px 0;text-align:center">
+        <button onclick="markAsAttended()" style="background:none;border:none;color:#0F6E56;font-size:11px;font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:2px;padding:4px 0">✓ I attended this — who did I meet?</button>
+      </div>
+      <div class="pactions" style="position:relative">
+        <!-- Mini menu shown after joining -->
+        <div id="dpJoinMenu">
+          <button class="djm-item" onclick="logMeetFromJoin()">🤝 Log someone I met here</button>
+          <button class="djm-item danger" onclick="cancelJoin()">✕ Cancel registration</button>
+        </div>
+        <button class="btn-join" id="dpJoinBtn" onclick="joinActivity()">Join Activity</button>
         <button id="dpSaveBtn" class="btn-save" onclick="toggleSave(currentDetailId)" title="Save this activity">♡ Save</button>
         <a id="dpDirections" href="#" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;flex-shrink:0;background:#F0F9FF;color:#0369A1;border:1.5px solid #BAE6FD;border-radius:9px;font-size:19px;text-decoration:none;transition:all .2s" title="Get directions in Google Maps"><svg width="14" height="18" viewBox="0 0 14 18" fill="currentColor" aria-hidden="true"><path d="M7 0C3.13 0 0 3.13 0 7c0 5.25 7 11 7 11S14 12.25 14 7C14 3.13 10.87 0 7 0zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg></a>
       </div>
     </div><!-- /detail-panel -->
     </div><!-- /listPane -->
+
+    <!-- Demo story guide -->
+    <button id="demoGuideBtn" onclick="openDemoGuide()" title="Try the demo story">📖 Demo Story</button>
+    <div id="demoGuide">
+      <div class="dg-header">
+        <span class="dg-title">📖 Demo Story — Try This Path</span>
+        <button class="dg-close" onclick="closeDemoGuide()">✕</button>
+      </div>
+      <div class="dg-step active" id="dgs1" onclick="demoStep(1)">
+        <div class="dg-num">1</div>
+        <div class="dg-text">Go to <strong>Timeline</strong> tab → click a <strong>Saturday morning</strong> cell</div>
+      </div>
+      <div class="dg-step" id="dgs2" onclick="demoStep(2)">
+        <div class="dg-num">2</div>
+        <div class="dg-text">Map filters to Sat morning → find <strong>Hamilton Farmers Market</strong></div>
+      </div>
+      <div class="dg-step" id="dgs3" onclick="demoStep(3)">
+        <div class="dg-num">3</div>
+        <div class="dg-text">Open it → see <strong>Anika &amp; Ravi</strong> from your network are going</div>
+      </div>
+      <div class="dg-step" id="dgs4" onclick="demoStep(4)">
+        <div class="dg-num">4</div>
+        <div class="dg-text">Go to <strong>Network</strong> tab → click the link to <strong>Anika</strong></div>
+      </div>
+      <div class="dg-step" id="dgs5" onclick="demoStep(5)">
+        <div class="dg-num">5</div>
+        <div class="dg-text">See your <strong>3 shared adventures</strong> → integration score grew to 67%</div>
+      </div>
+    </div>
   </div><!-- /map-wrap -->
 </div><!-- /view-map -->
 
-<!-- ═══ NETWORK VIEW / MY PROGRESS ═══ -->
-<div class="view" id="view-network">
-
-  <!-- ── HERO: Integration Score + Key Stats ── -->
-  <div style="background:linear-gradient(135deg,#E1F5EE 0%,#D1FAE5 100%);border-bottom:1px solid #9FE1CB;padding:16px 24px;display:flex;align-items:center;gap:22px;flex-shrink:0">
-    <!-- Score ring -->
-    <div style="position:relative;width:84px;height:84px;flex-shrink:0">
-      <svg width="84" height="84" viewBox="0 0 84 84">
-        <circle cx="42" cy="42" r="34" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="7"/>
-        <circle cx="42" cy="42" r="34" fill="none" stroke="#0F6E56" stroke-width="7"
-          stroke-linecap="round" stroke-dasharray="214" stroke-dashoffset="81" transform="rotate(-90 42 42)"/>
-      </svg>
-      <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
-        <div style="font-size:22px;font-weight:800;color:#0F6E56">62</div>
-        <div style="font-size:8px;color:#047857;font-weight:700;text-transform:uppercase;letter-spacing:.5px">Score</div>
-      </div>
-    </div>
-    <!-- Title + progress bar -->
-    <div style="flex:1;min-width:0">
-      <div style="font-size:15px;font-weight:800;color:#085041;margin-bottom:3px">Integration Progress</div>
-      <div style="font-size:12px;color:#0F6E56;margin-bottom:9px">You're integrating well in <span id="netCity">Hamilton</span>. Try a new category to push past 70!</div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <div style="flex:1;height:6px;background:rgba(255,255,255,.55);border-radius:3px;overflow:hidden">
-          <div style="width:62%;height:100%;background:#0F6E56;border-radius:3px"></div>
-        </div>
-        <span style="font-size:11px;font-weight:700;color:#085041;white-space:nowrap">62 / 100</span>
-      </div>
-    </div>
-    <!-- Key stat cards -->
-    <div style="display:flex;gap:10px;flex-shrink:0">
-      <div style="background:rgba(255,255,255,.72);border-radius:12px;padding:10px 16px;text-align:center;min-width:72px">
-        <div style="font-size:26px;font-weight:800;color:#0F6E56;line-height:1" id="nsConn">7</div>
-        <div style="font-size:9px;font-weight:700;color:#047857;text-transform:uppercase;letter-spacing:.3px;margin-top:3px">Connections</div>
-        <div style="font-size:9px;color:#10B981;font-weight:600;margin-top:2px">▲ +2 this week</div>
-      </div>
-      <div style="background:rgba(255,255,255,.72);border-radius:12px;padding:10px 16px;text-align:center;min-width:72px">
-        <div style="font-size:26px;font-weight:800;color:#7EB8F7;line-height:1" id="nsAct">7</div>
-        <div style="font-size:9px;font-weight:700;color:#1D4ED8;text-transform:uppercase;letter-spacing:.3px;margin-top:3px">Activities</div>
-        <div style="font-size:9px;color:#3B82F6;font-weight:600;margin-top:2px">▲ +1 this week</div>
-      </div>
-      <div style="background:rgba(255,255,255,.72);border-radius:12px;padding:10px 16px;text-align:center;min-width:72px">
-        <div style="font-size:26px;font-weight:800;color:#B57BEE;line-height:1" id="nsCat">6</div>
-        <div style="font-size:9px;font-weight:700;color:#7C3AED;text-transform:uppercase;letter-spacing:.3px;margin-top:3px">Categories</div>
-        <div style="font-size:9px;color:#94A3B8;font-weight:600;margin-top:2px">of 7 total</div>
-      </div>
-      <div style="background:rgba(255,255,255,.72);border-radius:12px;padding:10px 16px;text-align:center;min-width:72px">
-        <div style="font-size:26px;font-weight:800;color:#FFB347;line-height:1" id="nsScore">62</div>
-        <div style="font-size:9px;font-weight:700;color:#D4893A;text-transform:uppercase;letter-spacing:.3px;margin-top:3px">Int. Score</div>
-        <div style="font-size:9px;color:#F97316;font-weight:600;margin-top:2px">▲ +8 pts</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ── MIDDLE: Connection Growth (main story) ── -->
-  <div class="growth-wrap" style="height:210px">
-    <div class="growth-title">Your Integration Journey — Who you've met and when</div>
-    <svg id="growthSvg"></svg>
-  </div>
-  <div class="growth-tooltip" id="growthTip"></div>
-
-  <!-- ── BOTTOM: Network graph (left) + Sidebar (right) ── -->
-  <div style="flex:1;display:flex;overflow:hidden;min-height:0">
-    <!-- Network graph area -->
-    <div style="flex:1;position:relative;overflow:hidden;background:linear-gradient(160deg,#EDF5EF 0%,#E8F0E8 50%,#EDF2F0 100%)">
-      <div style="position:absolute;top:10px;left:14px;font-size:11px;font-weight:700;color:#0F6E56;z-index:10;pointer-events:none">
-        Your Social Network &nbsp;<span style="font-weight:400;color:#94A3B8">· Drag nodes to explore</span>
-      </div>
-      <svg id="netSvg" style="width:100%;height:100%"></svg>
-    </div>
-    <!-- Right sidebar -->
-    <div class="net-side" style="overflow-y:auto">
-      <div class="net-insight" id="netInsight">
-        💡 <strong>Opportunity:</strong> <span id="netInsightText">You're 2 connections away from 3 Mandarin speakers. Join the next Language Exchange to expand your network.</span>
-      </div>
-      <div style="font-size:10px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">
-        Integration by Category
-        <span style="font-size:9px;color:#94A3B8;font-weight:400;text-transform:none;letter-spacing:0"> · click to filter map</span>
-      </div>
-      <div id="netCatBars"></div>
-      <div style="font-size:10px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.5px;margin-top:18px;margin-bottom:10px">People you've met</div>
-      <div id="personList"></div>
-      <div id="netLegend" style="display:none"></div>
-    </div>
-  </div>
-
-  <div class="net-tooltip" id="netTip"></div>
-</div>
 <!-- ═══ DASHBOARD VIEW ═══ -->
 <div class="view" id="view-dashboard">
   <!-- Brush indicator banner -->
@@ -775,6 +989,22 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
     <button onclick="clearBrush()" title="Clear filter">✕</button>
   </div>
   <div class="dash-wrap">
+
+    <!-- ① Integration Journey Banner -->
+    <div class="journey-banner" id="journeyBanner">
+      <div style="font-size:26px;flex-shrink:0" id="jbEmoji">🌱</div>
+      <div class="jb-stat"><div class="jb-num" id="jbDays">21</div><div class="jb-lbl">Days Here</div></div>
+      <div class="jb-div"></div>
+      <div class="jb-stat"><div class="jb-num" id="jbActs">5</div><div class="jb-lbl">Activities</div></div>
+      <div class="jb-div"></div>
+      <div class="jb-stat"><div class="jb-num" id="jbConns">7</div><div class="jb-lbl">Connections</div></div>
+      <div class="jb-div"></div>
+      <div class="jb-status">
+        <div class="jb-status-label" id="jbLabel">Growing 🌿 — You're building your community!</div>
+        <div class="jb-bar-track"><div class="jb-bar-fill" id="jbBarFill" style="width:62%"></div></div>
+        <div style="font-size:10px;opacity:.6;margin-top:4px"><span id="jbScore">62</span>% integrated — keep going!</div>
+      </div>
+    </div>
 
     <!-- Dashboard insight banner -->
     <div class="dash-insight">
@@ -856,14 +1086,88 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
 <div class="view" id="view-timeline">
   <div class="tl-wrap">
 
-    <!-- Category × Day Grid (merged) -->
-    <div class="tl-card">
-      <div class="tl-card-title">📅 When &amp; What? <span style="font-size:11px;font-weight:400;color:#94A3B8">Category activity by day · darker = more events · click to filter map</span></div>
-      <p class="tl-chart-note">Weekends dominate outdoor &amp; sports · Friday evening = social &amp; food peak · Weekdays = learning &amp; culture indoors</p>
-      <div id="catDayGrid" style="margin-top:8px"></div>
+
+    <!-- ═══ UNIFIED CALENDAR + PATTERN VIEW ═══ -->
+    <div class="tl-card" id="unifiedTimelineCard">
+      <!-- Header row: title + note + month nav -->
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap">
+        <div class="tl-card-title" style="margin:0">📅 When &amp; What?</div>
+        <span style="font-size:11px;color:#94A3B8;flex:1" id="tlGridNote">Loading…</span>
+        <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+          <button onclick="shiftMonth(-1)" style="width:28px;height:28px;border-radius:50%;border:1.5px solid #e2e8f0;background:#fff;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;color:#475569;transition:all .18s" onmouseover="this.style.borderColor='#0F6E56';this.style.color='#0F6E56'" onmouseout="this.style.borderColor='#e2e8f0';this.style.color='#475569'">‹</button>
+          <div id="tlMonthLabel" style="font-size:13px;font-weight:700;color:#0F6E56;min-width:104px;text-align:center"></div>
+          <button onclick="shiftMonth(1)" style="width:28px;height:28px;border-radius:50%;border:1.5px solid #e2e8f0;background:#fff;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;color:#475569;transition:all .18s" onmouseover="this.style.borderColor='#0F6E56';this.style.color='#0F6E56'" onmouseout="this.style.borderColor='#e2e8f0';this.style.color='#475569'">›</button>
+          <button onclick="jumpToToday()" id="tlTodayBtn" style="padding:3px 10px;border-radius:8px;border:1.5px solid #e2e8f0;background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#64748B;transition:all .18s" onmouseover="this.style.borderColor='#0F6E56';this.style.color='#0F6E56'" onmouseout="this.style.borderColor='#e2e8f0';this.style.color='#64748B'">Today</button>
+        </div>
+      </div>
+      <!-- Unified grid rendered by JS: shared col headers → calendar weeks → separator → heatmap rows -->
+      <div id="unifiedGrid"></div>
+      <!-- Legend -->
+      <div class="mcal-legend" id="mcalLegend" style="margin-top:10px"></div>
+      <!-- Monthly Summary (inside same card, updates with month nav) -->
+      <div id="tlMonthlySummary"></div>
     </div>
 
-    <!-- Seasonal Activity Trends -->
+    <!-- Connection Network Graph -->
+    <div class="tl-card" style="padding:0;overflow:hidden">
+      <div style="padding:14px 20px 10px;border-bottom:1px solid #E1F5EE;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <div class="tl-card-title" style="margin:0">🕸 Connection Network</div>
+        <div style="display:flex;align-items:center;gap:6px;margin-left:auto">
+          <span style="font-size:10px;color:#94A3B8;font-weight:600">Journey:</span>
+          <button class="week-btn" id="wbtn1" onclick="showWeek(1)">🌱 Arrived</button>
+          <button class="week-btn" id="wbtn3" onclick="showWeek(3)">🌿 Growing</button>
+          <button class="week-btn active" id="wbtn6" onclick="showWeek(6)">🌳 Connected</button>
+          <span id="weekMilestone" style="font-size:10px;color:#94A3B8;margin-left:6px;font-style:italic"></span>
+        </div>
+      </div>
+      <div style="display:flex;overflow:visible;min-height:480px">
+        <div style="flex:1;position:relative;overflow:hidden;background:#F8FAFB">
+          <svg id="netSvg" viewBox="0 0 680 460" preserveAspectRatio="xMidYMid meet" style="width:100%;height:480px;display:block;min-height:480px"></svg>
+          <div id="connDetailPanel">
+            <div class="cdp-header">
+              <div class="cdp-names" id="cdpNames">You &amp; —</div>
+              <div class="cdp-count-badge" id="cdpCount">0 times</div>
+              <button class="cdp-close" onclick="closeConnPanel()" title="Close">✕</button>
+            </div>
+            <div class="cdp-body">
+              <div class="cdp-title">Shared Adventures</div>
+              <div id="cdpEvents"></div>
+            </div>
+            <div class="cdp-footer">
+              <span>🗓️</span>
+              <span id="cdpFooter">Met for the first time —</span>
+            </div>
+          </div>
+        </div>
+        <div class="net-side" style="height:480px;overflow-y:auto;display:flex;flex-direction:column;gap:0">
+          <div class="net-insight" id="netInsight">
+            <div style="display:flex;align-items:flex-start;gap:6px">
+              <span style="flex-shrink:0">💡</span>
+              <div style="flex:1;min-width:0">
+                <strong>Opportunity:</strong> <span id="netInsightText">You're 2 connections away from 3 Mandarin speakers. Join the next Language Exchange to expand your network.</span>
+                <div style="margin-top:7px"><button onclick="switchTab('map')" style="background:#0F6E56;color:#fff;border:none;border-radius:7px;padding:4px 12px;font-size:10px;font-weight:700;cursor:pointer">→ View Activity</button></div>
+              </div>
+            </div>
+          </div>
+          <div style="font-size:11px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px">People you've met</div>
+          <div id="personList" style="flex:1"></div>
+          <div id="netCatBars" style="display:none"></div>
+          <div style="margin-top:auto;padding-top:14px;border-top:1px solid #F1F5F9">
+            <button onclick="openLogMeet()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:6px;background:linear-gradient(135deg,#0F6E56,#085041);color:#fff;border:none;border-radius:10px;padding:11px;font-size:12px;font-weight:700;cursor:pointer;box-shadow:0 3px 10px rgba(15,110,86,.28)">
+              🤝 Log a Meeting
+            </button>
+            <div style="font-size:10px;color:#94A3B8;text-align:center;margin-top:6px">Record someone you met → grows your network</div>
+          </div>
+          <div id="netLegend" style="display:none"></div>
+        </div>
+      </div>
+      <div class="net-tooltip" id="netTip"></div>
+    </div>
+  </div>
+
+  </div>
+
+        <!-- Seasonal Activity Trends -->
     <div class="tl-card">
       <div class="tl-card-title">🌏 Seasonal Activity Trends — Jan to Dec
         <span style="font-size:11px;font-weight:400;color:#94A3B8"> NZ climate shapes when activities peak</span>
@@ -872,29 +1176,83 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
       <div style="position:relative;height:230px"><canvas id="seasonalChart"></canvas></div>
     </div>
 
+    <!-- ② My Integration Journey Timeline -->
+    <div class="tl-card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+        <div class="tl-card-title" style="margin:0">🗺️ My Integration Journey</div>
+        <span style="font-size:11px;color:#94A3B8">Your personal story of settling in</span>
+      </div>
+      <div class="journey-tl" id="journeyTimeline">
+        <div style="font-size:12px;color:#94A3B8;padding:20px 0;text-align:center">Loading your journey…</div>
+      </div>
+    </div>
   </div>
+
 </div>
 
 
+<!-- ═══ LOG MEETING MODAL ═══ -->
+<div id="logMeetModal" role="dialog" aria-modal="true" aria-label="Log a Meeting">
+  <div class="lmm-box">
+    <div class="lmm-head">
+      <div>
+        <div class="lmm-title">🤝 Log a Meeting</div>
+        <div class="lmm-sub">Who did you connect with? Your network will update instantly.</div>
+      </div>
+      <button class="lmm-close" onclick="closeLogMeet()" aria-label="Close">✕</button>
+    </div>
+    <div class="lmm-body">
+      <div>
+        <div class="lmm-label">Who did you meet? *</div>
+        <input class="lmm-input" id="lmName" type="text" placeholder="e.g. Sarah, Ming, Aroha…" maxlength="30"/>
+      </div>
+      <div class="lmm-row">
+        <div>
+          <div class="lmm-label">Category (how you met)</div>
+          <select class="lmm-select" id="lmCat">
+            <option value="social">Social</option>
+            <option value="sports">Sports</option>
+            <option value="culture">Culture</option>
+            <option value="learning">Learning</option>
+            <option value="outdoor">Outdoor</option>
+            <option value="food">Food & Dining</option>
+            <option value="volunteer">Volunteer</option>
+          </select>
+        </div>
+        <div>
+          <div class="lmm-label">Date you met</div>
+          <input class="lmm-input" id="lmDate" type="text" placeholder="YYYY-MM-DD" pattern="\d{4}-\d{2}-\d{2}"/>
+        </div>
+      </div>
+      <div>
+        <div class="lmm-label">Activity (optional)</div>
+        <select class="lmm-select" id="lmActivity">
+          <option value="">— Select an activity —</option>
+        </select>
+      </div>
+      <button class="lmm-submit" onclick="submitLogMeet()">Add to My Network →</button>
+    </div>
+  </div>
+</div>
 
 <!-- MODAL -->
 <div class="modal-ov" id="modalOv">
   <div class="modal">
     <div class="mhdr"><div class="mhdr-title">Post a New Activity</div><button class="mclose" onclick="closeModal()">✕</button></div>
     <div class="mbody">
-      <div class="fg"><label class="flbl">Activity Title *</label><input class="finp" type="text" placeholder="e.g. Saturday Morning Yoga"/></div>
+      <div class="fg"><label class="flbl">Activity Title *</label><input id="actTitle" class="finp" type="text" placeholder="e.g. Saturday Morning Yoga"/></div>
       <div class="frow">
         <div class="fg"><label class="flbl">Category *</label>
-          <select class="fsel"><option>Social</option><option>Sports</option><option>Culture</option><option>Learning</option><option>Outdoor</option><option>Food &amp; Dining</option><option>Volunteer</option><option>Other</option></select></div>
+          <select id="actCat" class="fsel"><option value="social">Social</option><option value="sports">Sports</option><option value="culture">Culture</option><option value="learning">Learning</option><option value="outdoor">Outdoor</option><option value="food">Food &amp; Dining</option><option value="volunteer">Volunteer</option><option value="other">Other</option></select></div>
         <div class="fg"><label class="flbl">City *</label>
-          <select class="fsel"><option>Hamilton</option><option>Auckland</option></select></div>
+          <select id="actCity" class="fsel"><option value="hamilton">Hamilton</option><option value="auckland">Auckland</option></select></div>
       </div>
       <div class="frow">
-        <div class="fg"><label class="flbl">Date</label><input class="finp" type="date"/></div>
-        <div class="fg"><label class="flbl">Time</label><input class="finp" type="time"/></div>
+        <div class="fg"><label class="flbl">Date</label><input id="actDate" class="finp" type="text" placeholder="YYYY-MM-DD" pattern="\d{4}-\d{2}-\d{2}"/></div>
+        <div class="fg"><label class="flbl">Time</label><input id="actTime" class="finp" type="time"/></div>
       </div>
-      <div class="fg"><label class="flbl">Location / Venue</label><input class="finp" type="text" placeholder="e.g. Hamilton Lake, Gate 2"/></div>
-      <div class="fg"><label class="flbl">Description</label><textarea class="ftxt" placeholder="What to expect, who it's for, what to bring…"></textarea></div>
+      <div class="fg"><label class="flbl">Location / Venue</label><input id="actLocation" class="finp" type="text" placeholder="e.g. Hamilton Lake, Gate 2"/></div>
+      <div class="fg"><label class="flbl">Description</label><textarea id="actDesc" class="ftxt" placeholder="What to expect, who it's for, what to bring…"></textarea></div>
       <!-- Image upload -->
       <div class="fg">
         <label class="flbl">Activity Photo <span style="color:#94A3B8;font-weight:400">(optional)</span></label>
@@ -914,7 +1272,7 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
           </div>
         </div>
       </div>
-      <div class="fg"><label class="flbl">Max Companions</label><input class="finp" type="number" placeholder="Leave blank for unlimited" min="1"/></div>
+      <div class="fg"><label class="flbl">Max Companions</label><input id="actMax" class="finp" type="number" placeholder="Leave blank for unlimited" min="1"/></div>
       <div class="fg" style="flex-direction:row;align-items:center;gap:8px">
         <input type="checkbox" id="ncCheck" style="width:15px;height:15px;accent-color:#0F6E56"/>
         <label for="ncCheck" class="flbl" style="margin:0;cursor:pointer">Mark as Newcomer-Friendly 🌟</label>
@@ -931,6 +1289,164 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
 <script src="https://d3js.org/d3.v7.min.js"></script>
 
 <script>
+// ── My Location ──────────────────────────────────────────────────────────────
+let homeLocation = null;   // { lat, lng, label }
+let _homeMarker  = null;
+let _pinDropMode = false;
+
+// Inject panel & pin-bar directly into body (avoids map overflow:hidden clipping)
+(function _injectLocUI(){
+  if(document.getElementById('locPanel')) return;
+
+  const panel = document.createElement('div');
+  panel.id = 'locPanel';
+  panel.className = 'loc-panel';
+  panel.innerHTML = `
+    <div class="loc-panel-title">My Location</div>
+    <div class="loc-current-lbl" id="locCurrentLbl">Not set — using map centre</div>
+    <button class="loc-opt-btn" onclick="locUseGPS()">&#x1F4E1; Use GPS</button>
+    <button class="loc-opt-btn" onclick="locDropPin()">&#x1F4CC; Click on Map</button>
+    <button class="loc-opt-btn danger" id="locClearBtn" onclick="locClear()" style="display:none">&#x2715; Clear Location</button>`;
+  document.body.appendChild(panel);
+
+  const bar = document.createElement('div');
+  bar.id = 'locPinBar';
+  bar.className = 'loc-pin-mode-bar';
+  bar.innerHTML = 'Click anywhere on the map to set your location <button class="loc-pin-cancel" onclick="locCancelPin()">Cancel</button>';
+  document.body.appendChild(bar);
+
+  // Close panel when clicking outside
+  document.addEventListener('click', e => {
+    const p = document.getElementById('locPanel');
+    const b = document.getElementById('setLocBtn');
+    if(p && p.classList.contains('open') && !p.contains(e.target) && !b?.contains(e.target)){
+      p.classList.remove('open');
+      b?.classList.remove('active');
+    }
+  }, true); // capture phase so it fires before any stopPropagation
+})();
+
+function toggleLocPanel(){
+  const btn   = document.getElementById('setLocBtn');
+  const panel = document.getElementById('locPanel');
+  if(!panel || !btn) return;
+  if(panel.classList.contains('open')){
+    panel.classList.remove('open');
+    btn.classList.remove('active');
+  } else {
+    _refreshLocPanel();
+    // Position relative to button using fixed coords
+    const r = btn.getBoundingClientRect();
+    panel.style.top  = r.top + 'px';
+    panel.style.left = (r.right + 10) + 'px';
+    panel.classList.add('open');
+    btn.classList.add('active');
+    // Clamp if off bottom
+    requestAnimationFrame(() => {
+      const pr = panel.getBoundingClientRect();
+      if(pr.bottom > window.innerHeight - 16)
+        panel.style.top = Math.max(8, window.innerHeight - pr.height - 16) + 'px';
+    });
+  }
+}
+
+function _refreshLocPanel(){
+  const lbl  = document.getElementById('locCurrentLbl');
+  const clrBtn = document.getElementById('locClearBtn');
+  if(homeLocation){
+    lbl.textContent = homeLocation.label || (homeLocation.lat.toFixed(5)+', '+homeLocation.lng.toFixed(5));
+    lbl.classList.add('is-set');
+    clrBtn.style.display = '';
+  } else {
+    lbl.textContent = 'Not set — using map centre';
+    lbl.classList.remove('is-set');
+    clrBtn.style.display = 'none';
+  }
+}
+
+function locUseGPS(){
+  _closeLocPanel();
+  if(!navigator.geolocation){
+    showToast('GPS unavailable','Your browser or device does not support geolocation','warn'); return;
+  }
+  showToast('Getting location…','Accessing GPS — please allow access','info',4000);
+  navigator.geolocation.getCurrentPosition(
+    pos => _applyHomeLocation(pos.coords.latitude, pos.coords.longitude, 'GPS location'),
+    err => showToast('GPS error', err.message || 'Could not get location', 'warn')
+  );
+}
+
+function locDropPin(){
+  _closeLocPanel();
+  _pinDropMode = true;
+  if(map) map.getContainer().style.cursor = 'crosshair';
+  document.getElementById('locPinBar').classList.add('active');
+  map.once('click', e => {
+    if(!_pinDropMode) return;
+    _pinDropMode = false;
+    map.getContainer().style.cursor = '';
+    document.getElementById('locPinBar').classList.remove('active');
+    _applyHomeLocation(e.latlng.lat, e.latlng.lng, 'Custom pin');
+  });
+}
+
+function locCancelPin(){
+  _pinDropMode = false;
+  if(map) map.getContainer().style.cursor = '';
+  document.getElementById('locPinBar').classList.remove('active');
+  map.off('click');  // remove the pending once-handler
+}
+
+function _applyHomeLocation(lat, lng, label){
+  homeLocation = { lat, lng, label };
+  // Place home marker
+  if(_homeMarker) map.removeLayer(_homeMarker);
+  const icon = L.divIcon({
+    className: '',
+    html: '<div style="position:relative;width:16px;height:16px"><div class="home-ring"></div><div class="home-dot">H</div></div>',
+    iconSize: [16,16], iconAnchor: [8,8], popupAnchor: [0,-12]
+  });
+  _homeMarker = L.marker([lat,lng], { icon, zIndexOffset: 900 })
+    .addTo(map)
+    .bindPopup('<b>My Location</b><br><span style="font-size:11px;color:#64748B">'+label+'</span>');
+  // Update button badge
+  const btn = document.getElementById('setLocBtn');
+  if(btn) btn.classList.add('loc-set');
+  // Pan to show marker
+  map.panTo([lat, lng]);
+  // Refresh distance filtering
+  renderMarkers();
+  updateActivityList();
+  showToast('Location set!', 'Distances now measured from ' + label, 'success');
+}
+
+function locClear(){
+  homeLocation = null;
+  if(_homeMarker){ map.removeLayer(_homeMarker); _homeMarker = null; }
+  const btn = document.getElementById('setLocBtn');
+  if(btn) btn.classList.remove('loc-set');
+  _closeLocPanel();
+  renderMarkers();
+  updateActivityList();
+  showToast('Location cleared','Distances now use the map centre','info');
+}
+
+function _closeLocPanel(){
+  document.getElementById('locPanel')?.classList.remove('open');
+  document.getElementById('setLocBtn')?.classList.remove('active');
+}
+
+// Close panel when clicking outside
+document.addEventListener('click', e => {
+  const panel = document.getElementById('locPanel');
+  const btn   = document.getElementById('setLocBtn');
+  if(panel && !panel.contains(e.target) && e.target !== btn && !btn?.contains(e.target)){
+    panel.classList.remove('open');
+    btn?.classList.remove('active');
+  }
+});
+
+
 // ════════════════════════════════════════
 //  SHARED DATA
 // ════════════════════════════════════════
@@ -958,6 +1474,20 @@ const CAT_BG = {
   social:'#F5EEFF', sports:'#FFF0F0', culture:'#E8FEFB',
   learning:'#EEF6FF', outdoor:'#EDFFF3', food:'#FFF8ED',
   volunteer:'#FFF0F5', other:'#F1F5F9'
+};
+// ── Connections attending each activity (from social network) ──
+const CONNECTION_ACTS = {
+  1: [{name:'Anika',col:'#B57BEE',group:'social'},{name:'Ravi',col:'#B57BEE',group:'social'}],
+  2: [{name:'James',col:'#F87171',group:'sports'}],
+  3: [{name:'Sofia',col:'#2DD4BF',group:'culture'}],
+  4: [{name:'Li Wei',col:'#7EB8F7',group:'learning'}],
+  5: [{name:'Emma',col:'#6DCF8A',group:'outdoor'}],
+  6: [{name:'Yuki',col:'#FFB347',group:'food'}],
+  8: [{name:'Ravi',col:'#B57BEE',group:'social'}],
+  9: [{name:'James',col:'#F87171',group:'sports'}],
+  10:[{name:'Sofia',col:'#2DD4BF',group:'culture'}],
+  11:[{name:'Li Wei',col:'#7EB8F7',group:'learning'}],
+  15:[{name:'Anika',col:'#B57BEE',group:'social'}],
 };
 // ── Activity meta: recurring cadence + organiser type ──
 const ACTIVITY_META={
@@ -1235,7 +1765,7 @@ document.addEventListener('click',e=>{
 //  TAB SWITCHING
 // ════════════════════════════════════════
 function switchTab(tab) {
-  const tabKeys=['map','network','timeline'];
+  const tabKeys=['map','timeline'];
   document.querySelectorAll('.tab').forEach((t,i)=>{
     const active=tabKeys[i]===tab;
     t.classList.toggle('active', active);
@@ -1244,7 +1774,6 @@ function switchTab(tab) {
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.getElementById('view-'+tab).classList.add('active');
   if(tab==='map' && !map) initMap();
-  if(tab==='network') initNetwork();
   if(tab==='dashboard') initDashboard();
   if(tab==='timeline') initTimeline();
   if(tab==='map') setTimeout(()=>map&&map.invalidateSize(),50);
@@ -1280,12 +1809,26 @@ function switchTile(key){
   currentTile=L.tileLayer(s.url,s.opts).addTo(map);
   currentTile.bringToBack();
 }
+function isEnglishFriendly(a){
+  return a.newcomer && (a.category==='learning' || a.category==='social' || a.desc.toLowerCase().includes('english'));
+}
+function isSoloFriendly(a){
+  return a.newcomer===true;
+}
 function getFilteredActivities({checkBounds=false,bounds=null}={}){
   const q=document.getElementById('searchInput').value.toLowerCase();
+  const hasEnglish=activeFilters.has('english');
+  const hasSolo=activeFilters.has('solo');
+  const catFilters=new Set([...activeFilters].filter(f=>f!=='all'&&f!=='english'&&f!=='solo'));
   return ACTIVITIES.filter(a=>{
     if(a.city!==currentCity)return false;
     if(timeBrushIds!==null){if(!timeBrushIds.has(a.id))return false;}
-    else if(!activeFilters.has('all')&&!activeFilters.has(a.category))return false;
+    else if(!activeFilters.has('all')){
+      if(catFilters.size&&!catFilters.has(a.category))return false;
+      if(hasEnglish&&!isEnglishFriendly(a))return false;
+      if(hasSolo&&!isSoloFriendly(a))return false;
+      if(!catFilters.size&&!hasEnglish&&!hasSolo)return false;
+    }
     if(!withinDist(a))return false;
     if(q&&!a.name.toLowerCase().includes(q)&&!a.location.toLowerCase().includes(q)&&!a.desc.toLowerCase().includes(q))return false;
     if(checkBounds&&bounds&&!bounds.contains(L.latLng(a.lat,a.lng)))return false;
@@ -1303,22 +1846,34 @@ function renderMarkers(){
     const ncBadge=a.newcomer?`
       <div class="nc-tip" data-tip="🌟 Newcomer-friendly"
            style="position:absolute;top:-6px;right:-6px;width:20px;height:20px;background:#10B981;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;font-size:11px;line-height:1;z-index:4">🌟</div>`:'';
-    // Bold floating marker: large circle + outer glow ring + strong shadow — clearly above Google POI icons
+    const myConnsM=CONNECTION_ACTS[a.id]||[];
+    const connBadge=myConnsM.length?`
+      <div title="${myConnsM.map(c=>c.name).join(' & ')} going"
+           style="position:absolute;top:-6px;left:-6px;min-width:20px;height:20px;background:#0F6E56;border-radius:10px;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:#fff;line-height:1;z-index:4;padding:0 4px;white-space:nowrap">👥${myConnsM.length}</div>`:'';
+    // Bold floating marker — user-posted activities get gold "My Activity" treatment
+    const isMyAct = !!a._userPosted;
+    const markerBorder = isMyAct ? '3.5px solid #F59E0B' : `3.5px solid ${col}`;
+    const markerGlow   = isMyAct ? '#F59E0B' : col;
+    const markerBg     = isMyAct ? '#FFFBEB' : '#fff';
+    const myActBadge   = isMyAct ? `<div title="My Activity" style="position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:#F59E0B;color:#fff;font-size:9px;font-weight:800;border-radius:8px;padding:1px 6px;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.2);z-index:5;letter-spacing:.2px">✦ Mine</div>` : '';
     const icon=L.divIcon({
       html:`<div style="position:relative;display:inline-flex;flex-direction:column;align-items:center">
         <!-- Outer glow ring -->
-        <div style="position:absolute;top:-5px;left:-5px;right:-5px;bottom:2px;border-radius:50%;background:${col};opacity:0.18;pointer-events:none"></div>
+        <div style="position:absolute;top:-5px;left:-5px;right:-5px;bottom:2px;border-radius:50%;background:${markerGlow};opacity:0.22;pointer-events:none"></div>
+        <!-- My-act top badge -->
+        ${myActBadge}
         <!-- Main circle -->
-        <div style="position:relative;width:42px;height:42px;border-radius:50%;background:#fff;border:3.5px solid ${col};box-shadow:0 4px 16px rgba(0,0,0,.32),0 1px 4px rgba(0,0,0,.2);display:flex;align-items:center;justify-content:center;font-size:20px;line-height:1;z-index:1">
-          ${emoji}${ncBadge}
+        <div style="position:relative;width:42px;height:42px;border-radius:50%;background:${markerBg};border:${markerBorder};box-shadow:0 4px 16px rgba(0,0,0,.32),0 1px 4px rgba(0,0,0,.2);display:flex;align-items:center;justify-content:center;font-size:20px;line-height:1;z-index:1">
+          ${emoji}${ncBadge}${connBadge}
         </div>
         <!-- Pointer -->
-        <svg width="14" height="9" viewBox="0 0 14 9" style="display:block;margin-top:-1px;z-index:1;filter:drop-shadow(0 3px 3px rgba(0,0,0,.18))"><polygon points="0,0 14,0 7,9" fill="${col}"/></svg>
+        <svg width="14" height="9" viewBox="0 0 14 9" style="display:block;margin-top:-1px;z-index:1;filter:drop-shadow(0 3px 3px rgba(0,0,0,.18))"><polygon points="0,0 14,0 7,9" fill="${isMyAct?'#F59E0B':col}"/></svg>
       </div>`,
-      className:'',iconSize:[42,51],iconAnchor:[21,51],popupAnchor:[0,-54]
+      className:'',iconSize:[42,59],iconAnchor:[21,59],popupAnchor:[0,-62]
     });
     const m=L.marker([a.lat,a.lng],{icon});
-    m.bindPopup(`<div class="pop"><div class="pop-cat" style="color:${col}">${CAT_LABEL[a.category]}</div><div class="pop-name">${a.name}</div><div class="pop-det">📅 ${a.date} · ${a.time}</div><div class="pop-det">📍 ${a.location}</div><div class="pop-det" style="margin-top:5px"><span style="color:#0F6E56;font-weight:600;cursor:pointer" onclick="showDetail(${a.id})">View details →</span></div></div>`,{maxWidth:240});
+    const myActPopupBadge = isMyAct ? `<div style="display:inline-flex;align-items:center;gap:4px;background:#FEF3C7;color:#92400E;border-radius:6px;padding:2px 8px;font-size:10px;font-weight:700;margin-bottom:5px">✦ My Activity</div><br>` : '';
+    m.bindPopup(`<div class="pop">${myActPopupBadge}<div class="pop-cat" style="color:${col}">${emoji} ${CAT_LABEL[a.category]}</div><div class="pop-name">${a.name}</div><div class="pop-det">📅 ${a.date} · ${a.time}</div><div class="pop-det">📍 ${a.location}</div><div class="pop-det" style="margin-top:5px"><span style="color:#0F6E56;font-weight:600;cursor:pointer" onclick="showDetail(${a.id})">View details →</span></div></div>`,{maxWidth:240});
     m.on('click',()=>showDetail(a.id));
     // Marker hover → highlight card in list
     m.on('mouseover',()=>{
@@ -1334,7 +1889,10 @@ function renderMarkers(){
   });
   document.getElementById('statCount').textContent=list.length;
   document.getElementById('statCity').textContent=CITIES[currentCity].label;
-  document.getElementById('statNC').textContent=list.filter(a=>a.newcomer).length;
+  const _ncList=list.filter(a=>a.newcomer);
+  document.getElementById('statNC').textContent=_ncList.length;
+  const _ncPctEl=document.getElementById('statNCPct');
+  if(_ncPctEl)_ncPctEl.textContent=(list.length>0?Math.round(_ncList.length/list.length*100):0)+'%';
   // defer list update until map settles
   setTimeout(updateActivityList, 80);
 }
@@ -1382,7 +1940,7 @@ function updateActivityList(){
   scroll.innerHTML=visible.map(a=>`
     <div class="act-card${selectedCardId===a.id?' selected':''}" id="card-${a.id}"
          onclick="selectCard(${a.id})" onmouseenter="hoverCard(${a.id})" onmouseleave="unhoverCard(${a.id})"
-         style="--cat-color:${CAT_COLOR[a.category]};--cat-bg:${CAT_BG[a.category]}">
+         style="--cat-color:${CAT_COLOR[a.category]};--cat-bg:${CAT_BG[a.category]};${a._userPosted?'border:2px solid #F59E0B;box-shadow:0 0 0 2px rgba(245,158,11,.15),0 4px 12px rgba(0,0,0,.06);':''}">
       <div class="ac-header">
         <img class="ac-header-img" src="${getCardImg(a)}" alt="${CAT_LABEL[a.category]||'activity'}" loading="lazy"
              onerror="this.style.display='none'"/>
@@ -1401,9 +1959,16 @@ function updateActivityList(){
           ${metaBadges(a.id)}
           <span class="ac-att">👥 ${a.attendees}</span>
           ${a.newcomer?'<span class="ac-nc">🌟 Newcomer ✓</span>':''}
+          ${a._userPosted?'<span style="font-size:10px;font-weight:700;background:#FEF3C7;color:#92400E;border-radius:9px;padding:2px 8px;border:1px solid #FDE68A">✦ My Activity</span>':''}
           ${EVTFD_IDS.has(a.id)?'<span class="source-badge">✓ Real Event</span>':''}
           ${a.website?`<a href="${a.website}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="font-size:9.5px;font-weight:600;color:#0F6E56;text-decoration:none;border:1px solid #9FE1CB;border-radius:8px;padding:2px 7px;background:#F0FDF4;white-space:nowrap;flex-shrink:0">🌐 Website ↗</a>`:''}
         </div>
+        ${(CONNECTION_ACTS[a.id]||[]).length?`
+        <div class="rec-bar">
+          <span class="rec-label">🤝 Based on your network</span>
+          <span class="rec-names">${(CONNECTION_ACTS[a.id]).map(c=>c.name).join(' & ')} are going</span>
+        </div>`:''}
+
       </div>
     </div>`).join('');
 
@@ -1513,7 +2078,26 @@ function showDetail(id){
   document.getElementById('pnc').style.display=a.newcomer?'flex':'none';
   document.getElementById('pdesc').textContent=a.desc;
   const ini=['JK','SA','MT','RL','WH','DY','CL'];
-  document.getElementById('patt').innerHTML=`
+  const myConns = CONNECTION_ACTS[a.id] || [];
+  const connHtml = myConns.length ? `
+    <div style="background:#F0FDF9;border:1.5px solid #9FE1CB;border-radius:10px;padding:9px 12px;margin-bottom:10px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div style="font-size:9.5px;font-weight:700;color:#0F6E56;text-transform:uppercase;letter-spacing:.5px">🤝 Your connections going</div>
+        <button onclick="switchTab('timeline')" style="font-size:9px;font-weight:700;color:#0F6E56;background:rgba(15,110,86,.08);border:1px solid #9FE1CB;border-radius:6px;padding:2px 8px;cursor:pointer;white-space:nowrap">Network →</button>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">
+        ${myConns.map(c=>`
+          <div style="display:flex;align-items:center;gap:6px;background:#fff;border-radius:20px;padding:4px 10px 4px 4px;border:1.5px solid ${c.col}30;box-shadow:0 1px 4px ${c.col}20">
+            <div style="width:26px;height:26px;border-radius:50%;background:${c.col};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;flex-shrink:0">${c.name.slice(0,2).toUpperCase()}</div>
+            <span style="font-size:11px;font-weight:700;color:#1e293b">${c.name}</span>
+            <span style="font-size:9px;color:#0F6E56;font-weight:600">✓ going</span>
+          </div>`).join('')}
+      </div>
+    </div>` : `<div style="background:#F8FAFC;border:1.5px dashed #E2E8F0;border-radius:10px;padding:9px 12px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between">
+      <span style="font-size:11px;color:#94A3B8">None of your connections are going yet.</span>
+      <button onclick="switchTab('timeline')" style="font-size:9px;font-weight:700;color:#64748B;background:#F1F5F9;border:1px solid #E2E8F0;border-radius:6px;padding:2px 8px;cursor:pointer;white-space:nowrap">Network →</button>
+    </div>`;
+  document.getElementById('patt').innerHTML=connHtml+`
     <div class="av-stack">${a.avatarColors.slice(0,5).map((c,i)=>`<div class="av" style="background:${c}">${ini[i]}</div>`).join('')}</div>
     <span class="att-cnt">+${Math.max(0,a.attendees-5)} others going</span>`;
 
@@ -1600,6 +2184,18 @@ function showDetail(id){
   if(sb){const sv=savedActivities.has(a.id);sb.textContent=sv?'♥ Saved':'♡ Save';sb.style.background=sv?'#E1F5EE':'';}
 
   document.getElementById('detailPanel').classList.add('open');
+  const _dgb=document.getElementById('demoGuideBtn');if(_dgb)_dgb.style.display='none';
+  // Reset join/attend state for this activity
+  const _mr=document.getElementById('dpMarkAttendedRow');
+  if(_mr) _mr.style.display=joinedActivities&&joinedActivities.has(a.id)?'block':'none';
+  const _jb=document.getElementById('dpJoinBtn');
+  if(_jb){
+    if(joinedActivities&&joinedActivities.has(a.id)){_jb.textContent='✓ Joined';_jb.style.background='linear-gradient(135deg,#059669,#047857)';}
+    else{_jb.textContent='Join Activity';_jb.style.background='';}
+  }
+  document.getElementById('dpAttendedStrip').classList.remove('show');
+  const _jm=document.getElementById('dpJoinMenu');if(_jm)_jm.classList.remove('show');
+  if(_jb&&joinedActivities&&joinedActivities.has(a.id)){_jb.textContent='✓ Joined ▾';}
   if(map) map.setView([a.lat,a.lng],Math.max(map.getZoom(),15),{animate:true});
   // sync card highlight
   selectedCardId=a.id;
@@ -1609,10 +2205,17 @@ function showDetail(id){
 }
 function closePanel(){
   document.getElementById('detailPanel').classList.remove('open');
+  const _dgb=document.getElementById('demoGuideBtn');if(_dgb)_dgb.style.display='block';
   selectedCardId=null;
   document.querySelectorAll('.act-card').forEach(c=>c.classList.remove('selected'));
 }
-function joinActivity(){showToast('You\'re in! 🎉','Your new connection will appear in the Network graph.','success');}
+function joinActivity(){
+  const a = ACTIVITIES.find(x=>x.id===currentDetailId);
+  const conns = CONNECTION_ACTS[currentDetailId]||[];
+  const boost = 8 + (conns.length * 3);
+  const connNote = conns.length ? ` · Meet ${conns.map(c=>c.name).join(' & ')}!` : ' · Your new connection will appear in the Network graph.';
+  showToast(`You\'re in! 🎉 +${boost} Integration Score`,`${CAT_LABEL[a?.category]||'Activity'} joined${connNote}`,'success');
+}
 function toggleSave(id){
   if(!id)return;
   const sb=document.getElementById('dpSaveBtn');
@@ -1629,7 +2232,16 @@ function toggleSave(id){
 
 function switchCity(city){
   currentCity=city;
+  // Remove home marker from map on city switch (location may not be in new city)
+  if(_homeMarker){ map.removeLayer(_homeMarker); _homeMarker=null; }
+  if(homeLocation){
+    const btn=document.getElementById('setLocBtn');
+    if(btn) btn.classList.remove('loc-set');
+    homeLocation=null;
+    showToast('City changed','Home location cleared — set a new one for '+CITIES[city].label,'info',3200);
+  }
   const c=CITIES[city];
+  updateTravelBanner(city);
   // Update dropdown button label
   document.getElementById('cityDdLabel').textContent=`${c.icon} ${c.label}`;
   // Update network sidebar title
@@ -1641,12 +2253,10 @@ function switchCity(city){
   // Reset network/dashboard for new city so they reinitialise
   netInitialized[city]=false;
   dashCharts={};
-  const sv=document.getElementById('view-network');
-  if(sv.classList.contains('active')) initNetwork();
   const dv=document.getElementById('view-dashboard');
   if(dv.classList.contains('active')) initDashboard();
   const tv=document.getElementById('view-timeline');
-  if(tv.classList.contains('active')) initTimeline();
+  if(tv.classList.contains('active')){ renderUnifiedTimeline(); initSeasonalChart(); requestAnimationFrame(()=>{ netInitialized[currentCity]=false; initNetworkWithWeek(currentWeek); }); }
   // Rebuild dropdown list to update active state
   buildCityList(document.getElementById('citySearchInp')?.value||'');
 }
@@ -1680,7 +2290,8 @@ function toggleFilter(cat){
     if(activeFilters.size===0)activeFilters.add('all');
   }
   updateChips(); renderMarkers();
-  if(!activeFilters.has('all')) setTimeout(fitToFilter,100);
+  // Only fitToFilter for category chips, not special filters
+  if(!activeFilters.has('all')&&cat!=='english'&&cat!=='solo') setTimeout(fitToFilter,100);
 }
 function updateChips(){
   const ac=document.getElementById('chip-all');
@@ -1696,7 +2307,7 @@ function updateChips(){
     if(isActive){
       ch.classList.add('active');
       ch.style.background=CAT_COLOR[c];ch.style.borderColor=CAT_COLOR[c];
-      // 马卡龙浅色用深色文字保证对比度
+      // Light pastel bg needs dark text for contrast
       const _hex=CAT_COLOR[c].replace('#','');
       const _l=(0.299*parseInt(_hex.substr(0,2),16)+0.587*parseInt(_hex.substr(2,2),16)+0.114*parseInt(_hex.substr(4,2),16))/255;
       ch.style.color=_l>0.62?'#334155':'#fff';
@@ -1705,6 +2316,19 @@ function updateChips(){
       ch.style.background='';ch.style.borderColor='';ch.style.color='';
     }
   });
+  // Special chips: english, solo
+  ['english','solo'].forEach(k=>{
+    const ch=document.getElementById('chip-'+k); if(!ch)return;
+    const isActive=activeFilters.has(k);
+    ch.setAttribute('aria-pressed', isActive);
+    if(isActive){ch.classList.add('active');} else {ch.classList.remove('active');}
+  });
+}
+
+function toggleScoreBreakdown(){
+  const sd=document.getElementById('scoreBreakdown');
+  if(!sd) return;
+  sd.style.display = (sd.style.display==='none'||sd.style.display==='') ? 'block' : 'none';
 }
 
 // ════════════════════════════════════════
@@ -1756,6 +2380,428 @@ function updateChoroStat(){
   if(s&&el) el.textContent=`${CITIES[currentCity].label}: ${s.pct}% migrants`;
 }
 
+
+
+// ── Week snapshot data ──
+const NET_WEEKS = {
+  hamilton: {
+    1: {
+      label:'Week 1 · Just Arrived', score:12, acts:1, cats:1,
+      milestone:'1 connection · Just getting started',
+      nodes:[
+        {id:'you',label:'You',group:'you',size:22},
+        {id:'p1',label:'Anika',group:'social',acts:['Coffee Chat','Social Mixer','Board Games Night'],size:15},
+        {id:'p5',label:'Ravi',group:'social',acts:['Coffee Chat'],size:12},
+      ],
+      links:[
+        {source:'you',target:'p1',value:1,cat:'social',sharedActs:[{name:'Hamilton Farmers Market',date:'17 May',cat:'social'}]},
+        {source:'you',target:'p5',value:1,cat:'social',sharedActs:[{name:'Hamilton Farmers Market',date:'17 May',cat:'social'}]},
+      ]
+    },
+    3: {
+      label:'Week 3 · Growing', score:34, acts:4, cats:3,
+      milestone:'5 connections · Things are picking up!',
+      nodes:[
+        {id:'you',label:'You',group:'you',size:22},
+        {id:'p1',label:'Anika',group:'social',acts:['Coffee Chat','Social Mixer','Board Games Night'],size:15},
+        {id:'p2',label:'James',group:'sports',acts:['Parkrun','Badminton Session'],size:14},
+        {id:'p3',label:'Li Wei',group:'learning',acts:['Conversation Club','IELTS Study Group','Conversation Club (2nd)'],size:15},
+        {id:'p5',label:'Ravi',group:'social',acts:['Coffee Chat'],size:12},
+        {id:'p6',label:'Emma',group:'outdoor',acts:['Botanic Gardens Walk','Hakarimata Track'],size:13},
+        {source:'p1',target:'p5',value:1,cat:'social',sharedActs:[]},
+      ],
+      links:[
+        {source:'you',target:'p1',value:2,cat:'social',sharedActs:[{name:'Coffee Chat',date:'17 May',cat:'social'},{name:'Social Mixer',date:'25 May',cat:'social'}]},
+        {source:'you',target:'p2',value:1,cat:'sports',sharedActs:[{name:'Hamilton Lake Parkrun',date:'17 May',cat:'sports'}]},
+        {source:'you',target:'p3',value:2,cat:'learning',sharedActs:[{name:'English Conversation Club',date:'21 May',cat:'learning'},{name:'IELTS Study Group',date:'28 May',cat:'learning'}]},
+        {source:'you',target:'p5',value:1,cat:'social',sharedActs:[{name:'Hamilton Farmers Market',date:'17 May',cat:'social'}]},
+        {source:'you',target:'p6',value:1,cat:'outdoor',sharedActs:[{name:'Botanic Gardens Walk',date:'24 May',cat:'outdoor'}]},
+        {source:'p1',target:'p5',value:1,cat:'social',sharedActs:[]},
+      ]
+    },
+    6: null  // null = use full NET_DATA
+  }
+};
+
+let currentWeek = 6;
+
+function showWeek(week) {
+  if(currentWeek === week) return;
+  currentWeek = week;
+  // Update buttons
+  [1,3,6].forEach(w => {
+    const btn = document.getElementById('wbtn'+w);
+    if(btn) btn.classList.toggle('active', w===week);
+  });
+  // Update milestone text + stats
+  const wData = NET_WEEKS.hamilton && NET_WEEKS.hamilton[week];
+  const ms = document.getElementById('weekMilestone');
+  if(wData && wData!==null) {
+    if(ms) ms.textContent = wData.milestone;
+    const _nc1=document.getElementById('nsConn'); if(_nc1) _nc1.textContent = wData.nodes.filter(n=>n.id!=='you').length;
+    const _na1=document.getElementById('nsAct');  if(_na1) _na1.textContent = wData.acts;
+    const _ng1=document.getElementById('nsCat');  if(_ng1) _ng1.textContent = wData.cats;
+    const _ns1=document.getElementById('nsScore');if(_ns1) _ns1.textContent = wData.score;
+    // update integration ring
+    const arc = document.getElementById('ringArc');
+    if(arc){const circ=226;arc.setAttribute('stroke-dashoffset',Math.round(circ*(1-wData.score/100)));}
+  } else {
+    if(ms) ms.textContent = '7 connections · Integration 62%';
+    const _nc2=document.getElementById('nsConn'); if(_nc2) _nc2.textContent = 7;
+    const _na2=document.getElementById('nsAct');  if(_na2) _na2.textContent = 7;
+    const _ng2=document.getElementById('nsCat');  if(_ng2) _ng2.textContent = 6;
+    const _ns2=document.getElementById('nsScore');if(_ns2) _ns2.textContent = 62;
+    const arc = document.getElementById('ringArc');
+    if(arc) arc.setAttribute('stroke-dashoffset', 86);
+  }
+  // Force re-draw network with week data
+  netInitialized[currentCity] = false;
+  initNetworkWithWeek(week);
+}
+
+function initNetworkWithWeek(week) {
+  const wEntry = NET_WEEKS[currentCity] ? NET_WEEKS[currentCity][week] : null;
+  const data = (!wEntry || wEntry === null) ? NET_DATA[currentCity] : {
+    nodes: wEntry.nodes.filter(n => !n.source), // filter out accidentally included links
+    links: wEntry.links
+  };
+  if(!data) return;
+  netInitialized[currentCity] = true;
+
+  // Fix: week 3 nodes mistakenly included a link object — filter
+  const nodes = data.nodes.filter(n => n.id !== undefined);
+  const links = data.links;
+
+  const cats=[...new Set(links.map(l=>l.cat))];
+  document.getElementById('netLegend').innerHTML=cats.map(c=>`
+    <div class="leg-row"><div class="leg-dot" style="background:${CAT_COLOR[c]}"></div>${CAT_LABEL[c]}</div>
+  `).join('')+`<div class="leg-row"><div class="leg-dot" style="background:#0F6E56;border:2px solid #fff;box-shadow:0 0 0 2px #0F6E56"></div>You</div>`
+  +`<div style="margin-top:10px;padding-top:10px;border-top:1px solid #F1F5F9">
+    <div style="font-size:9px;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Node type</div>
+    <div class="leg-row" style="gap:8px">
+      <svg width="14" height="14" style="flex-shrink:0"><circle cx="7" cy="7" r="6" fill="none" stroke="#94A3B8" stroke-width="1.8" stroke-dasharray="4 2.5"/></svg>
+      <span style="font-size:10px;color:#64748B">System inferred<br><span style="font-size:9px;color:#94A3B8">Based on shared activities</span></span>
+    </div>
+    <div class="leg-row" style="gap:8px;margin-top:5px">
+      <svg width="14" height="14" style="flex-shrink:0"><circle cx="7" cy="7" r="6" fill="none" stroke="#0F6E56" stroke-width="1.8"/></svg>
+      <span style="font-size:10px;color:#065F46">You confirmed<br><span style="font-size:9px;color:#94A3B8">Logged via "Log a Meeting"</span></span>
+    </div>
+  </div>`;
+
+  // Build meeting count
+  const meetCount={};
+  links.forEach(l=>{
+    const src=typeof l.source==='object'?l.source.id:l.source;
+    const tgt=typeof l.target==='object'?l.target.id:l.target;
+    if(src==='you') meetCount[tgt]=(l.sharedActs||[]).length||l.value;
+    if(tgt==='you') meetCount[src]=(l.sharedActs||[]).length||l.value;
+  });
+  const maxMeet=Math.max(...Object.values(meetCount),0);
+  const linkMap={};
+  links.forEach(l=>{ const src=typeof l.source==='object'?l.source.id:l.source; const tgt=typeof l.target==='object'?l.target.id:l.target; if(src==='you') linkMap[tgt]=l; if(tgt==='you') linkMap[src]=l; });
+  const peers=nodes.filter(n=>n.id!=='you').sort((a,b)=>(meetCount[b.id]||0)-(meetCount[a.id]||0));
+  document.getElementById('personList').innerHTML=peers.map(n=>{
+    const cnt=meetCount[n.id]||1;
+    const isTop=cnt===maxMeet&&maxMeet>=2;
+    const col=CAT_COLOR[n.group]||'#94A3B8';
+    const initials=n.label.slice(0,2);
+    const badge=isTop?`<span class='np-strong'>⭐ Closest</span>`:'';
+    const inferBadge=n.inferred?`<span style="font-size:8px;color:#94A3B8;background:#F1F5F9;border-radius:4px;padding:1px 5px;border:1px dashed #CBD5E1;flex-shrink:0">estimated</span>`:
+      `<span style="font-size:8px;color:#0F6E56;background:#ECFDF5;border-radius:4px;padding:1px 5px;flex-shrink:0">✦ confirmed</span>`;
+    const detail=`${cnt} time${cnt!==1?'s':''} · ${n.acts[0]}${n.acts.length>1?' +more':''}`;
+    const avatarStyle=n.inferred?`border:2px dashed ${col}`:`;border:2px solid ${col}`;
+    return `<div class="net-person" onclick="netBrushPerson('${n.group}','${n.label}')">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:34px;height:34px;border-radius:50%;background:${n.inferred?'#fff':col};${avatarStyle};box-shadow:0 1px 4px rgba(0,0,0,.12);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:${n.inferred?col:'#fff'};flex-shrink:0">${initials}</div>
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap">
+            <span class="np-name" style="color:${col}">${n.label}</span>${badge}${inferBadge}
+          </div>
+          <div class="np-detail">${detail}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  drawNetworkGraph({nodes, links});
+}
+
+function drawNetworkGraph(data) {
+  const svg = d3.select('#netSvg');
+  svg.selectAll('*').remove();
+  const W = 680, H = 460;
+  svg.attr('viewBox', '0 0 680 460').attr('preserveAspectRatio','xMidYMid meet');
+
+  // Pin "You" at center
+  const youNode = data.nodes.find(n => n.id === 'you');
+  if (youNode) { youNode.fx = W / 2; youNode.fy = H / 2; }
+
+  const sim = d3.forceSimulation(data.nodes)
+    .force('link', d3.forceLink(data.links).id(d => d.id).distance(Math.min(W, H) * 0.38))
+    .force('charge', d3.forceManyBody().strength(-Math.min(W, H) * 2.2))
+    .force('center', d3.forceCenter(W / 2, H / 2))
+    .force('collision', d3.forceCollide().radius(d => 52))
+    .alphaDecay(0.015);
+
+  const defs = svg.append('defs');
+
+  // Subtle dot-grid background pattern
+  const pat = defs.append('pattern').attr('id', 'kgDotGrid')
+    .attr('width', 28).attr('height', 28).attr('patternUnits', 'userSpaceOnUse');
+  pat.append('circle').attr('cx', 2).attr('cy', 2).attr('r', 1.2).attr('fill', '#CBD5E1').attr('opacity', .45);
+
+  // Glow for "You"
+  const fGlow = defs.append('filter').attr('id', 'kgYouGlow')
+    .attr('x','-60%').attr('y','-60%').attr('width','220%').attr('height','220%');
+  fGlow.append('feGaussianBlur').attr('stdDeviation','7').attr('result','blur');
+  const fm = fGlow.append('feMerge');
+  fm.append('feMergeNode').attr('in','blur');
+  fm.append('feMergeNode').attr('in','SourceGraphic');
+
+  // Shadow for peer nodes
+  const fSh = defs.append('filter').attr('id', 'kgShadow')
+    .attr('x','-40%').attr('y','-40%').attr('width','180%').attr('height','180%');
+  fSh.append('feDropShadow').attr('dx',0).attr('dy',3).attr('stdDeviation',5).attr('flood-color','#1e293b').attr('flood-opacity',.12);
+
+  // Per-link gradient (you-color → peer-color)
+  data.links.forEach((l, i) => {
+    const peerCat = l.cat || 'social';
+    const grad = defs.append('linearGradient').attr('id', `kgLg${i}`)
+      .attr('gradientUnits','userSpaceOnUse');
+    grad.append('stop').attr('offset','0%').attr('stop-color','#0F6E56').attr('stop-opacity',.8);
+    grad.append('stop').attr('offset','100%').attr('stop-color', CAT_COLOR[peerCat]||'#94A3B8').attr('stop-opacity',.5);
+    l._gi = i;
+  });
+
+  const g = svg.append('g');
+  svg.call(d3.zoom().scaleExtent([.35, 3]).on('zoom', e => g.attr('transform', e.transform)));
+
+  // Background
+  g.append('rect').attr('x',-W*2).attr('y',-H*2).attr('width',W*5).attr('height',H*5)
+    .attr('fill','url(#kgDotGrid)').style('pointer-events','none');
+
+  // ── Links ──
+  const linkG = g.append('g').attr('class','kg-links');
+  const linkPath = linkG.selectAll('path').data(data.links).enter().append('path')
+    .attr('fill','none')
+    .attr('stroke', d => `url(#kgLg${d._gi})`)
+    .attr('stroke-width', d => 1.2 + d.value * 0.7)
+    .attr('stroke-opacity', .7)
+    .style('cursor','pointer')
+    .on('mouseover', function(e, d) {
+      const isYou = (d.source.id==='you'||d.target.id==='you');
+      if (!isYou) return;
+      d3.select(this).attr('stroke-opacity', 1).attr('stroke-width', d.value*0.7+2.8);
+    })
+    .on('mouseout', function(e, d) {
+      d3.select(this).attr('stroke-opacity',.7).attr('stroke-width', 1.2+d.value*0.7);
+    })
+    .on('click', (e, d) => {
+      const isYou = (d.source.id==='you'||d.target.id==='you'||d.source==='you'||d.target==='you');
+      if (!isYou || !d.sharedActs || !d.sharedActs.length) return;
+      const peer = d.source.id==='you' ? d.target : d.source;
+      showConnDetail(peer, d);
+    });
+
+  // Edge count badge (×N)
+  const linkBadge = linkG.selectAll('text').data(data.links.filter(d => d.value > 1)).enter()
+    .append('text')
+    .attr('text-anchor','middle').attr('font-size',9).attr('font-weight',800)
+    .attr('fill', d => CAT_COLOR[d.cat]||'#94A3B8')
+    .attr('paint-order','stroke').attr('stroke','#fff').attr('stroke-width',3)
+    .text(d => `×${d.value}`)
+    .style('pointer-events','none');
+
+  // ── Nodes ──
+  const nodeG = g.append('g').attr('class','kg-nodes');
+  const node = nodeG.selectAll('g').data(data.nodes).enter().append('g')
+    .call(d3.drag()
+      .on('start',(e,d)=>{ if(!e.active) sim.alphaTarget(.3).restart(); d.fx=d.x; d.fy=d.y; })
+      .on('drag',(e,d)=>{ if(d.id!=='you'){d.fx=e.x;d.fy=e.y;} })
+      .on('end',(e,d)=>{ if(!e.active) sim.alphaTarget(0); if(d.id!=='you'){d.fx=null;d.fy=null;} }));
+
+  // Pulsing ring for "You"
+  node.filter(d => d.id==='you').append('circle')
+    .attr('class','you-pulse').attr('r',32)
+    .attr('fill','none').attr('stroke','#0F6E56').attr('stroke-width',2);
+
+  // Second outer ring for "You"
+  node.filter(d => d.id==='you').append('circle')
+    .attr('r', 28).attr('fill','rgba(15,110,86,.1)')
+    .attr('stroke','#0F6E56').attr('stroke-width',1.5).attr('stroke-opacity',.3);
+
+  // Main circle — dashed ring for inferred, solid for confirmed
+  node.append('circle')
+    .attr('r', d => d.id==='you' ? 22 : 19)
+    .attr('fill', d => d.id==='you' ? '#0F6E56' : '#fff')
+    .attr('stroke', d => d.id==='you' ? 'rgba(255,255,255,.4)' : (CAT_COLOR[d.group]||'#94A3B8'))
+    .attr('stroke-width', d => d.id==='you' ? 2 : 2.5)
+    .attr('stroke-dasharray', d => (d.inferred && d.id!=='you') ? '5 3' : null)
+    .attr('filter', d => d.id==='you' ? 'url(#kgYouGlow)' : 'url(#kgShadow)')
+    .style('cursor','pointer');
+
+  // Confirmed badge (✦) for user-logged nodes
+  node.filter(d => d.id!=='you' && !d.inferred).append('text')
+    .text('✦').attr('x',13).attr('y',13)
+    .attr('text-anchor','middle').attr('dominant-baseline','central')
+    .attr('font-size',7).attr('fill','#0F6E56')
+    .attr('filter','url(#kgShadow)').style('pointer-events','none');
+
+  // Category dot badge on peer nodes (bottom-right)
+  node.filter(d => d.id!=='you').append('circle')
+    .attr('cx',13).attr('cy',13).attr('r',6)
+    .attr('fill', d => CAT_COLOR[d.group]||'#94A3B8')
+    .attr('stroke','#fff').attr('stroke-width',1.8)
+    .style('pointer-events','none');
+
+  // Initials / "You"
+  node.append('text')
+    .text(d => d.id==='you' ? 'You' : d.label.slice(0,2))
+    .attr('text-anchor','middle').attr('dominant-baseline','central')
+    .attr('font-size', d => d.id==='you' ? 12 : 11)
+    .attr('font-weight',800)
+    .attr('fill', d => d.id==='you' ? '#fff' : '#1e293b')
+    .style('pointer-events','none');
+
+  // Name pill below peer nodes
+  node.filter(d => d.id!=='you').each(function(d) {
+    const grp = d3.select(this);
+    const W_pill = Math.max(d.label.length * 6.2 + 18, 44);
+    grp.append('rect')
+      .attr('x', -W_pill/2).attr('y', 24).attr('width', W_pill).attr('height', 19)
+      .attr('rx', 9.5).attr('fill','#fff')
+      .attr('stroke', CAT_COLOR[d.group]||'#E2E8F0').attr('stroke-width',1.5)
+      .attr('filter','url(#kgShadow)');
+    grp.append('text').text(d.label)
+      .attr('text-anchor','middle').attr('y', 37)
+      .attr('font-size', 10).attr('font-weight',700)
+      .attr('fill', CAT_COLOR[d.group]||'#475569')
+      .style('pointer-events','none');
+  });
+
+  // Tooltip + click
+  const tip = document.getElementById('netTip');
+  node.on('mouseover',(e,d)=>{
+    const acts = d.acts ? d.acts.slice(0,3).join(' · ') : '';
+    const inferredNote = (d.inferred && d.id!=='you') ? '<br><span style="color:#F97316;font-size:9px">◌ Inferred from shared activities</span>' : (d.id!=='you' ? '<br><span style="color:#0F6E56;font-size:9px">✦ You confirmed this connection</span>' : '');
+    tip.innerHTML = d.id==='you'
+      ? '<strong>You</strong>'
+      : `<strong>${d.label}</strong><br><span style="color:#94A3B8;font-size:10px">${acts}</span>${inferredNote}`;
+    tip.style.display='block';
+    tip.style.left=(e.clientX+14)+'px'; tip.style.top=(e.clientY-10)+'px';
+  }).on('mousemove',e=>{
+    tip.style.left=(e.clientX+14)+'px'; tip.style.top=(e.clientY-10)+'px';
+  }).on('mouseout',()=>tip.style.display='none')
+    .on('click',(e,d)=>{
+      if(d.id==='you') return;
+      tip.style.display='none';
+      netBrushPerson(d.group, d.label);
+    });
+
+  // Tick
+  sim.on('tick', () => {
+    // Update gradient endpoints
+    data.links.forEach(l => {
+      const grad = defs.select(`#kgLg${l._gi}`);
+      if(grad.node()){
+        grad.attr('x1',l.source.x).attr('y1',l.source.y)
+           .attr('x2',l.target.x).attr('y2',l.target.y);
+      }
+    });
+
+    linkPath.attr('d', d => {
+      const dx = d.target.x - d.source.x, dy = d.target.y - d.source.y;
+      const dist = Math.sqrt(dx*dx+dy*dy);
+      const dr = dist * 1.5;
+      return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
+    });
+
+    linkBadge.attr('transform', d => {
+      // Place badge 35% along the arc (closer to peer)
+      const mx = d.source.x + (d.target.x - d.source.x) * 0.38;
+      const my = d.source.y + (d.target.y - d.source.y) * 0.38;
+      return `translate(${mx},${my - 8})`;
+    });
+
+    node.attr('transform', d => `translate(${d.x},${d.y})`);
+  });
+
+  initGrowthTimeline();
+  initNetworkExtras();
+}
+
+// ── Demo guide functions ──
+let demoCurrentStep = 1;
+function openDemoGuide(){
+  document.getElementById('demoGuide').classList.add('show');
+  document.getElementById('demoGuideBtn').style.display='none';
+}
+function closeDemoGuide(){
+  document.getElementById('demoGuide').classList.remove('show');
+  document.getElementById('demoGuideBtn').style.display='block';
+}
+function demoStep(step){
+  demoCurrentStep = step;
+  [1,2,3,4,5].forEach(i=>{
+    const el=document.getElementById('dgs'+i);
+    if(!el) return;
+    el.classList.remove('active','done');
+    if(i < step) el.classList.add('done');
+    else if(i === step) el.classList.add('active');
+  });
+  // Auto-navigate
+  if(step===1){ switchTab('timeline'); }
+  else if(step===2){ switchTab('map'); showToast('Timeline linked!','Map now shows Saturday morning activities only','success',2500); }
+  else if(step===3){ switchTab('map'); setTimeout(()=>showDetail(1),200); } // Farmers Market id=1
+  else if(step===4){ switchTab('timeline'); }
+  else if(step===5){ switchTab('timeline'); }
+}
+
+// ── Connection detail panel ──
+function showConnDetail(peer, link){
+  const panel=document.getElementById('connDetailPanel');
+  document.getElementById('cdpNames').textContent='You & '+peer.label;
+  const cnt=link.sharedActs.length;
+  document.getElementById('cdpCount').textContent=cnt+' time'+(cnt!==1?'s':'');
+  const firstDate=link.sharedActs[0]?.date||'—';
+  document.getElementById('cdpFooter').textContent='First met: '+firstDate;
+  document.getElementById('cdpEvents').innerHTML=link.sharedActs.map(ev=>`
+    <div class="cdp-event">
+      <div class="cdp-event-dot" style="background:${CAT_COLOR[ev.cat]||'#CBD5E1'}"></div>
+      <div class="cdp-event-name">${ev.name}</div>
+      <div class="cdp-event-date">${ev.date}</div>
+    </div>`).join('');
+  panel.classList.add('show');
+}
+function closeConnPanel(){
+  document.getElementById('connDetailPanel').classList.remove('show');
+}
+
+// ── Travel mode banner ──
+const HOME_CITY_KEY='hamilton';
+function updateTravelBanner(city){
+  const banner=document.getElementById('travelBanner');
+  if(city===HOME_CITY_KEY){
+    banner.classList.remove('show');
+  } else {
+    const label=CITIES[city]?.label||city;
+    document.getElementById('travelCityName').textContent=label;
+    // Default dates to next weekend
+    const today=new Date();
+    const fri=new Date(today); fri.setDate(today.getDate()+(5-today.getDay()+7)%7||7);
+    const sun=new Date(fri); sun.setDate(fri.getDate()+2);
+    const fmt=d=>d.toISOString().slice(0,10);
+    const fromInp=document.getElementById('travelFrom');
+    const toInp=document.getElementById('travelTo');
+    if(!fromInp.value) fromInp.value=fmt(fri);
+    if(!toInp.value) toInp.value=fmt(sun);
+    banner.classList.add('show');
+  }
+}
+function hideTravelBanner(){
+  document.getElementById('travelBanner').classList.remove('show');
+}
+
 // ════════════════════════════════════════
 //  NETWORK GRAPH (D3 force-directed)
 // ════════════════════════════════════════
@@ -1763,46 +2809,76 @@ const NET_DATA = {
   hamilton:{
     nodes:[
       {id:'you',label:'You',group:'you',size:22},
-      {id:'p1',label:'Anika',group:'social',acts:['Coffee Chat','Social Mixer'],size:14},
-      {id:'p2',label:'James',group:'sports',acts:['Parkrun','Badminton'],size:14},
-      {id:'p3',label:'Li Wei',group:'learning',acts:['Conversation Club','IELTS Group'],size:14},
-      {id:'p4',label:'Sofia',group:'culture',acts:['Museum Talk','Maori Workshop'],size:14},
-      {id:'p5',label:'Ravi',group:'social',acts:['Coffee Chat','Board Games'],size:12},
-      {id:'p6',label:'Emma',group:'outdoor',acts:['Gardens Walk'],size:11},
-      {id:'p7',label:'Yuki',group:'food',acts:['Night Market'],size:11},
+      {id:'p1',label:'Anika',group:'social',acts:['Coffee Chat','Social Mixer','Board Games Night'],size:15,inferred:true},
+      {id:'p2',label:'James',group:'sports',acts:['Parkrun','Badminton Session'],size:14,inferred:true},
+      {id:'p3',label:'Li Wei',group:'learning',acts:['Conversation Club','IELTS Study Group','Conversation Club (2nd)'],size:15,inferred:true},
+      {id:'p4',label:'Sofia',group:'culture',acts:['Museum Talk','Maori Cultural Workshop'],size:14,inferred:true},
+      {id:'p5',label:'Ravi',group:'social',acts:['Coffee Chat'],size:12,inferred:true},
+      {id:'p6',label:'Emma',group:'outdoor',acts:['Botanic Gardens Walk','Hakarimata Track'],size:13,inferred:true},
+      {id:'p7',label:'Yuki',group:'food',acts:['Hamilton Night Market'],size:11,inferred:true},
     ],
     links:[
-      {source:'you',target:'p1',value:2,cat:'social'},
-      {source:'you',target:'p2',value:2,cat:'sports'},
-      {source:'you',target:'p3',value:2,cat:'learning'},
-      {source:'you',target:'p4',value:2,cat:'culture'},
-      {source:'you',target:'p5',value:2,cat:'social'},
-      {source:'you',target:'p6',value:1,cat:'outdoor'},
-      {source:'you',target:'p7',value:1,cat:'food'},
-      {source:'p1',target:'p5',value:1,cat:'social'},
-      {source:'p2',target:'p6',value:1,cat:'outdoor'},
-      {source:'p3',target:'p4',value:1,cat:'culture'},
+      {source:'you',target:'p1',value:3,cat:'social',sharedActs:[
+        {name:'Coffee Chat',date:'17 May',cat:'social'},
+        {name:'Social Mixer',date:'25 May',cat:'social'},
+        {name:'Board Games Night',date:'1 Jun',cat:'social'}
+      ]},
+      {source:'you',target:'p2',value:2,cat:'sports',sharedActs:[
+        {name:'Hamilton Lake Parkrun',date:'17 May',cat:'sports'},
+        {name:'Open Badminton',date:'20 May',cat:'sports'}
+      ]},
+      {source:'you',target:'p3',value:3,cat:'learning',sharedActs:[
+        {name:'English Conversation Club',date:'21 May',cat:'learning'},
+        {name:'IELTS Study Group',date:'28 May',cat:'learning'},
+        {name:'English Conversation Club',date:'4 Jun',cat:'learning'}
+      ]},
+      {source:'you',target:'p4',value:2,cat:'culture',sharedActs:[
+        {name:'Museum Talk: NZ History',date:'23 May',cat:'culture'},
+        {name:'Maori Cultural Workshop',date:'31 May',cat:'culture'}
+      ]},
+      {source:'you',target:'p5',value:1,cat:'social',sharedActs:[
+        {name:'Coffee Chat',date:'17 May',cat:'social'}
+      ]},
+      {source:'you',target:'p6',value:2,cat:'outdoor',sharedActs:[
+        {name:'Botanic Gardens Walk',date:'24 May',cat:'outdoor'},
+        {name:'Hakarimata Summit Track',date:'7 Jun',cat:'outdoor'}
+      ]},
+      {source:'you',target:'p7',value:1,cat:'food',sharedActs:[
+        {name:'Hamilton Night Market',date:'30 May',cat:'food'}
+      ]},
+      {source:'p1',target:'p5',value:1,cat:'social',sharedActs:[]},
+      {source:'p2',target:'p6',value:1,cat:'outdoor',sharedActs:[]},
+      {source:'p3',target:'p4',value:1,cat:'culture',sharedActs:[]},
     ]
   },
   auckland:{
     nodes:[
       {id:'you',label:'You',group:'you',size:22},
-      {id:'a1',label:'Marco',group:'social',acts:['Viaduct Meetup'],size:14},
-      {id:'a2',label:'Priya',group:'learning',acts:['Language Exchange'],size:13},
-      {id:'a3',label:'Ben',group:'sports',acts:['Morning Run','Cricket'],size:14},
-      {id:'a4',label:'Chen',group:'culture',acts:['Art Gallery Tour','Ukulele Jam'],size:14},
-      {id:'a5',label:'Fatima',group:'volunteer',acts:['City Harvest'],size:12},
-      {id:'a6',label:'Tom',group:'outdoor',acts:['Photography Walk','Coastal Walk'],size:13},
+      {id:'a1',label:'Marco',group:'social',acts:['Viaduct Meetup'],size:13,inferred:true},
+      {id:'a2',label:'Priya',group:'learning',acts:['Language Exchange'],size:13,inferred:true},
+      {id:'a3',label:'Ben',group:'sports',acts:['Morning Run','Cricket Social'],size:14,inferred:true},
+      {id:'a4',label:'Chen',group:'culture',acts:['Art Gallery Tour','Ukulele Jam'],size:14,inferred:true},
+      {id:'a5',label:'Fatima',group:'volunteer',acts:['City Harvest'],size:12,inferred:true},
+      {id:'a6',label:'Tom',group:'outdoor',acts:['Photography Walk','Coastal Walk'],size:13,inferred:true},
     ],
     links:[
-      {source:'you',target:'a1',value:1,cat:'social'},
-      {source:'you',target:'a2',value:1,cat:'learning'},
-      {source:'you',target:'a3',value:2,cat:'sports'},
-      {source:'you',target:'a4',value:2,cat:'culture'},
-      {source:'you',target:'a5',value:1,cat:'volunteer'},
-      {source:'you',target:'a6',value:2,cat:'outdoor'},
-      {source:'a1',target:'a2',value:1,cat:'social'},
-      {source:'a3',target:'a6',value:1,cat:'outdoor'},
+      {source:'you',target:'a1',value:1,cat:'social',sharedActs:[{name:'Viaduct Harbour Meetup',date:'18 May',cat:'social'}]},
+      {source:'you',target:'a2',value:1,cat:'learning',sharedActs:[{name:'Language Exchange Café',date:'20 May',cat:'learning'}]},
+      {source:'you',target:'a3',value:2,cat:'sports',sharedActs:[
+        {name:'Morning Run — Waterfront',date:'17 May',cat:'sports'},
+        {name:'Cricket Social',date:'24 May',cat:'sports'}
+      ]},
+      {source:'you',target:'a4',value:2,cat:'culture',sharedActs:[
+        {name:'Auckland Art Gallery Tour',date:'22 May',cat:'culture'},
+        {name:'Ukulele Jam Night',date:'29 May',cat:'culture'}
+      ]},
+      {source:'you',target:'a5',value:1,cat:'volunteer',sharedActs:[{name:'City Harvest Volunteer',date:'17 May',cat:'volunteer'}]},
+      {source:'you',target:'a6',value:2,cat:'outdoor',sharedActs:[
+        {name:'Photography Walk — Ponsonby',date:'19 May',cat:'outdoor'},
+        {name:'Coastal Walkway — Tamaki',date:'26 May',cat:'outdoor'}
+      ]},
+      {source:'a1',target:'a2',value:1,cat:'social',sharedActs:[]},
+      {source:'a3',target:'a6',value:1,cat:'outdoor',sharedActs:[]},
     ]
   }
 };
@@ -1818,15 +2894,27 @@ function initNetwork(){
   };
   const data=NET_DATA[currentCity]||NET_DEFAULT;
   if(!NET_DATA[currentCity]){
-    document.querySelector('.net-sub').innerHTML=`You're new to <strong>${CITIES[currentCity].label}</strong>! Join activities to start building connections here. Your network grows with each event you attend.`;
-    document.getElementById('personList').innerHTML=`<div style="text-align:center;padding:20px 10px;color:#94A3B8;font-size:12px;line-height:2">No connections yet in ${CITIES[currentCity].label}.<br><button onclick="switchTab('map')" style="margin-top:8px;background:#0F6E56;color:#fff;border:none;padding:7px 16px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer">Discover Activities →</button></div>`;
+    if(document.querySelector('.net-sub')) document.querySelector('.net-sub').innerHTML=`You're new to <strong>${CITIES[currentCity].label}</strong>! Join activities to start building connections here.`;
+    document.getElementById('personList').innerHTML=`
+      <div style="text-align:center;padding:24px 12px 16px;display:flex;flex-direction:column;align-items:center;gap:14px">
+        <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#E1F5EE,#D1FAE5);border:2px dashed #9FE1CB;display:flex;align-items:center;justify-content:center;font-size:28px">🌱</div>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:#0F172A;margin-bottom:4px">No connections yet in ${CITIES[currentCity].label}</div>
+          <div style="font-size:11px;color:#64748B;line-height:1.7">Your network grows with every activity you attend.<br>Start with one event to make your first connection.</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;width:100%">
+          <button onclick="switchTab('map')" style="background:#0F6E56;color:#fff;border:none;padding:9px 16px;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;width:100%">🗺️ Discover Activities →</button>
+          <button onclick="openLogMeet()" style="background:#fff;color:#0F6E56;border:1.5px solid #9FE1CB;padding:7px 16px;border-radius:9px;font-size:12px;font-weight:600;cursor:pointer;width:100%">🤝 I already met someone</button>
+        </div>
+        <div style="font-size:9px;color:#CBD5E1;margin-top:4px">Once you log connections they'll appear here as a network graph</div>
+      </div>`;
   }
   const connCount=data.nodes.length-1;
-  document.getElementById('nsConn').textContent=connCount;
+  const _icnc=document.getElementById('nsConn'); if(_icnc) _icnc.textContent=connCount;
   const cityActs=ACTIVITIES.filter(a=>a.city===currentCity);
-  document.getElementById('nsAct').textContent=Math.min(connCount,cityActs.length);
-  document.getElementById('nsCat').textContent=[...new Set(data.links.map(l=>l.cat))].length||0;
-  document.getElementById('connBadge').textContent=connCount;
+  const _icna=document.getElementById('nsAct'); if(_icna) _icna.textContent=Math.min(connCount,cityActs.length);
+  const _icng=document.getElementById('nsCat'); if(_icng) _icng.textContent=[...new Set(data.links.map(l=>l.cat))].length||0;
+  const _icbd=document.getElementById('connBadge'); if(_icbd) _icbd.textContent=connCount;
 
   // Legend
   const cats=[...new Set(data.links.map(l=>l.cat))];
@@ -1835,147 +2923,42 @@ function initNetwork(){
   `).join('')+`<div class="leg-row"><div class="leg-dot" style="background:#0F6E56;border:2px solid #fff;box-shadow:0 0 0 2px #0F6E56"></div>You</div>`;
 
   // Person list
-  document.getElementById('personList').innerHTML=data.nodes.filter(n=>n.id!=='you').map(n=>`
-    <div class="net-person" onclick="netBrushPerson('${n.group}','${n.label}')" title="Click to see ${n.label}'s activities on map">
-      <div class="np-name" style="color:${CAT_COLOR[n.group]||'#1e293b'}">${n.label} <span style="font-size:10px;opacity:.6">→ map</span></div>
-      <div class="np-detail">Met at: ${n.acts.join(', ')}</div>
-    </div>`).join('');
-
-  const svg=d3.select('#netSvg');
-  svg.selectAll('*').remove();
-  const rect=document.getElementById('netSvg').getBoundingClientRect();
-  const W=rect.width||700, H=rect.height||480;
-  svg.attr('viewBox',`0 0 ${W} ${H}`);
-
-  const sim=d3.forceSimulation(data.nodes)
-    .force('link',d3.forceLink(data.links).id(d=>d.id).distance(Math.min(W,H)*0.22))
-    .force('charge',d3.forceManyBody().strength(-Math.min(W,H)*1.1))
-    .force('center',d3.forceCenter(W/2,H/2))
-    .force('x',d3.forceX(W/2).strength(0.04))
-    .force('y',d3.forceY(H/2).strength(0.04))
-    .force('collision',d3.forceCollide().radius(d=>d.size+22))
-    .alphaDecay(0.02);
-
-  const defs=svg.append('defs');
-
-  // Drop-shadow filter
-  const fShadow=defs.append('filter').attr('id','nodeShadow').attr('x','-30%').attr('y','-30%').attr('width','160%').attr('height','160%');
-  fShadow.append('feDropShadow').attr('dx',0).attr('dy',2).attr('stdDeviation',3).attr('flood-opacity',.22);
-
-  // Stronger glow for "you" node
-  const fGlow=defs.append('filter').attr('id','youGlow').attr('x','-40%').attr('y','-40%').attr('width','180%').attr('height','180%');
-  fGlow.append('feGaussianBlur').attr('stdDeviation','5').attr('result','blur');
-  const fGlowMerge=fGlow.append('feMerge');
-  fGlowMerge.append('feMergeNode').attr('in','blur');
-  fGlowMerge.append('feMergeNode').attr('in','SourceGraphic');
-
-  // Radial gradients — one per unique node colour
-  const allCols=[...new Set(data.nodes.map(n=>n.id==='you'?'#0F6E56':CAT_COLOR[n.group]||'#94A3B8'))];
-  allCols.forEach((col,i)=>{
-    const grad=defs.append('radialGradient').attr('id',`ng${i}`).attr('cx','35%').attr('cy','30%').attr('r','65%');
-    grad.append('stop').attr('offset','0%').attr('stop-color',col).attr('stop-opacity',.55);
-    grad.append('stop').attr('offset','100%').attr('stop-color',col).attr('stop-opacity',1);
+  // Build meeting count lookup from links
+  const meetCount={};
+  data.links.forEach(l=>{
+    const src=typeof l.source==='object'?l.source.id:l.source;
+    const tgt=typeof l.target==='object'?l.target.id:l.target;
+    if(src==='you') meetCount[tgt]=(l.sharedActs||[]).length||l.value;
+    if(tgt==='you') meetCount[src]=(l.sharedActs||[]).length||l.value;
   });
-  const colIdx=col=>allCols.indexOf(col);
-  const nodeFill=d=>{
-    const col=d.id==='you'?'#0F6E56':CAT_COLOR[d.group]||'#94A3B8';
-    return `url(#ng${colIdx(col)})`;
-  };
+  const maxMeet=Math.max(...Object.values(meetCount),0);
+  const linkMap={};
+  data.links.forEach(l=>{ const src=typeof l.source==='object'?l.source.id:l.source; const tgt=typeof l.target==='object'?l.target.id:l.target; if(src==='you') linkMap[tgt]=l; if(tgt==='you') linkMap[src]=l; });
+  const peers=data.nodes.filter(n=>n.id!=='you').sort((a,b)=>(meetCount[b.id]||0)-(meetCount[a.id]||0));
+  document.getElementById('personList').innerHTML=peers.map(n=>{
+    const cnt=meetCount[n.id]||1;
+    const isTop=cnt===maxMeet&&maxMeet>=2;
+    const col=CAT_COLOR[n.group]||'#94A3B8';
+    const initials=n.label.slice(0,2);
+    const badge=isTop?`<span class='np-strong'>⭐ Closest</span>`:'';
+    const detail=`${cnt} time${cnt!==1?'s':''} · ${n.acts[0]}${n.acts.length>1?' +more':''}`;
+    return `<div class="net-person" onclick="netBrushPerson('${n.group}','${n.label}')">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:34px;height:34px;border-radius:50%;background:${col};border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.12);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0">${initials}</div>
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap">
+            <span class="np-name" style="color:${col}">${n.label}</span>${badge}
+            <span style="font-size:9px;color:#CBD5E1">→ map</span>
+          </div>
+          <div class="np-detail">${detail}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
 
-  const g=svg.append('g');
-
-  // Zoom
-  svg.call(d3.zoom().scaleExtent([.4,3]).on('zoom',e=>g.attr('transform',e.transform)));
-
-  // Links — slightly curved paths
-  const link=g.append('g').selectAll('path').data(data.links).enter().append('path')
-    .attr('fill','none')
-    .attr('stroke',d=>CAT_COLOR[d.cat]||'#CBD5E1')
-    .attr('stroke-opacity',d=>d.value===2?.52:.35)
-    .attr('stroke-width',d=>d.value===2?2:1.2);
-
-  const node=g.append('g').selectAll('g').data(data.nodes).enter().append('g')
-    .call(d3.drag()
-      .on('start',(e,d)=>{if(!e.active)sim.alphaTarget(.3).restart();d.fx=d.x;d.fy=d.y;})
-      .on('drag',(e,d)=>{d.fx=e.x;d.fy=e.y;})
-      .on('end',(e,d)=>{if(!e.active)sim.alphaTarget(0);d.fx=null;d.fy=null;}));
-
-  // Outer pulse ring for "you"
-  node.filter(d=>d.id==='you').append('circle')
-    .attr('r',d=>d.size+6)
-    .attr('fill','none')
-    .attr('stroke','#0F6E56')
-    .attr('stroke-width',1.2)
-    .attr('stroke-opacity',.18)
-    .attr('stroke-dasharray','3,4');
-
-
-  // Main node circle with gradient
-  node.append('circle')
-    .attr('r',d=>d.size)
-    .attr('fill',nodeFill)
-    .attr('stroke','rgba(255,255,255,.95)')
-    .attr('stroke-width',d=>d.id==='you'?2.5:1.8)
-    .attr('filter',d=>d.id==='you'?'url(#youGlow)':'url(#nodeShadow)')
-    .style('cursor','pointer');
-
-  // White inner highlight dot (gives sphere-like depth)
-  node.filter(d=>d.id!=='you').append('circle')
-    .attr('r',d=>Math.round(d.size*0.28))
-    .attr('cx',d=>-Math.round(d.size*0.2))
-    .attr('cy',d=>-Math.round(d.size*0.2))
-    .attr('fill','rgba(255,255,255,.5)')
-    .style('pointer-events','none');
-
-  // Label with white background pill
-  node.append('rect')
-    .attr('rx',5).attr('ry',5)
-    .attr('height',15)
-    .attr('y',d=>d.size+5)
-    .attr('fill','rgba(255,255,255,.82)')
-    .style('pointer-events','none')
-    .each(function(d){
-      const w=(d.label.length*6.5)+10;
-      d3.select(this).attr('width',w).attr('x',-w/2);
-    });
-
-  node.append('text')
-    .text(d=>d.label)
-    .attr('text-anchor','middle')
-    .attr('dy',d=>d.size+16)
-    .attr('font-size',d=>d.id==='you'?12:10.5)
-    .attr('font-weight',d=>d.id==='you'?700:600)
-    .attr('fill',d=>d.id==='you'?'#0F6E56':'#334155')
-    .style('pointer-events','none');
-
-  const tip=document.getElementById('netTip');
-  node.on('mouseover',(e,d)=>{
-    if(d.id==='you'){tip.innerHTML='<strong>You</strong><br>Tap activities to add connections!';}
-    else{tip.innerHTML=`<strong>${d.label}</strong><br>Met at: ${d.acts.join('<br>')}`;}
-    tip.style.display='block';tip.style.left=(e.clientX+12)+'px';tip.style.top=(e.clientY-8)+'px';
-  }).on('mousemove',e=>{
-    tip.style.left=(e.clientX+12)+'px';tip.style.top=(e.clientY-8)+'px';
-  }).on('mouseout',()=>tip.style.display='none')
-    .on('click',(e,d)=>{
-      if(d.id==='you')return;
-      tip.style.display='none';
-      netBrushPerson(d.group, d.label);
-    });
-
-  sim.on('tick',()=>{
-    link.attr('d',d=>{
-      const dx=d.target.x-d.source.x, dy=d.target.y-d.source.y;
-      const dr=Math.sqrt(dx*dx+dy*dy)*1.4; // curve radius
-      return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
-    });
-    node.attr('transform',d=>`translate(${d.x},${d.y})`);
-  });
-
-  // Network growth timeline
-  initGrowthTimeline();
-  // ── Merged dashboard content ──
-  initNetworkExtras();
+  drawNetworkGraph(data);
 }
+
 function initNetworkExtras(){
   // Category progress bars
   const cats=[
@@ -2134,17 +3117,20 @@ function initDashboard(){
 
   // Animate ring
   const offset=226*(1-62/100);
-  document.getElementById('ringArc').style.strokeDashoffset=offset;
+  const _ra=document.getElementById('ringArc'); if(_ra) _ra.style.strokeDashoffset=offset;
 }
 
 // ════════════════════════════════════════
 //  TIMELINE
 // ════════════════════════════════════════
 function initTimeline(){
-  // Category × Day merged grid
-  initCategoryDayGrid();
-  // Seasonal trends chart
+  renderUnifiedTimeline();
   initSeasonalChart();
+  // Render network graph after one rAF so layout is committed
+  requestAnimationFrame(()=>{
+    netInitialized[currentCity]=false;
+    initNetworkWithWeek(currentWeek);
+  });
 }
 
 // ════════════════════════════════════════
@@ -2231,8 +3217,8 @@ function setDist(km){
 }
 function withinDist(a){
   if(!distFilter||!map) return true;
-  const c=map.getCenter();
-  return haversineKm(c.lat,c.lng,a.lat,a.lng)<=distFilter;
+  const ref = homeLocation ? homeLocation : map.getCenter();
+  return haversineKm(ref.lat, ref.lng, a.lat, a.lng) <= distFilter;
 }
 
 // ── Toast notification system ─────────────────────────────────────────────────
@@ -2564,22 +3550,368 @@ function initBubbleScatter(){
 // ════════════════════════════════════════
 //  CATEGORY × DAY GRID (merged visualization)
 // ════════════════════════════════════════
-function initCategoryDayGrid(){
-  const el=document.getElementById('catDayGrid');
-  if(!el||el._built)return;
-  el._built=true;
 
-  // Tooltip element
-  let tip=document.getElementById('catDayTip');
+// ════════════════════════════════════════
+//  UNIFIED TIMELINE  (calendar + heatmap)
+// ════════════════════════════════════════
+function renderUnifiedTimeline(){
+  const el = document.getElementById('unifiedGrid');
+  if(!el) return;
+
+  const DAY_NAMES = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const CATS = [
+    {key:'social',   label:'Social',   emoji:'💬'},
+    {key:'sports',   label:'Sports',   emoji:'🏃'},
+    {key:'culture',  label:'Culture',  emoji:'🎭'},
+    {key:'learning', label:'Learning', emoji:'📚'},
+    {key:'outdoor',  label:'Outdoor',  emoji:'🌿'},
+    {key:'food',     label:'Food',     emoji:'🍜'},
+    {key:'volunteer',label:'Volunteer',emoji:'🤝'},
+  ];
+
+  const cityActs = ACTIVITIES.filter(a => a.city === currentCity);
+  const wkCounts = weekdayCountsInMonth(tlYear, tlMonth);
+  const daysInMonth = new Date(tlYear, tlMonth+1, 0).getDate();
+  const firstJsDay = new Date(tlYear, tlMonth, 1).getDay();
+  const firstDayMon = (firstJsDay + 6) % 7; // 0=Mon
+  const today = new Date();
+  const isCurMon = (tlYear===today.getFullYear() && tlMonth===today.getMonth());
+
+  // Update header text
+  const now2 = new Date();
+  const isFuture = tlYear > now2.getFullYear() || (tlYear===now2.getFullYear() && tlMonth>now2.getMonth());
+  const noteEl = document.getElementById('tlGridNote');
+  const totalActive = [...Array(daysInMonth)].reduce((s,_,i)=>{
+    const d=i+1, catMap=getCatsForCalDate(d);
+    return s + (Object.keys(catMap).length>0?1:0);
+  },0);
+  if(noteEl){
+    if(isCurMon) noteEl.textContent = `This month · ${totalActive} active days · click a date or pattern to filter map`;
+    else if(isFuture) noteEl.textContent = `Future · ${totalActive} projected active days · based on recurring activities`;
+    else noteEl.textContent = `Past · ${totalActive} active days · click to filter map`;
+    noteEl.style.color = isFuture ? '#D97706' : '#94A3B8';
+  }
+  document.getElementById('tlMonthLabel').textContent = `${TL_MONTH_NAMES[tlMonth]} ${tlYear}`;
+  const todayBtn = document.getElementById('tlTodayBtn');
+  if(todayBtn) todayBtn.style.fontWeight = isCurMon ? '700' : '600';
+
+  function hexAlpha(hex,a){
+    const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+    return `rgba(${r},${g},${b},${a})`;
+  }
+
+  // ── Section A: shared day-of-week column headers ──────────────
+  // Grid uses 8 columns: week-label + 7 days
+  let html = `<div class="utl-grid utl-8col">`;
+
+  // Top-left blank
+  html += `<div></div>`;
+  // Day headers with category dots
+  DAY_NAMES.forEach((d, i) => {
+    const isW = i >= 5;
+    const catDots = CATS.map(cat => {
+      const v = cityActs.filter(a => a.category === cat.key)
+        .reduce((s,a) => s + activityOccurrences(a, d, tlYear, tlMonth, wkCounts), 0);
+      if(!v) return '';
+      return `<div style="width:8px;height:8px;border-radius:50%;background:${CAT_COLOR[cat.key]};box-shadow:0 1px 2px rgba(0,0,0,.12)" title="${cat.label}: ${v}x"></div>`;
+    }).join('');
+    html += `<div class="utl-col-hd${isW?' wknd':''}">
+      <span>${d}</span><span class="utl-count">${wkCounts[d]}×</span>
+      <div style="display:flex;gap:2px;flex-wrap:wrap;justify-content:center;margin-top:4px;min-height:10px">${catDots}</div>
+    </div>`;
+  });
+
+  // ── Section B: calendar rows (date cells) ─────────────────────
+  let col = firstDayMon; // which day-of-week slot we're on (0-6)
+  let weekRowOpen = false;
+
+  function openWeek(weekNum){
+    weekRowOpen = true;
+    html += `<div class="utl-wk-lbl">W${weekNum}</div>`;
+  }
+
+  // blank leading cells
+  if(firstDayMon > 0){
+    openWeek(1);
+    for(let i=0;i<firstDayMon;i++) html += `<div class="utl-date empty"></div>`;
+  }
+
+  let weekNum = 1;
+  for(let date=1; date<=daysInMonth; date++){
+    const jsDay = new Date(tlYear, tlMonth, date).getDay();
+    const dow = (jsDay+6)%7; // 0=Mon
+
+    // Start new row on Monday
+    if(dow===0){
+      if(weekRowOpen) {} // grid handles wrapping automatically
+      weekNum++;
+      openWeek(weekNum);
+    }
+
+    const isW = dow>=5;
+    const isToday = isCurMon && date===today.getDate();
+    const catMap = getCatsForCalDate(date);
+    const catKeys = Object.keys(catMap);
+    const hasCats = catKeys.length > 0;
+
+    // ── Flatten activities in category order ───────────────────
+    const allActs = ['social','sports','culture','learning','outdoor','food','volunteer']
+      .flatMap(c => (catMap[c]||[]).map(a => ({...a, cat:c})));
+
+    // Top colour stripe: split by category proportion
+    let stripeHtml = '';
+    if(hasCats) {
+      const segs = ['social','sports','culture','learning','outdoor','food','volunteer']
+        .filter(c => catMap[c]?.length)
+        .map(c => `<div style="flex:${catMap[c].length};background:${CAT_COLOR[c]};height:100%"></div>`)
+        .join('');
+      stripeHtml = `<div style="position:absolute;top:0;left:0;right:0;height:2px;display:flex;border-radius:8px 8px 0 0;overflow:hidden">${segs}</div>`;
+    }
+
+    // Activity name labels (max 2, then "+N more")
+    const showActs = allActs.slice(0, 2);
+    const moreCount = allActs.length - showActs.length;
+    const actLabels = showActs.map(a =>
+      `<div style="display:flex;align-items:center;gap:2px;min-width:0;margin-top:1px">
+        <span style="font-size:8px;line-height:1;flex-shrink:0">${CAT_EMOJI[a.cat]||'📌'}</span>
+        <span style="font-size:8px;color:#475569;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.25">${a.name}</span>
+      </div>`
+    ).join('');
+    const moreLbl = moreCount > 0
+      ? `<div style="font-size:7.5px;color:#94A3B8;margin-top:1px;padding-left:7px">+${moreCount} more</div>`
+      : '';
+
+    const hasJoined = allActs.some(a => (typeof joinedActivities!=='undefined' && joinedActivities && joinedActivities.has(a.id)) || (typeof attendedActivities!=='undefined' && attendedActivities && attendedActivities.has(a.id)));
+    const joinedTick = hasJoined ? `<span class="joined-tick">✓</span>` : '';
+    html += `<div class="utl-date${hasCats?' has-acts':''}${isW?' wknd':''}${isToday?' is-today':''}${hasJoined?' joined-act':''}"
+      data-date="${date}" style="position:relative;padding-top:6px">
+      ${stripeHtml}
+      ${joinedTick}
+      <div class="utl-date-num">${date}</div>
+      ${actLabels}${moreLbl}
+    </div>`;
+    col = (col+1)%7;
+  }
+
+  // trailing blank cells to complete last row
+  if(col > 0){
+    for(let i=col;i<7;i++) html += `<div class="utl-date empty"></div>`;
+  }
+
+  // Section C removed — category info is in column headers
+
+  html += `</div>`; // close utl-grid
+
+  el.innerHTML = html;
+
+  // ── Tooltip setup ─────────────────────────────────────────────
+  let tip = document.getElementById('catDayTip');
   if(!tip){
     tip=document.createElement('div');
     tip.id='catDayTip';
-    tip.style.cssText='position:fixed;background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:10px 14px;font-size:12px;pointer-events:none;z-index:9999;display:none;line-height:1.6;max-width:280px;box-shadow:0 6px 24px rgba(0,0,0,.12)';
+    tip.style.cssText='position:fixed;background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:10px 14px;font-size:12px;pointer-events:none;z-index:9999;display:none;line-height:1.6;max-width:300px;box-shadow:0 6px 24px rgba(0,0,0,.13)';
     document.body.appendChild(tip);
   }
 
-  const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  // Date cell tooltips + click
+  el.querySelectorAll('.utl-date[data-date]').forEach(cell => {
+    const date = parseInt(cell.dataset.date);
+    const catMap = getCatsForCalDate(date);
+    if(!Object.keys(catMap).length) return;
+
+    const jsDay=new Date(tlYear,tlMonth,date).getDay();
+    const dayName=DAY_NAMES[(jsDay+6)%7];
+    let tipHtml=`<div style="font-weight:700;color:#0F6E56;margin-bottom:7px;font-size:12px">${date} ${TL_MONTH_NAMES[tlMonth]} ${tlYear} · ${dayName}</div>`;
+    ['social','sports','culture','learning','outdoor','food','volunteer'].filter(c=>catMap[c]).forEach(c=>{
+      catMap[c].forEach(a=>{
+        const meta=ACTIVITY_META[a.id]||{r:null};
+        const tag=meta.r==='weekly'?` <span style="font-size:9px;color:#0F6E56">🔁 weekly</span>`:meta.r==='monthly'?' <span style="font-size:9px;color:#64748B">🗓</span>':'';
+        tipHtml+=`<div style="display:flex;align-items:center;gap:6px;margin-bottom:2px">
+          <div style="width:8px;height:8px;border-radius:50%;background:${CAT_COLOR[c]};flex-shrink:0"></div>
+          <span style="font-weight:600;color:#1e293b;font-size:11px">${a.name}</span>${tag}
+        </div><div style="margin-left:14px;color:#64748B;font-size:10px;margin-bottom:4px">${a.time} · ${a.location.split(',')[0]}</div>`;
+      });
+    });
+    tipHtml+=`<div style="color:#0F6E56;font-size:10px;margin-top:4px;border-top:1px solid #F1F5F9;padding-top:4px">🗺 Click to filter map</div>`;
+
+    cell.addEventListener('mouseover',e=>{tip.innerHTML=tipHtml;tip.style.display='block';tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-10)+'px';});
+    cell.addEventListener('mousemove',e=>{tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-10)+'px';});
+    cell.addEventListener('mouseout',()=>tip.style.display='none');
+    cell.addEventListener('click',()=>{tip.style.display='none';calClickDay(date);});
+  });
+
+  // Heatmap tooltips removed (section C removed)
+
+  // Legend
+  const legendEl=document.getElementById('mcalLegend');
+  if(legendEl){
+    const activeCats=new Set();
+    for(let d=1;d<=daysInMonth;d++) Object.keys(getCatsForCalDate(d)).forEach(c=>activeCats.add(c));
+    legendEl.innerHTML=[...activeCats].map(c=>`
+      <div class="mcal-leg-item"><div class="mcal-leg-dot" style="background:${CAT_COLOR[c]}"></div><span>${CAT_LABEL[c]}</span></div>`).join('');
+  }
+
+  // Render monthly summary below calendar
+  renderMonthlySummary();
+}
+
+// ── Month-navigable timeline state ──
+const TL_MONTH_NAMES=['January','February','March','April','May','June',
+                      'July','August','September','October','November','December'];
+const TL_MONTH_SHORT=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+let tlYear=2026, tlMonth=4; // 0-indexed; 4 = May (default: today)
+
+function initCategoryDayGrid(){
+  // Set to current date on first load
+  const now=new Date();
+  tlYear=now.getFullYear(); tlMonth=now.getMonth();
+  renderCategoryDayGrid();
+}
+
+function shiftMonth(delta){
+  tlMonth+=delta;
+  if(tlMonth>11){tlMonth=0;tlYear++;}
+  if(tlMonth<0){tlMonth=11;tlYear--;}
+  renderUnifiedTimeline();
+}
+
+function jumpToToday(){
+  const now=new Date();
+  tlYear=now.getFullYear(); tlMonth=now.getMonth();
+  renderUnifiedTimeline();
+}
+
+// ════════════════════════════════════════
+//  MONTHLY SUMMARY (rendered below calendar)
+// ════════════════════════════════════════
+function renderMonthlySummary(){
+  const el=document.getElementById('tlMonthlySummary');
+  if(!el) return;
+
+  const CATS_LIST=['social','sports','culture','learning','outdoor','food','volunteer'];
+  const wkCounts=weekdayCountsInMonth(tlYear,tlMonth);
   const cityActs=ACTIVITIES.filter(a=>a.city===currentCity);
+
+  const catCounts={};
+  CATS_LIST.forEach(c=>{catCounts[c]=0;});
+  cityActs.forEach(a=>{
+    const dow=a.date.split(' ')[0];
+    const occ=activityOccurrences(a,dow,tlYear,tlMonth,wkCounts);
+    if(occ>0 && CATS_LIST.includes(a.category)) catCounts[a.category]+=occ;
+  });
+
+  const totalSessions=Object.values(catCounts).reduce((s,v)=>s+v,0);
+  const catsCount=CATS_LIST.filter(c=>catCounts[c]>0).length;
+
+  const reachableConns=new Set();
+  cityActs.forEach(a=>{
+    const dow=a.date.split(' ')[0];
+    if(activityOccurrences(a,dow,tlYear,tlMonth,wkCounts)>0 && CONNECTION_ACTS[a.id]){
+      CONNECTION_ACTS[a.id].forEach(c=>reachableConns.add(c.name));
+    }
+  });
+  const connCount=reachableConns.size;
+
+  const connScore=Math.round(Math.min(connCount/8,1)*40);
+  const divScore=Math.round((catsCount/7)*35);
+  const freqScore=Math.round(Math.min(totalSessions/24,1)*25);
+  const monthScore=Math.min(connScore+divScore+freqScore,100);
+
+  const missingCats=CATS_LIST.filter(c=>catCounts[c]===0);
+  const weakCat=missingCats[0]||CATS_LIST.reduce((a,b)=>catCounts[a]<catCounts[b]?a:b);
+  const maxCount=Math.max(...Object.values(catCounts),1);
+  const scoreCol=monthScore>=75?'#0F6E56':monthScore>=50?'#F97316':'#EF4444';
+  const scoreLabel=monthScore>=75?'Strong 🌟':monthScore>=50?'Building 📈':'Starting 🌱';
+
+  const catBarsHtml=CATS_LIST.map(c=>{
+    const n=catCounts[c];
+    const pct=Math.round(n/maxCount*100);
+    const inactive=n===0;
+    return `<div style="display:grid;grid-template-columns:110px 1fr 52px;align-items:center;gap:10px;opacity:${inactive?'.35':'1'}">
+      <div style="display:flex;align-items:center;gap:6px">
+        <span style="font-size:13px;line-height:1;flex-shrink:0">${CAT_EMOJI[c]||'📌'}</span>
+        <span style="font-size:11px;font-weight:700;color:${inactive?'#94A3B8':CAT_COLOR[c]}">${CAT_LABEL[c]}</span>
+      </div>
+      <div style="height:7px;background:#F1F5F9;border-radius:4px;overflow:hidden">
+        <div style="width:${pct}%;height:100%;background:${CAT_COLOR[c]};border-radius:4px;transition:width .5s ease"></div>
+      </div>
+      <div style="text-align:right;font-size:11px;font-weight:${inactive?'400':'600'};color:${inactive?'#CBD5E1':'#475569'}">${n?n+'×':'—'}</div>
+    </div>`;
+  }).join('');
+
+  const insightHtml=missingCats.length
+    ?`<div style="display:flex;align-items:center;gap:8px;background:#FFF7ED;border:1px solid #FED7AA;border-radius:8px;padding:8px 12px;margin-top:12px">
+        <span style="font-size:13px;flex-shrink:0">💡</span>
+        <div style="font-size:11px;color:#92400E;line-height:1.5">No <strong>${CAT_LABEL[weakCat]}</strong> events this month — joining one boosts score to <strong>${Math.min(monthScore+8,100)}</strong>.
+          <span onclick="switchTab('map')" style="color:#0F6E56;font-weight:700;cursor:pointer;margin-left:4px">Find →</span>
+        </div>
+      </div>`
+    :`<div style="display:flex;align-items:center;gap:8px;background:#ECFDF5;border:1px solid #9FE1CB;border-radius:8px;padding:8px 12px;margin-top:12px">
+        <span style="font-size:13px;flex-shrink:0">✅</span>
+        <div style="font-size:11px;color:#065F46;line-height:1.5">All 7 categories this month — great diversity! Attend more to boost frequency score.</div>
+      </div>`;
+
+  el.innerHTML=`
+    <div style="margin:14px 0 12px;border-top:1px solid #E1F5EE;position:relative">
+      <span style="position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:#fff;padding:0 10px;font-size:9px;font-weight:700;color:#9FE1CB;text-transform:uppercase;letter-spacing:.6px;white-space:nowrap">Monthly Summary</span>
+    </div>
+
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <div style="font-size:13px;font-weight:800;color:#0F172A">📊 ${TL_MONTH_NAMES[tlMonth]} ${tlYear}</div>
+      <div style="font-size:10px;color:#94A3B8;font-weight:600">${currentCity&&CITIES[currentCity]?CITIES[currentCity].label:''}</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px">
+      <div style="background:linear-gradient(135deg,#ECFDF5,#D1FAE5);border-radius:10px;padding:10px 8px;text-align:center;border:1px solid #9FE1CB">
+        <div style="font-size:26px;font-weight:900;color:#0F6E56;line-height:1">${totalSessions}</div>
+        <div style="font-size:9px;color:#047857;font-weight:800;margin-top:4px;text-transform:uppercase;letter-spacing:.4px">Sessions</div>
+      </div>
+      <div style="background:linear-gradient(135deg,#F5EEFF,#EDE9FE);border-radius:10px;padding:10px 8px;text-align:center;border:1px solid #DDD6FE">
+        <div style="font-size:26px;font-weight:900;color:#7C3AED;line-height:1">${catsCount}<span style="font-size:13px;font-weight:600;color:#A78BFA">/7</span></div>
+        <div style="font-size:9px;color:#6D28D9;font-weight:800;margin-top:4px;text-transform:uppercase;letter-spacing:.4px">Categories</div>
+      </div>
+      <div style="background:linear-gradient(135deg,#EFF6FF,#DBEAFE);border-radius:10px;padding:10px 8px;text-align:center;border:1px solid #BFDBFE">
+        <div style="font-size:26px;font-weight:900;color:#2563EB;line-height:1">${connCount}</div>
+        <div style="font-size:9px;color:#1D4ED8;font-weight:800;margin-top:4px;text-transform:uppercase;letter-spacing:.4px">Connections</div>
+      </div>
+      <div style="background:linear-gradient(135deg,#F8FAFC,#fff);border-radius:10px;padding:10px 8px;text-align:center;border:2px solid ${scoreCol}35">
+        <div style="font-size:26px;font-weight:900;color:${scoreCol};line-height:1">${monthScore}</div>
+        <div style="font-size:9px;font-weight:800;margin-top:4px;color:${scoreCol};text-transform:uppercase;letter-spacing:.4px">Score</div>
+        <div style="font-size:8px;color:#94A3B8;margin-top:2px">${scoreLabel}</div>
+      </div>
+    </div>
+
+    <div style="font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:9px">Activity breakdown</div>
+    <div style="display:flex;flex-direction:column;gap:7px">${catBarsHtml}</div>
+    ${insightHtml}`;
+}
+
+// Count how many times each weekday appears in a month
+function weekdayCountsInMonth(year,month){
+  const names=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const counts={Mon:0,Tue:0,Wed:0,Thu:0,Fri:0,Sat:0,Sun:0};
+  const days=new Date(year,month+1,0).getDate();
+  for(let d=1;d<=days;d++) counts[names[new Date(year,month,d).getDay()]]++;
+  return counts;
+}
+
+// How many times does activity A appear in the selected month on the given weekday?
+function activityOccurrences(a, dayOfWeek, year, month, wkCounts){
+  const parts=a.date.split(' '); // ["Sat","17","May"]
+  if(parts[0]!==dayOfWeek) return 0;          // wrong weekday
+  const meta=ACTIVITY_META[a.id]||{r:null};
+  if(meta.r==='weekly') return wkCounts[dayOfWeek]||4; // every week
+  if(meta.r==='monthly') return 1;             // once per month
+  // one-off: only if month matches
+  return parts[2]===TL_MONTH_SHORT[month] ? 1 : 0;
+}
+
+function renderCategoryDayGrid(){
+  const el=document.getElementById('catDayGrid');
+  if(!el) return;
+  const wkCounts=weekdayCountsInMonth(tlYear,tlMonth);
+  const cityActs=ACTIVITIES.filter(a=>a.city===currentCity);
+  const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
   const cats=[
     {key:'social',   label:'Social',   emoji:'💬'},
     {key:'sports',   label:'Sports',   emoji:'🏃'},
@@ -2588,59 +3920,249 @@ function initCategoryDayGrid(){
     {key:'outdoor',  label:'Outdoor',  emoji:'🌿'},
     {key:'food',     label:'Food',     emoji:'🍜'},
     {key:'volunteer',label:'Volunteer',emoji:'🤝'},
-  ].map(cat=>({...cat, data:days.map(d=>cityActs.filter(a=>a.category===cat.key&&a.date.startsWith(d)).length)}));
+  ].map(cat=>({
+    ...cat,
+    data: days.map(dow=>{
+      // Sum occurrences across all matching activities
+      const total=cityActs
+        .filter(a=>a.category===cat.key)
+        .reduce((sum,a)=>sum+activityOccurrences(a,dow,tlYear,tlMonth,wkCounts),0);
+      // Also collect activity names for tooltip
+      const acts=cityActs.filter(a=>a.category===cat.key&&a.date.startsWith(dow)&&activityOccurrences(a,dow,tlYear,tlMonth,wkCounts)>0);
+      return {total, acts};
+    })
+  }));
+
+  // Update label + note
+  const now=new Date();
+  const isCurrentMonth=(tlYear===now.getFullYear()&&tlMonth===now.getMonth());
+  const isFuture=(tlYear>now.getFullYear()||(tlYear===now.getFullYear()&&tlMonth>now.getMonth()));
+  document.getElementById('tlMonthLabel').textContent=`${TL_MONTH_NAMES[tlMonth]} ${tlYear}`;
+  const totalEvts=cats.reduce((s,c)=>s+c.data.reduce((s2,d)=>s2+d.total,0),0);
+  const noteEl=document.getElementById('tlGridNote');
+  if(noteEl){
+    if(isCurrentMonth) noteEl.textContent=`This month · ${totalEvts} scheduled · click a cell to filter map`;
+    else if(isFuture) noteEl.textContent=`Future view based on recurring activities · ${totalEvts} projected · click to filter map`;
+    else noteEl.textContent=`Past month · ${totalEvts} activities ran · click to filter map`;
+    noteEl.style.color=isFuture?'#D97706':'#94A3B8';
+  }
+  // Today button styling
+  const todayBtn=document.getElementById('tlTodayBtn');
+  if(todayBtn) todayBtn.style.fontWeight=isCurrentMonth?'700':'600';
 
   function hexAlpha(hex,a){
     const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
     return `rgba(${r},${g},${b},${a})`;
   }
 
+  // Tooltip
+  let tip=document.getElementById('catDayTip');
+  if(!tip){
+    tip=document.createElement('div');
+    tip.id='catDayTip';
+    tip.style.cssText='position:fixed;background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:10px 14px;font-size:12px;pointer-events:none;z-index:9999;display:none;line-height:1.6;max-width:300px;box-shadow:0 6px 24px rgba(0,0,0,.12)';
+    document.body.appendChild(tip);
+  }
+
   el.style.cssText='display:grid;grid-template-columns:92px repeat(7,1fr);gap:4px;align-items:center';
+
+  // Find global max for normalised alpha
+  const allVals=cats.flatMap(c=>c.data.map(d=>d.total));
+  const maxVal=Math.max(...allVals,1);
 
   const header='<div></div>'+days.map((d,i)=>{
     const isWknd=i>=5;
-    return `<div style="text-align:center;font-size:10px;font-weight:${isWknd?700:600};color:${isWknd?'#0F6E56':'#64748B'};padding-bottom:4px">${d}</div>`;
+    const cnt=wkCounts[d];
+    return `<div style="text-align:center;padding-bottom:4px">
+      <div style="font-size:10px;font-weight:${isWknd?700:600};color:${isWknd?'#0F6E56':'#64748B'}">${d}</div>
+      <div style="font-size:9px;color:#CBD5E1;font-weight:500">${cnt}×</div>
+    </div>`;
   }).join('');
 
   const rows=cats.map(cat=>{
     const col=CAT_COLOR[cat.key]||'#94A3B8';
-    // Label cell: colored left border for visual connection
-    const labelCell=`<div style="display:flex;align-items:center;gap:5px;height:32px;padding-left:7px;border-left:3px solid ${col};background:${hexAlpha(col,0.06)};border-radius:0 5px 5px 0">
+    const labelCell=`<div style="display:flex;align-items:center;gap:5px;height:36px;padding-left:7px;border-left:3px solid ${col};background:${hexAlpha(col,0.06)};border-radius:0 5px 5px 0">
       <span style="font-size:12px;line-height:1">${cat.emoji}</span>
       <span style="font-size:10px;font-weight:700;color:#1e293b;white-space:nowrap">${cat.label}</span>
     </div>`;
-    const cells=cat.data.map((v,di)=>{
-      if(v===0) return `<div data-catday="${cat.key},${di},0" style="height:32px;border-radius:7px;background:#F8FAFC;display:flex;align-items:center;justify-content:center;font-size:11px;color:#E2E8F0;cursor:default">·</div>`;
-      const alpha=0.22+(v/4)*0.78;
-      const textCol=alpha>0.56?'#fff':col;
-      return `<div data-catday="${cat.key},${di},${v}" onclick="brushFilter('${cat.key}')"
-        style="height:32px;border-radius:7px;background:${hexAlpha(col,alpha)};display:flex;align-items:center;justify-content:center;
-        font-size:12px;font-weight:800;color:${textCol};cursor:pointer;transition:all .18s;border:1px solid ${hexAlpha(col,Math.min(1,alpha+0.15))}">${v}</div>`;
+    const cells=cat.data.map((d,di)=>{
+      const v=d.total;
+      const acts=d.acts;
+      if(v===0) return `<div data-catday="${cat.key},${di},0" style="height:36px;border-radius:7px;background:#F8FAFC;display:flex;align-items:center;justify-content:center;font-size:11px;color:#E2E8F0;cursor:default">·</div>`;
+      const alpha=0.2+(v/maxVal)*0.75;
+      const textCol=alpha>0.5?'#fff':col;
+      const dayLabel=days[di];
+      const isWknd=di>=5;
+      const recurTag=acts.length&&ACTIVITY_META[acts[0].id]?.r==='weekly'?'🔁':'';
+      return `<div data-catkey="${cat.key}" data-di="${di}" data-v="${v}"
+        onclick="hmBrushDay('${cat.key}','${dayLabel}')"
+        style="height:36px;border-radius:7px;background:${hexAlpha(col,alpha)};display:flex;flex-direction:column;align-items:center;justify-content:center;
+        font-size:12px;font-weight:800;color:${textCol};cursor:pointer;transition:all .18s;border:1px solid ${hexAlpha(col,Math.min(1,alpha+0.15))};gap:1px">
+        <span>${v}</span>
+        ${recurTag?`<span style="font-size:8px;opacity:.75">${recurTag}</span>`:''}
+      </div>`;
     }).join('');
     return labelCell+cells;
   }).join('');
 
   el.innerHTML=header+rows;
 
-  // Add rich hover tooltips via event listeners
-  el.querySelectorAll('[data-catday]').forEach(cell=>{
-    const [catKey,diStr,vStr]=cell.dataset.catday.split(',');
-    const v=parseInt(vStr);
+  renderMonthCalendar();
+
+  // Hover tooltips
+  el.querySelectorAll('[data-catkey]').forEach(cell=>{
+    const catKey=cell.dataset.catkey;
+    const di=parseInt(cell.dataset.di);
+    const v=parseInt(cell.dataset.v);
     if(v===0) return;
-    const di=parseInt(diStr);
     const dayKey=days[di];
     const cat=cats.find(c=>c.key===catKey);
     const col=CAT_COLOR[catKey]||'#94A3B8';
-    // Find actual activities for this slot
-    const matched=ACTIVITIES.filter(a=>a.city===currentCity&&a.category===catKey&&a.date.startsWith(dayKey));
-    const actLines=matched.length
-      ? matched.map(a=>`<div style="margin-bottom:3px"><span style="font-weight:600;color:#1e293b">${a.name}</span><br><span style="color:#64748B;font-size:10px">⏰ ${a.time} &nbsp;·&nbsp; 📍 ${a.location.split(',')[0]}</span></div>`).join('')
-      : `<span style="color:#64748B">${v} ${cat.label} ${v===1?'activity':'activities'}</span>`;
-    const tipContent=`<div style="font-weight:700;color:${col};margin-bottom:7px;font-size:12px">${cat.emoji} ${cat.label} · ${dayKey}</div>${actLines}`;
+    const matched=cityActs.filter(a=>a.category===catKey&&a.date.startsWith(dayKey)&&activityOccurrences(a,dayKey,tlYear,tlMonth,wkCounts)>0);
+    const wkCount=wkCounts[dayKey];
+    const actLines=matched.map(a=>{
+      const m=ACTIVITY_META[a.id]||{r:null};
+      const recurNote=m.r==='weekly'?` <span style="color:#0F6E56;font-size:9px">🔁 ×${wkCount} this month</span>`:m.r==='monthly'?' <span style="color:#64748B;font-size:9px">🗓 monthly</span>':'';
+      return `<div style="margin-bottom:4px"><span style="font-weight:600;color:#1e293b">${a.name}</span>${recurNote}<br><span style="color:#64748B;font-size:10px">⏰ ${a.time} &nbsp;·&nbsp; 📍 ${a.location.split(',')[0]}</span></div>`;
+    }).join('');
+    const tipContent=`<div style="font-weight:700;color:${col};margin-bottom:7px;font-size:12px">${cat.emoji} ${cat.label} · ${dayKey} · ${TL_MONTH_NAMES[tlMonth]}</div>${actLines}<div style="color:#94A3B8;font-size:10px;margin-top:6px;border-top:1px solid #F1F5F9;padding-top:5px">${v} total occurrence${v!==1?'s':''} this month · click to filter map</div>`;
     cell.addEventListener('mouseover',e=>{tip.innerHTML=tipContent;tip.style.display='block';tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-10)+'px';});
     cell.addEventListener('mousemove',e=>{tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-10)+'px';});
     cell.addEventListener('mouseout',()=>tip.style.display='none');
   });
+}
+
+// Click cell → filter map by category (keep existing behaviour)
+function hmBrushDay(catKey, dayOfWeek){
+  brushFilter(catKey);
+}
+
+
+// ════════════════════════════════════════
+//  MONTH CALENDAR VIEW
+// ════════════════════════════════════════
+const CAL_DAY_NAMES=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const CAL_CATS=['social','sports','culture','learning','outdoor','food','volunteer'];
+
+function getCatsForCalDate(date){
+  const jsDay=new Date(tlYear,tlMonth,date).getDay(); // 0=Sun
+  const dayName=CAL_DAY_NAMES[(jsDay+6)%7];          // Mon=0
+  const monthShort=TL_MONTH_SHORT[tlMonth];
+  const result={};
+  ACTIVITIES.filter(a=>a.city===currentCity).forEach(a=>{
+    const parts=a.date.split(' ');
+    if(parts[0]!==dayName) return;
+    const meta=ACTIVITY_META[a.id]||{r:null};
+    const include=meta.r==='weekly'||meta.r==='monthly'||(parts[2]===monthShort);
+    if(include) result[a.category]=(result[a.category]||[]).concat(a);
+  });
+  return result;
+}
+
+function renderMonthCalendar(){
+  const headerEl=document.getElementById('mcalHeader');
+  const gridEl=document.getElementById('monthCalGrid');
+  const legendEl=document.getElementById('mcalLegend');
+  const countEl=document.getElementById('calActCount');
+  if(!headerEl||!gridEl) return;
+
+  // Header row
+  headerEl.innerHTML=CAL_DAY_NAMES.map((d,i)=>`
+    <div class="mcal-hd${i>=5?' mcal-wknd':''}">${d}</div>`).join('');
+
+  const daysInMonth=new Date(tlYear,tlMonth+1,0).getDate();
+  const firstJsDay=new Date(tlYear,tlMonth,1).getDay();   // 0=Sun
+  const firstDayMon=(firstJsDay+6)%7;                      // 0=Mon
+  const today=new Date();
+  const isCurrentMonth=(tlYear===today.getFullYear()&&tlMonth===today.getMonth());
+  let totalActs=0, activeCats=new Set();
+  let html='';
+
+  // Leading blanks
+  for(let i=0;i<firstDayMon;i++) html+=`<div class="mcal-cell mcal-empty"></div>`;
+
+  // Date cells
+  for(let date=1;date<=daysInMonth;date++){
+    const jsDay=new Date(tlYear,tlMonth,date).getDay();
+    const isWknd=jsDay===0||jsDay===6;
+    const isToday=isCurrentMonth&&date===today.getDate();
+    const catMap=getCatsForCalDate(date);
+    const hasCats=Object.keys(catMap).length>0;
+    if(hasCats){ totalActs++; Object.keys(catMap).forEach(c=>activeCats.add(c)); }
+
+    const dots=CAL_CATS.filter(c=>catMap[c]).map(c=>`
+      <div class="mcal-dot" style="background:${CAT_COLOR[c]}" data-cat="${c}"></div>`).join('');
+
+    html+=`<div class="mcal-cell${isToday?' mcal-today':''}${isWknd?' mcal-wknd-cell':''}${hasCats?' mcal-has-acts':''}"
+      data-date="${date}">
+      <div class="mcal-date-num${isToday?' mcal-today-num':''}">${date}</div>
+      <div class="mcal-dots">${dots}</div>
+    </div>`;
+  }
+
+  gridEl.innerHTML=html;
+  if(countEl) countEl.textContent=totalActs?`${totalActs} active day${totalActs!==1?'s':''}${isCurrentMonth?' this month':' · '+TL_MONTH_NAMES[tlMonth]}` :'';
+
+  // Legend — only show cats present this month
+  if(legendEl) legendEl.innerHTML=[...activeCats].map(c=>`
+    <div class="mcal-leg-item">
+      <div class="mcal-leg-dot" style="background:${CAT_COLOR[c]}"></div>
+      <span>${CAT_LABEL[c]}</span>
+    </div>`).join('');
+
+  // Events: tooltip + click
+  let tip=document.getElementById('catDayTip');
+  gridEl.querySelectorAll('.mcal-cell[data-date]').forEach(cell=>{
+    const date=parseInt(cell.dataset.date);
+    const catMap=getCatsForCalDate(date);
+    if(!Object.keys(catMap).length) return;
+
+    // Tooltip
+    const dayName=CAL_DAY_NAMES[(new Date(tlYear,tlMonth,date).getDay()+6)%7];
+    let tipHtml=`<div style="font-weight:700;color:#0F6E56;margin-bottom:7px;font-size:12px">
+      ${date} ${TL_MONTH_NAMES[tlMonth]} ${tlYear} · ${dayName}</div>`;
+    CAL_CATS.filter(c=>catMap[c]).forEach(c=>{
+      catMap[c].forEach(a=>{
+        const meta=ACTIVITY_META[a.id]||{r:null};
+        const recurTag=meta.r==='weekly'?' <span style="font-size:9px;color:#0F6E56">🔁 weekly</span>':meta.r==='monthly'?' <span style="font-size:9px;color:#64748B">🗓</span>':'';
+        tipHtml+=`<div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
+          <div style="width:8px;height:8px;border-radius:50%;background:${CAT_COLOR[c]};flex-shrink:0"></div>
+          <span style="font-weight:600;color:#1e293b;font-size:11px">${a.name}</span>${recurTag}
+        </div>
+        <div style="margin-left:14px;color:#64748B;font-size:10px;margin-bottom:5px">${a.time} · ${a.location.split(',')[0]}</div>`;
+      });
+    });
+    tipHtml+=`<div style="color:#0F6E56;font-size:10px;margin-top:4px;border-top:1px solid #F1F5F9;padding-top:5px">🗺 Click to show on map</div>`;
+
+    cell.addEventListener('mouseover',e=>{tip.innerHTML=tipHtml;tip.style.display='block';tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-10)+'px';});
+    cell.addEventListener('mousemove',e=>{tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-10)+'px';});
+    cell.addEventListener('mouseout',()=>tip.style.display='none');
+    cell.addEventListener('click',()=>{ tip.style.display='none'; calClickDay(date); });
+  });
+}
+
+function calClickDay(date){
+  const jsDay=new Date(tlYear,tlMonth,date).getDay();
+  const dayName=CAL_DAY_NAMES[(jsDay+6)%7];
+  const monthShort=TL_MONTH_SHORT[tlMonth];
+  const matching=ACTIVITIES.filter(a=>{
+    if(a.city!==currentCity) return false;
+    const parts=a.date.split(' ');
+    if(parts[0]!==dayName) return false;
+    const meta=ACTIVITY_META[a.id]||{r:null};
+    return meta.r==='weekly'||meta.r==='monthly'||(parts[2]===monthShort);
+  });
+  if(!matching.length){
+    showToast('No activities','Nothing scheduled on this date — try another day.','warn',2500);
+    return;
+  }
+  timeBrushIds=new Set(matching.map(a=>a.id));
+  const label=`${date} ${TL_MONTH_NAMES[tlMonth]} · ${dayName}`;
+  document.getElementById('mapTimeLabel').textContent=label;
+  document.getElementById('mapTimeBanner').classList.add('show');
+  switchTab('map');
+  renderMarkers();
+  showToast(`Filtered to ${label}`,`${matching.length} activit${matching.length!==1?'ies':'y'} in view`,'success',2500);
 }
 
 // ════════════════════════════════════════
@@ -2863,14 +4385,86 @@ function openModal(){
   document.getElementById('modalOv').classList.add('open');
 }
 function closeModal(){document.getElementById('modalOv').classList.remove('open');}
-function submitAct(){closeModal();setTimeout(()=>showToast('Activity published! 🎉','It will appear on the map for others to discover.','success'),200);}
+function submitAct(){
+  const title = (document.getElementById('actTitle')?.value||'').trim();
+  if(!title){ showToast('Title required','Please enter an activity name.','warn',2500); return; }
+  const cat   = document.getElementById('actCat')?.value || 'social';
+  const city  = document.getElementById('actCity')?.value || currentCity;
+  const dateRaw = document.getElementById('actDate')?.value || '';
+  const timeRaw = document.getElementById('actTime')?.value || '';
+  const loc   = document.getElementById('actLocation')?.value || '';
+  const desc  = document.getElementById('actDesc')?.value || '';
+  const maxA  = parseInt(document.getElementById('actMax')?.value)||20;
+  const isNC  = document.getElementById('ncCheck')?.checked||false;
+
+  // Format date display (e.g. "Sat 7 Jun")
+  let dateDisplay = dateRaw;
+  if(dateRaw.match(/^\d{4}-\d{2}-\d{2}$/)){
+    const d = new Date(dateRaw + 'T12:00:00');
+    const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    dateDisplay = `${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]}`;
+  }
+
+  // Format time display
+  let timeDisplay = timeRaw;
+  if(timeRaw){
+    const [hh,mm]=timeRaw.split(':');
+    const h=parseInt(hh); const ampm=h>=12?'PM':'AM';
+    timeDisplay=`${h%12||12}:${mm} ${ampm}`;
+  }
+
+  // City centre coords with small random offset so pins don't stack
+  const CITY_CENTERS={hamilton:{lat:-37.787,lng:175.279},auckland:{lat:-36.848,lng:174.763}};
+  const cc=CITY_CENTERS[city]||CITY_CENTERS.hamilton;
+  const lat=cc.lat+(Math.random()-.5)*0.03;
+  const lng=cc.lng+(Math.random()-.5)*0.04;
+
+  const newId = Math.max(...ACTIVITIES.map(a=>a.id))+1;
+  const newAct = {
+    id:newId, city, name:title, category:cat,
+    lat, lng,
+    date:dateDisplay, time:timeDisplay,
+    location:loc||'Location TBD',
+    attendees:1, maxAttendees:maxA,
+    newcomer:isNC,
+    desc:desc||'No description provided.',
+    avatarColors:['#0F6E56'],
+    _userPosted:true
+  };
+  ACTIVITIES.push(newAct);
+
+  closeModal();
+
+  // Reset form
+  ['actTitle','actLocation','actDesc','actMax'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['actDate','actTime'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  const nc=document.getElementById('ncCheck');if(nc)nc.checked=false;
+
+  // Show on map
+  if(city===currentCity){
+    renderMarkers();
+    if(map) setTimeout(()=>{
+      map.setView([lat,lng],15,{animate:true});
+      showDetail(newId);
+    },300);
+  }
+
+  // Refresh Timeline if active
+  const tv=document.getElementById('view-timeline');
+  if(tv&&tv.classList.contains('active')) renderUnifiedTimeline();
+
+  // Switch to map to show the new pin
+  switchTab('map');
+  setTimeout(()=>showToast('Activity published! 🎉',`"${title}" is now on the map.`,'success'),400);
+}
 document.getElementById('modalOv').addEventListener('click',function(e){if(e.target===this)closeModal();});
 
 // ════════════════════════════════════════
 //  BOOT
 // ════════════════════════════════════════
 window.addEventListener('load',()=>{
-  // 只在第一次访问时显示 onboarding
+  // Only show onboarding on first visit
   try{ if(localStorage.getItem('localin_seen')) closeOnboarding(); }catch(e){}
   // Init dropdown with Hamilton pre-selected
   document.getElementById('cityDdLabel').textContent=`${CITIES.hamilton.icon} Hamilton`;
@@ -2929,6 +4523,346 @@ window.addEventListener('load',()=>{
     });
   })();
 });
+
+// ════════════════════════════════════════
+//  LOG MEETING + MARK ATTENDED
+// ════════════════════════════════════════
+
+// Track attended activities and user-logged meetings
+let attendedActivities = new Set();
+let userNodeCounter = 100; // IDs for user-added nodes
+
+function openLogMeet(prefillActivityId) {
+  // Populate activity dropdown
+  const sel = document.getElementById('lmActivity');
+  const cityActs = ACTIVITIES.filter(a => a.city === currentCity);
+  sel.innerHTML = '<option value="">— Select an activity —</option>' +
+    cityActs.map(a => `<option value="${a.id}"${prefillActivityId===a.id?' selected':''}>${a.name}</option>`).join('');
+
+  // Auto-select category if activity prefilled
+  if (prefillActivityId) {
+    const act = ACTIVITIES.find(x => x.id === prefillActivityId);
+    if (act) document.getElementById('lmCat').value = act.category;
+  }
+
+  // Default date to today
+  const today = new Date();
+  document.getElementById('lmDate').value = today.toISOString().slice(0, 10);
+  document.getElementById('lmName').value = '';
+  document.getElementById('logMeetModal').classList.add('open');
+  setTimeout(() => document.getElementById('lmName').focus(), 80);
+}
+
+function closeLogMeet() {
+  document.getElementById('logMeetModal').classList.remove('open');
+}
+
+function submitLogMeet() {
+  const name = document.getElementById('lmName').value.trim();
+  if (!name) {
+    document.getElementById('lmName').focus();
+    document.getElementById('lmName').style.borderColor = '#EF4444';
+    setTimeout(() => document.getElementById('lmName').style.borderColor = '', 1200);
+    return;
+  }
+  const cat = document.getElementById('lmCat').value;
+  const dateVal = document.getElementById('lmDate').value;
+  const actId = parseInt(document.getElementById('lmActivity').value) || null;
+  const act = actId ? ACTIVITIES.find(x => x.id === actId) : null;
+
+  // Format date for display
+  const d = dateVal ? new Date(dateVal + 'T00:00:00') : new Date();
+  const dateLabel = d.toLocaleDateString('en-NZ', { day:'numeric', month:'short' });
+
+  // Build node + link
+  const nodeId = 'u' + (++userNodeCounter);
+  const newNode = { id: nodeId, label: name, group: cat, acts: [act ? act.name : 'Met in person'], size: 12, _userAdded: true };
+  const newLink = {
+    source: 'you', target: nodeId, value: 1, cat: cat,
+    sharedActs: act ? [{ name: act.name, date: dateLabel, cat: cat }] : [{ name: 'Met in person', date: dateLabel, cat: cat }]
+  };
+
+  // Inject into NET_DATA
+  if (!NET_DATA[currentCity]) NET_DATA[currentCity] = { nodes: [{ id:'you', label:'You', group:'you', size:22 }], links: [] };
+  NET_DATA[currentCity].nodes.push(newNode);
+  NET_DATA[currentCity].links.push(newLink);
+
+  // Force re-render
+  netInitialized[currentCity] = false;
+  closeLogMeet();
+  initNetworkWithWeek(currentWeek);
+
+  // Update connection count badge
+  const connCount = NET_DATA[currentCity].nodes.filter(n => n.id !== 'you').length;
+  const _slnc=document.getElementById('nsConn'); if(_slnc) _slnc.textContent = connCount;
+  const _slbd=document.getElementById('connBadge'); if(_slbd) _slbd.textContent = connCount;
+
+  showToast('Connection added! 🎉', `${name} is now in your network.`, 'success');
+}
+
+// ── Join Activity (sign up) ──
+let joinedActivities = new Set();
+
+function joinActivity() {
+  const a = ACTIVITIES.find(x => x.id === currentDetailId);
+  if (!a) return;
+
+  const btn = document.getElementById('dpJoinBtn');
+  const markRow = document.getElementById('dpMarkAttendedRow');
+  const menu = document.getElementById('dpJoinMenu');
+
+  if (joinedActivities.has(currentDetailId)) {
+    // Already joined — toggle mini menu
+    if (menu) menu.classList.toggle('show');
+    return;
+  }
+
+  // Mark as joined
+  joinedActivities.add(currentDetailId);
+  if (btn) {
+    btn.textContent = '✓ Joined ▾';
+    btn.style.background = 'linear-gradient(135deg,#059669,#047857)';
+  }
+  if (markRow) markRow.style.display = 'block';
+
+  const conns = CONNECTION_ACTS[currentDetailId] || [];
+  const connNote = conns.length ? ` · ${conns.map(c=>c.name).join(' & ')} is going too!` : '';
+  showToast("You're in! 🎉", `Signed up for ${a.name}${connNote}`, 'success');
+}
+
+function logMeetFromJoin() {
+  document.getElementById('dpJoinMenu').classList.remove('show');
+  openLogMeet(currentDetailId);
+}
+
+function cancelJoin() {
+  if (!currentDetailId) return;
+  joinedActivities.delete(currentDetailId);
+  const btn = document.getElementById('dpJoinBtn');
+  if (btn) { btn.textContent = 'Join Activity'; btn.style.background = ''; }
+  const markRow = document.getElementById('dpMarkAttendedRow');
+  if (markRow) markRow.style.display = 'none';
+  document.getElementById('dpJoinMenu').classList.remove('show');
+  document.getElementById('dpAttendedStrip').classList.remove('show');
+  showToast('Registration cancelled', '', 'info', 2000);
+}
+
+// ── Mark as Attended (after the activity) ──
+function markAsAttended() {
+  if (!attendedActivities.has(currentDetailId)) {
+    attendedActivities.add(currentDetailId);
+  }
+  // Hide the link, show the "who did you meet" strip
+  const markRow = document.getElementById('dpMarkAttendedRow');
+  if (markRow) markRow.style.display = 'none';
+  const strip = document.getElementById('dpAttendedStrip');
+  if (strip) {
+    strip.classList.add('show');
+    setTimeout(() => { const inp = document.getElementById('dpMeetName'); if (inp) inp.focus(); }, 80);
+  }
+}
+
+function submitAttendedMeet() {
+  const name = document.getElementById('dpMeetName').value.trim();
+  if (!name) { document.getElementById('dpMeetName').focus(); return; }
+  const a = ACTIVITIES.find(x => x.id === currentDetailId);
+
+  // Prefill and open the full log modal for this activity
+  document.getElementById('dpMeetName').value = '';
+  document.getElementById('dpAttendedStrip').classList.remove('show');
+
+  // Add directly
+  const cat = a ? a.category : 'social';
+  const today = new Date();
+  const dateLabel = today.toLocaleDateString('en-NZ', { day:'numeric', month:'short' });
+  const nodeId = 'u' + (++userNodeCounter);
+  const newNode = { id: nodeId, label: name, group: cat, acts: [a ? a.name : 'Met in person'], size: 12, _userAdded: true };
+  const newLink = {
+    source: 'you', target: nodeId, value: 1, cat: cat,
+    sharedActs: [{ name: a ? a.name : 'Met in person', date: dateLabel, cat: cat }]
+  };
+  if (!NET_DATA[currentCity]) NET_DATA[currentCity] = { nodes: [{ id:'you', label:'You', group:'you', size:22 }], links: [] };
+  NET_DATA[currentCity].nodes.push(newNode);
+  NET_DATA[currentCity].links.push(newLink);
+
+  netInitialized[currentCity] = false;
+  // No re-render now (user is in detail panel), will refresh when they switch to network
+
+  const connCount = NET_DATA[currentCity].nodes.filter(n => n.id !== 'you').length;
+  const _amnc=document.getElementById('nsConn'); if(_amnc) _amnc.textContent = connCount;
+  const _ambd=document.getElementById('connBadge'); if(_ambd) _ambd.textContent = connCount;
+
+  showToast(`${name} added to your network! 🤝`, 'Check My Progress to see your updated network.', 'success', 3000);
+
+  // Ask if they met more people
+  document.getElementById('dpAttendedStrip').classList.add('show');
+  document.getElementById('dpMeetName').value = '';
+  document.getElementById('dpMeetName').placeholder = 'Anyone else? (optional)';
+  document.querySelector('.att-strip-skip').textContent = 'Done — close this';
+}
+
+function skipAttendedMeet() {
+  document.getElementById('dpAttendedStrip').classList.remove('show');
+}
+
+// Close log modal on overlay click
+document.addEventListener('click', function(e) {
+  const modal = document.getElementById('logMeetModal');
+  if (e.target === modal) closeLogMeet();
+});
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeLogMeet();
+});
+
+
+// Move logMeetModal to document.body to escape any stacking context
+document.addEventListener('DOMContentLoaded', function() {
+  const m = document.getElementById('logMeetModal');
+  if (m && m.parentElement !== document.body) {
+    document.body.appendChild(m);
+  }
+});
+
+// Close dpJoinMenu on outside click
+document.addEventListener('click', function(e) {
+  const menu = document.getElementById('dpJoinMenu');
+  const btn = document.getElementById('dpJoinBtn');
+  if (menu && menu.classList.contains('show') && !menu.contains(e.target) && e.target !== btn) {
+    menu.classList.remove('show');
+  }
+});
+
+
+// ═══════════════════════════════════════════════
+// ① Integration Journey Banner
+// ═══════════════════════════════════════════════
+function updateJourneyBanner(){
+  const userActs=ACTIVITIES.filter(a=>a._userPosted).length;
+  const totalActs=5+userActs, totalConns=7+userActs*3;
+  const score=Math.min(95,62+userActs*8);
+  const g=id=>document.getElementById(id);
+  if(g('jbActs'))g('jbActs').textContent=totalActs;
+  if(g('jbConns'))g('jbConns').textContent=totalConns;
+  if(g('jbScore'))g('jbScore').textContent=score;
+  if(g('jbBarFill'))g('jbBarFill').style.width=score+'%';
+  let emoji,label;
+  if(score<30){emoji='🌱';label='Just Starting — welcome to your new city!';}
+  else if(score<55){emoji='🌿';label='Finding Your Feet — great progress!';}
+  else if(score<75){emoji='🌳';label='Growing — you\'re building your community!';}
+  else if(score<90){emoji='🏡';label='Well Connected — you\'re thriving here!';}
+  else{emoji='🎉';label='Fully Integrated — this city is your home!';}
+  if(g('jbEmoji'))g('jbEmoji').textContent=emoji;
+  if(g('jbLabel'))g('jbLabel').textContent=label;
+}
+
+// ═══════════════════════════════════════════════
+// ② My Journey Timeline
+// ═══════════════════════════════════════════════
+const JOURNEY_SEED=[
+  {date:'Week 1 · Day 3',name:'Arrived in the city',meta:'Moved in, starting fresh',met:0,mine:false},
+  {date:'Week 1 · Day 5',name:'Hamilton Lake Parkrun',meta:'First social activity',met:3,mine:false},
+  {date:'Week 2 · Day 9',name:'English Conversation Club',meta:'At Hamilton City Library',met:2,mine:false},
+  {date:'Week 2 · Day 12',name:'Garden Place Night Market',meta:'Tried local food, chatted with vendors',met:1,mine:false},
+  {date:'Week 3 · Day 16',name:'International Coffee Chat @ UoW',meta:'Biggest social event so far!',met:4,mine:false},
+];
+function renderJourneyTimeline(){
+  const el=document.getElementById('journeyTimeline');
+  if(!el)return;
+  const userItems=ACTIVITIES.filter(a=>a._userPosted).map(a=>({
+    date:'This week · Just posted',name:a.name,meta:a.location||'Your posted activity',met:3,mine:true
+  }));
+  const all=[...userItems,...JOURNEY_SEED];
+  el.innerHTML=all.map(e=>`
+    <div class="jtl-item">
+      <div class="jtl-dot${e.mine?' mine':''}"></div>
+      <div class="jtl-date">${e.date}</div>
+      <div class="jtl-name">${e.mine?'✦ ':''}${e.name}</div>
+      <div class="jtl-meta">${e.meta}</div>
+      ${e.met>0?`<div class="jtl-met">+${e.met} connection${e.met>1?'s':''}</div>`:''}
+    </div>`).join('');
+}
+
+
+
+
+
+
+// ═══════════════════════════════════════════════
+// ④ Activity Density Heatmap (self-contained canvas)
+// ═══════════════════════════════════════════════
+let _heatCanvas=null,heatOn=false;
+
+function _drawHeat(){
+  if(!heatOn||!_heatCanvas||!map)return;
+  const mapEl=document.getElementById('map');
+  const w=mapEl.offsetWidth,h=mapEl.offsetHeight;
+  _heatCanvas.width=w;_heatCanvas.height=h;
+  const ctx=_heatCanvas.getContext('2d');
+  ctx.clearRect(0,0,w,h);
+  const pts=ACTIVITIES.filter(a=>a.city===currentCity);
+  const zoom=map.getZoom();
+  const r=Math.max(20,Math.min(60, zoom*3.5));
+  pts.forEach(a=>{
+    try{
+      const p=map.latLngToContainerPoint([a.lat,a.lng]);
+      const grd=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,r);
+      grd.addColorStop(0,'rgba(15,110,86,0.55)');
+      grd.addColorStop(0.45,'rgba(34,197,94,0.28)');
+      grd.addColorStop(1,'rgba(134,239,172,0)');
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,r,0,Math.PI*2);
+      ctx.fillStyle=grd;
+      ctx.fill();
+    }catch(e){}
+  });
+}
+
+function toggleHeatmap(){
+  if(!map)return;
+  const btn=document.getElementById('heatmapToggleBtn');
+  if(heatOn){
+    if(_heatCanvas&&_heatCanvas.parentNode)_heatCanvas.parentNode.removeChild(_heatCanvas);
+    _heatCanvas=null; heatOn=false;
+    map.off('move moveend zoomend',_drawHeat);
+    if(btn){btn.classList.remove('on');btn.textContent='🔥 Heatmap';}
+    showToast('Heatmap off','Activity markers restored','info',1800);
+  }else{
+    const mapEl=document.getElementById('map');
+    _heatCanvas=document.createElement('canvas');
+    _heatCanvas.style.cssText='position:absolute;top:0;left:0;width:100%;height:100%;z-index:450;pointer-events:none;opacity:.85';
+    mapEl.style.position='relative';
+    mapEl.appendChild(_heatCanvas);
+    heatOn=true;
+    _drawHeat();
+    map.on('move moveend zoomend',_drawHeat);
+    if(btn){btn.classList.add('on');btn.textContent='🔥 Hide Heatmap';}
+    showToast('Heatmap on','Showing activity density across '+CITIES[currentCity].label,'success',2200);
+  }
+}
+
+// ═══════════════════════════════════════════════
+// Boot: init banner & journey on load, patch submitAct
+// ═══════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded',function(){
+  updateJourneyBanner();
+  renderJourneyTimeline();
+  // Patch submitAct to refresh banner & journey after posting
+  const _origSubmit=window.submitAct;
+  if(typeof _origSubmit==='function'){
+    window.submitAct=function(){
+      _origSubmit.apply(this,arguments);
+      setTimeout(()=>{updateJourneyBanner();renderJourneyTimeline();},600);
+    };
+  }
+  // Refresh journey when timeline tab is shown
+  const _origSwitch=window.switchTab;
+  if(typeof _origSwitch==='function'){
+    window.switchTab=function(tab){
+      _origSwitch.apply(this,arguments);
+      if(tab==='timeline')setTimeout(renderJourneyTimeline,100);
+    };
+  }
+});
 </script>
 <!-- App toast — outside all views so it's always visible regardless of active tab -->
 <div id="appToast">
@@ -2939,5 +4873,6 @@ window.addEventListener('load',()=>{
   </div>
   <button class="at-close" onclick="hideToast()">✕</button>
 </div>
+
 </body>
 </html>
