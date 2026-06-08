@@ -774,9 +774,8 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
 
 
 /* ── My Location feature ────────────────────────────────────────────── */
-#setLocBtn{position:absolute;top:122px;left:14px;z-index:500;background:#fff;border:none;border-radius:10px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.14);transition:all .2s}
-#setLocBtn:hover{background:#E1F5EE;transform:scale(1.08)}
-#setLocBtn.loc-set{background:#0F6E56;color:#fff;box-shadow:0 2px 12px rgba(15,110,86,.4)}
+#setLocBtn{display:none}
+#mapLocateBtn.loc-set{background:#0F6E56!important;color:#fff!important;box-shadow:0 2px 12px rgba(15,110,86,.4)!important}
 .loc-panel{position:fixed;z-index:9999;background:#fff;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,.16);border:1px solid #e2e8f0;padding:14px 16px;width:220px;display:none;animation:locSlideIn .15s ease}
 .loc-panel.open{display:block}
 @keyframes locSlideIn{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:translateX(0)}}
@@ -976,11 +975,8 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
         </div>
 
       </div>
-      <!-- Re-center button -->
-      <button id="mapLocateBtn" title="Re-center map" onclick="map.setView([-37.787,175.279],13)">📍</button>
-      
-      <!-- My Location button (panel + pin-bar injected to body via JS) -->
-      <button id="setLocBtn" title="Set my home location" onclick="toggleLocPanel()">&#x2302;</button>
+      <!-- Location button: short click = re-center, long click = set home location -->
+      <button id="mapLocateBtn" id2="setLocBtn" title="Set my home location / Re-center" onclick="toggleLocPanel()">📍</button>
       <button id="heatmapToggleBtn" onclick="toggleHeatmap()" title="Toggle activity heatmap">🔥 Heatmap</button>
     </div>
 
@@ -1423,7 +1419,7 @@ let _pinDropMode = false;
   // Close panel when clicking outside
   document.addEventListener('click', e => {
     const p = document.getElementById('locPanel');
-    const b = document.getElementById('setLocBtn');
+    const b = document.getElementById('mapLocateBtn');
     if(p && p.classList.contains('open') && !p.contains(e.target) && !b?.contains(e.target)){
       p.classList.remove('open');
       b?.classList.remove('active');
@@ -1432,7 +1428,7 @@ let _pinDropMode = false;
 })();
 
 function toggleLocPanel(){
-  const btn   = document.getElementById('setLocBtn');
+  const btn   = document.getElementById('mapLocateBtn');
   const panel = document.getElementById('locPanel');
   if(!panel || !btn) return;
   if(panel.classList.contains('open')){
@@ -1515,7 +1511,7 @@ function _applyHomeLocation(lat, lng, label){
     .addTo(map)
     .bindPopup('<b>My Location</b><br><span style="font-size:11px;color:#64748B">'+label+'</span>');
   // Update button badge
-  const btn = document.getElementById('setLocBtn');
+  const btn = document.getElementById('mapLocateBtn');
   if(btn) btn.classList.add('loc-set');
   // Pan to show marker
   map.panTo([lat, lng]);
@@ -1528,7 +1524,7 @@ function _applyHomeLocation(lat, lng, label){
 function locClear(){
   homeLocation = null;
   if(_homeMarker){ map.removeLayer(_homeMarker); _homeMarker = null; }
-  const btn = document.getElementById('setLocBtn');
+  const btn = document.getElementById('mapLocateBtn');
   if(btn) btn.classList.remove('loc-set');
   _closeLocPanel();
   renderMarkers();
@@ -1538,13 +1534,13 @@ function locClear(){
 
 function _closeLocPanel(){
   document.getElementById('locPanel')?.classList.remove('open');
-  document.getElementById('setLocBtn')?.classList.remove('active');
+  document.getElementById('mapLocateBtn')?.classList.remove('active');
 }
 
 // Close panel when clicking outside
 document.addEventListener('click', e => {
   const panel = document.getElementById('locPanel');
-  const btn   = document.getElementById('setLocBtn');
+  const btn   = document.getElementById('mapLocateBtn');
   if(panel && !panel.contains(e.target) && e.target !== btn && !btn?.contains(e.target)){
     panel.classList.remove('open');
     btn?.classList.remove('active');
@@ -2396,7 +2392,7 @@ function switchCity(city){
   // Remove home marker from map on city switch (location may not be in new city)
   if(_homeMarker){ map.removeLayer(_homeMarker); _homeMarker=null; }
   if(homeLocation){
-    const btn=document.getElementById('setLocBtn');
+    const btn=document.getElementById('mapLocateBtn');
     if(btn) btn.classList.remove('loc-set');
     homeLocation=null;
     showToast('City changed','Home location cleared — set a new one for '+CITIES[city].label,'info',3200);
