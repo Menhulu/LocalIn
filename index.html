@@ -198,7 +198,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .ac-name{font-size:14px;font-weight:700;color:#0F172A;line-height:1.3;margin-bottom:6px;letter-spacing:-.1px}
 .ac-meta{font-size:11px;color:#64748B;display:flex;flex-direction:column;gap:3px;margin-bottom:9px;line-height:1.5}
 .ac-meta span{display:flex;align-items:center;gap:4px}
-.ac-footer{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.ac-footer{display:flex;flex-direction:column;gap:6px;padding-top:2px}
+.ac-footer-row1{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.ac-footer-row2{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
 /* (legacy selectors kept for compatibility) */
 .ac-top{display:flex;align-items:flex-start;gap:8px;margin-bottom:5px}
 .ac-ico{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;background:var(--cat-bg,#f1f5f9)}
@@ -583,9 +585,9 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
 .week-milestone{font-size:10px;color:#94A3B8;font-style:italic;margin-left:6px}
 
 /* ── Recommendation badge (enhanced conn bar) ── */
-.rec-bar{display:flex;align-items:center;gap:5px;padding:5px 10px 7px;background:linear-gradient(135deg,#ECFDF5,#D1FAE5);border-top:1px solid #9FE1CB;flex-wrap:wrap}
-.rec-label{font-size:9px;font-weight:700;color:#065F46;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap}
-.rec-names{font-size:10.5px;font-weight:700;color:#0F6E56}
+.rec-bar{display:flex;align-items:center;gap:4px;padding:7px 12px 8px;border-top:1px solid #F1F5F9;flex-wrap:wrap}
+.rec-label{font-size:10px;font-weight:400;color:#94A3B8;white-space:nowrap}
+.rec-names{font-size:10.5px;font-weight:600;color:#0F6E56}
 
 /* ── Demo story guide ── */
 #demoGuide{position:absolute;bottom:18px;right:16px;z-index:600;width:270px;background:#fff;border-radius:14px;box-shadow:0 6px 28px rgba(0,0,0,.15);border:1px solid #e2e8f0;overflow:hidden;display:none}
@@ -857,6 +859,11 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
 <!-- ═══ MAP VIEW ═══ -->
 <div class="view active" id="view-map">
   <div class="filter-bar" role="group" aria-label="Filter activities by category">
+    <!-- Saved filter — leftmost as a view toggle -->
+    <button id="savedFilterBtn" onclick="toggleSavedFilter()" style="display:none;align-items:center;gap:5px;padding:4px 12px;border-radius:10px;border:1.5px solid #e2e8f0;background:#fff;color:#64748B;font-size:11px;font-weight:600;cursor:pointer;flex-shrink:0;transition:all .2s" title="Show saved activities only">
+      <span id="savedFilterIcon">♡</span> Saved (<span id="savedFilterCount">0</span>)
+    </button>
+    <div id="savedFilterDivider" style="display:none;width:1px;height:18px;background:#e2e8f0;flex-shrink:0;margin:0 4px;align-self:center"></div>
     <!-- Category dropdown -->
     <div class="cat-dd-wrap" id="catDdWrap">
       <button class="cat-dd-btn" id="catDdBtn" onclick="toggleCatDrop(event)" aria-haspopup="listbox" aria-expanded="false">
@@ -927,6 +934,7 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
     <!-- Reset all filters -->
     <button id="resetAllBtn" onclick="resetAllFilters()" style="display:none;align-items:center;gap:4px;margin-left:4px;padding:4px 11px;border-radius:10px;border:1.5px solid #CBD5E1;background:#F8FAFC;color:#64748B;font-size:11px;font-weight:600;cursor:pointer;flex-shrink:0;transition:all .15s" onmouseover="this.style.borderColor='#94A3B8';this.style.background='#F1F5F9'" onmouseout="this.style.borderColor='#CBD5E1';this.style.background='#F8FAFC'"><svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 2A5 5 0 1 0 11 6"/><polyline points="9,0 11,2 9,4"/></svg> Reset</button>
 
+
   </div>
   <!-- Time-brush banner: shows when Timeline → Map link is active -->
   <div class="map-time-banner" id="mapTimeBanner">
@@ -986,7 +994,7 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
         <div class="al-header">
 <!-- Row 2: count + distance filter + sort (only in map mode) -->
           <div class="al-header-row2" id="sortBtns">
-            <div class="al-count" style="margin-right:2px"><strong id="alCount">—</strong></div>
+            <div class="al-count" style="margin-right:2px"><strong id="alCount">—</strong> <span style="font-size:10px;color:#94A3B8;font-weight:500">activities in view</span></div>
 <div class="sort-btns">
               <button class="sort-btn active" id="sortDate" onclick="setSort('date')">📅 Date</button>
               <button class="sort-btn" id="sortPop" onclick="setSort('popularity')">🔥 Popular</button>
@@ -994,7 +1002,7 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
           </div>
         </div>
         <!-- Map insight bar -->
-        <div class="insight-bar" id="mapInsightBar">
+        <div class="insight-bar" id="mapInsightBar" style="display:none!important">
           <div class="insight-dot"></div>
           <span id="mapInsightText">Calculating…</span>
         </div>
@@ -1027,7 +1035,7 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
         <!-- Attendees + newcomer badge -->
         <div class="dp-section">
           <div class="att-row" id="patt" style="margin-bottom:8px"></div>
-          <div class="ncbadge" id="pnc" style="display:none">🌟 Newcomer-Friendly — all backgrounds welcome</div>
+          <div class="ncbadge" id="pnc" style="display:none"></div>
         </div>
         <!-- Rich extras: demographics, age, vibe, practical -->
         <div id="pextras"></div>
@@ -1052,13 +1060,14 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
         </div>
         <button class="btn-join" id="dpJoinBtn" onclick="joinActivity()">Join Activity</button>
         <button id="dpSaveBtn" class="btn-save" onclick="toggleSave(currentDetailId)" title="Save this activity">♡ Save</button>
+
         <a id="dpDirections" href="#" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;flex-shrink:0;background:#F0F9FF;color:#0369A1;border:1.5px solid #BAE6FD;border-radius:9px;font-size:19px;text-decoration:none;transition:all .2s" title="Get directions in Google Maps"><svg width="14" height="18" viewBox="0 0 14 18" fill="currentColor" aria-hidden="true"><path d="M7 0C3.13 0 0 3.13 0 7c0 5.25 7 11 7 11S14 12.25 14 7C14 3.13 10.87 0 7 0zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg></a>
       </div>
     </div><!-- /detail-panel -->
     </div><!-- /listPane -->
 
     <!-- Demo story guide -->
-    <button id="demoGuideBtn" onclick="openDemoGuide()" title="Try the demo story">📖 Demo Story</button>
+
     <div id="demoGuide">
       <div class="dg-header">
         <span class="dg-title">📖 Demo Story — Try This Path</span>
@@ -1275,7 +1284,7 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
 
     <!-- Seasonal Activity Trends -->
     <div class="tl-card">
-      <div class="tl-card-title">🌏 Seasonal Activity Trends — Jan to Dec
+      <div class="tl-card-title">🌏 Monthly Activity Trends
         <span style="font-size:11px;font-weight:400;color:#94A3B8"> NZ climate shapes when activities peak</span>
       </div>
       <p class="tl-chart-note">☀️ NZ summer (Dec–Feb): hot & dry → outdoor & sports peak &nbsp;·&nbsp; 🌧 Winter (Jun–Jul): Hamilton's rainiest months → indoor culture & learning surge &nbsp;·&nbsp; 🎄 December: Christmas social & food market peak</p>
@@ -1371,7 +1380,7 @@ button:focus-visible,.chip:focus-visible,.tab:focus-visible{outline:3px solid #1
       <div class="fg"><label class="flbl">Max Companions</label><input id="actMax" class="finp" type="number" placeholder="Leave blank for unlimited" min="1"/></div>
       <div class="fg" style="flex-direction:row;align-items:center;gap:8px">
         <input type="checkbox" id="ncCheck" style="width:15px;height:15px;accent-color:#0F6E56"/>
-        <label for="ncCheck" class="flbl" style="margin:0;cursor:pointer">Mark as Newcomer-Friendly 🌟</label>
+        
       </div>
       <button class="btn-sub" onclick="submitAct()">Publish Activity</button>
     </div>
@@ -1670,13 +1679,13 @@ const MIGRANT_STATS={
 const MONTHLY_DIST={
   labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
   cats:[
-    {label:'Social',   data:[5,4,5,6,5,4,3,4,5,5,6,5],  color:'#B57BEE'},
-    {label:'Sports',   data:[6,5,5,3,3,2,2,2,4,5,6,6],  color:'#F87171'},
-    {label:'Culture',  data:[2,2,3,4,4,5,5,4,3,3,3,2],  color:'#2DD4BF'},
-    {label:'Learning', data:[2,2,3,4,4,5,5,4,3,3,2,2],  color:'#7EB8F7'},
-    {label:'Outdoor',  data:[6,5,4,3,2,1,1,2,3,5,5,6],  color:'#6DCF8A'},
-    {label:'Food',     data:[5,4,4,3,3,3,3,3,4,4,5,5],  color:'#FFB347'},
-    {label:'Volunteer',data:[2,2,2,2,2,3,3,3,2,2,2,2],  color:'#F48FB1'},
+    {label:'Social',   data:[7,6,6,5,5,4,3,4,5,6,7,8],  color:'#B57BEE'},
+    {label:'Sports',   data:[10,9,7,4,3,2,1,2,4,6,8,10], color:'#F87171'},
+    {label:'Culture',  data:[2,2,3,5,6,9,10,8,5,3,2,2],  color:'#2DD4BF'},
+    {label:'Learning', data:[2,2,3,5,7,9,10,9,5,3,2,2],  color:'#7EB8F7'},
+    {label:'Outdoor',  data:[10,9,7,4,2,1,1,1,3,6,8,10], color:'#6DCF8A'},
+    {label:'Food',     data:[7,5,5,4,4,3,3,3,4,5,6,9],   color:'#FFB347'},
+    {label:'Volunteer',data:[2,2,2,3,4,5,6,5,4,3,2,2],   color:'#F48FB1'},
   ]
 };
 
@@ -1892,7 +1901,7 @@ function initMap(){
       const n=c.getChildCount();
       const sz=n>99?42:n>9?38:34;
       return L.divIcon({
-        html:`<div style="background:linear-gradient(135deg,#0F6E56,#085041);color:#fff;width:${sz}px;height:${sz}px;border-radius:50%;border:3px solid #fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:${n>99?10:12}px;box-shadow:0 3px 12px rgba(15,110,86,.45),0 1px 4px rgba(0,0,0,.2)">${n}</div>`,
+        html:`<div style="background:rgba(100,116,139,0.85);color:#fff;width:${sz}px;height:${sz}px;border-radius:50%;border:2.5px solid #fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:${n>99?10:12}px;box-shadow:0 2px 8px rgba(0,0,0,.18),0 1px 3px rgba(0,0,0,.1);backdrop-filter:blur(2px)">${n}</div>`,
         className:'',iconSize:[sz,sz],iconAnchor:[sz/2,sz/2]
       });
     }
@@ -1921,6 +1930,7 @@ function getFilteredActivities({checkBounds=false,bounds=null}={}){
   const hasSolo=activeFilters.has('solo');
   const catFilters=new Set([...activeFilters].filter(f=>f!=='all'&&f!=='english'&&f!=='solo'));
   return ACTIVITIES.filter(a=>{
+    if(_savedFilterActive && !savedActivities.has(a.id)) return false;
     if(a.city!==currentCity)return false;
     if(timeBrushIds!==null){if(!timeBrushIds.has(a.id))return false;}
     else if(!activeFilters.has('all')){
@@ -1944,13 +1954,11 @@ function renderMarkers(){
   list.forEach(a=>{
     const col=CAT_COLOR[a.category];
     const emoji=CAT_EMOJI[a.category]||'📌';
-    const ncBadge=a.newcomer?`
-      <div class="nc-tip" data-tip="🌟 Newcomer-friendly"
-           style="position:absolute;top:-6px;right:-6px;width:20px;height:20px;background:#10B981;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;font-size:11px;line-height:1;z-index:4">🌟</div>`:'';
+    const ncBadge='';
     const myConnsM=CONNECTION_ACTS[a.id]||[];
     const connBadge=myConnsM.length?`
       <div title="${myConnsM.map(c=>c.name).join(' & ')} going"
-           style="position:absolute;top:-6px;left:-6px;min-width:20px;height:20px;background:#0F6E56;border-radius:10px;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:#fff;line-height:1;z-index:4;padding:0 4px;white-space:nowrap">👥${myConnsM.length}</div>`:'';
+           style="position:absolute;top:-4px;left:-4px;min-width:15px;height:15px;background:#fff;border-radius:8px;border:1.5px solid #0F6E56;box-shadow:0 1px 3px rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#0F6E56;line-height:1;z-index:4;padding:0 3px;white-space:nowrap;gap:1px"><span style="font-size:7px">👤</span>${myConnsM.length}</div>`:'';
     // Bold floating marker — user-posted activities get gold "My Activity" treatment
     const isMyAct = !!a._userPosted;
     const markerBorder = isMyAct ? '3.5px solid #F59E0B' : `3.5px solid ${col}`;
@@ -2054,18 +2062,22 @@ function updateActivityList(){
           <span>📍 ${a.location}</span>
         </div>
         <div class="ac-footer">
-          <span class="ac-cat-tag" style="background:${CAT_COLOR[a.category]}">${CAT_LABEL[a.category]}</span>
-          ${metaBadges(a.id)}
-          <span class="ac-att">👥 ${a.attendees}</span>
-          ${a.newcomer?'<span class="ac-nc">🌟 Newcomer ✓</span>':''}
-          ${a._userPosted?'<span style="font-size:10px;font-weight:700;background:#FEF3C7;color:#92400E;border-radius:9px;padding:2px 8px;border:1px solid #FDE68A">✦ My Activity</span>':''}
-          ${EVTFD_IDS.has(a.id)?'<span class="source-badge">✓ Real Event</span>':''}
-          ${a.website?`<a href="${a.website}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="font-size:9.5px;font-weight:600;color:#0F6E56;text-decoration:none;border:1px solid #9FE1CB;border-radius:8px;padding:2px 7px;background:#F0FDF4;white-space:nowrap;flex-shrink:0">🌐 Website ↗</a>`:''}
+          <div class="ac-footer-row1">
+            <span class="ac-cat-tag" style="background:${CAT_COLOR[a.category]}">${CAT_LABEL[a.category]}</span>
+            ${metaBadges(a.id)}
+            <span class="ac-att" style="color:#CBD5E1">· ${a.attendees} going</span>
+            ${(()=>{const _s=Math.round(a.attendees*0.18+(a.id*7%13)+3);return _s>=8?`<span style="font-size:9.5px;font-weight:600;color:#EA580C">🔥 ${_s}</span>`:'';})()}
+            ${a._userPosted?'<span style="font-size:10px;font-weight:700;background:#FEF3C7;color:#92400E;border-radius:9px;padding:2px 8px;border:1px solid #FDE68A">✦ My Activity</span>':''}
+          </div>
+          ${(EVTFD_IDS.has(a.id)||a.website)? `<div class="ac-footer-row2">
+            ${EVTFD_IDS.has(a.id)?'<span class="source-badge">✓ Real Event</span>':''}
+            ${a.website?`<a href="${a.website}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="font-size:9.5px;font-weight:600;color:#0F6E56;text-decoration:none;border:1px solid #9FE1CB;border-radius:8px;padding:2px 7px;background:#F0FDF4;white-space:nowrap;flex-shrink:0">🌐 Website ↗</a>`:''}
+          </div>`:''}
         </div>
         ${(CONNECTION_ACTS[a.id]||[]).length?`
         <div class="rec-bar">
-          <span class="rec-label">🤝 Based on your network</span>
-          <span class="rec-names">${(CONNECTION_ACTS[a.id]).map(c=>c.name).join(' & ')} are going</span>
+          <span class="rec-label">🤝 From your network —</span>
+          <span class="rec-names">${(CONNECTION_ACTS[a.id]).map(c=>c.name).join(' & ')} ${CONNECTION_ACTS[a.id].length===1?'is':'are'} going</span>
         </div>`:''}
 
       </div>
@@ -2171,10 +2183,11 @@ function showDetail(id){
       <span>👥 ${a.attendees}</span>
       <div class="cap-bar-bg"><div class="cap-bar-fill" style="width:${barW}%;background:${barCol}"></div></div>
       <span style="color:${barCol};font-weight:600;white-space:nowrap;font-size:11px">${spotsLeft}</span>
-    </div>`;
+    </div>
+`;
 
   // Body
-  document.getElementById('pnc').style.display=a.newcomer?'flex':'none';
+  document.getElementById('pnc').style.display='none';
   document.getElementById('pdesc').textContent=a.desc;
   const ini=['JK','SA','MT','RL','WH','DY','CL'];
   const myConns = CONNECTION_ACTS[a.id] || [];
@@ -2182,7 +2195,7 @@ function showDetail(id){
     <div style="background:#F0FDF9;border:1.5px solid #9FE1CB;border-radius:10px;padding:9px 12px;margin-bottom:10px">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
         <div style="font-size:9.5px;font-weight:700;color:#0F6E56;text-transform:uppercase;letter-spacing:.5px">🤝 Your connections going</div>
-        <button onclick="switchTab('timeline')" style="font-size:9px;font-weight:700;color:#0F6E56;background:rgba(15,110,86,.08);border:1px solid #9FE1CB;border-radius:6px;padding:2px 8px;cursor:pointer;white-space:nowrap">Network →</button>
+
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:8px">
         ${myConns.map(c=>`
@@ -2194,7 +2207,7 @@ function showDetail(id){
       </div>
     </div>` : `<div style="background:#F8FAFC;border:1.5px dashed #E2E8F0;border-radius:10px;padding:9px 12px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between">
       <span style="font-size:11px;color:#94A3B8">None of your connections are going yet.</span>
-      <button onclick="switchTab('timeline')" style="font-size:9px;font-weight:700;color:#64748B;background:#F1F5F9;border:1px solid #E2E8F0;border-radius:6px;padding:2px 8px;cursor:pointer;white-space:nowrap">Network →</button>
+
     </div>`;
   document.getElementById('patt').innerHTML=connHtml+`
     <div class="av-stack">${a.avatarColors.slice(0,5).map((c,i)=>`<div class="av" style="background:${c}">${ini[i]}</div>`).join('')}</div>
@@ -2282,6 +2295,7 @@ function showDetail(id){
   const sb=document.getElementById('dpSaveBtn');
   if(sb){const sv=savedActivities.has(a.id);sb.textContent=sv?'♥ Saved':'♡ Save';sb.style.background=sv?'#E1F5EE':'';}
 
+
   document.getElementById('detailPanel').classList.add('open');
   const _dgb=document.getElementById('demoGuideBtn');if(_dgb)_dgb.style.display='none';
   // Reset join/attend state for this activity
@@ -2326,6 +2340,54 @@ function toggleSave(id){
     savedActivities.add(id);
     if(sb){sb.textContent='♥ Saved';sb.style.background='#E1F5EE';}
     showToast('Activity saved! ♥','Tap ♥ again to unsave.','success',2200);
+  }
+  _updateSavedBadge();
+  // Update inline save count
+  const _a2=ACTIVITIES.find(x=>x.id===id);
+  if(_a2){
+    const _sn2=document.getElementById('dpSaveCountNum');
+    const _bs2=Math.round(_a2.attendees*0.18+(_a2.id*7%13)+3);
+    if(_sn2) _sn2.textContent=savedActivities.has(id)?_bs2+1:_bs2;
+  }
+  // If saved filter is active, re-render so removed items disappear
+  if(_savedFilterActive){ renderMarkers(); if(typeof updateActivityList==='function') updateActivityList(); }
+}
+
+let _savedFilterActive=false;
+function toggleSavedFilter(){
+  if(savedActivities.size===0 && !_savedFilterActive){
+    showToast('No saved activities','Save an activity first by tapping ♡ Save','info',2500);
+    return;
+  }
+  _savedFilterActive=!_savedFilterActive;
+  const btn=document.getElementById('savedFilterBtn');
+  const icon=document.getElementById('savedFilterIcon');
+  if(_savedFilterActive){
+    btn.style.background='#E1F5EE';
+    btn.style.borderColor='#0F6E56';
+    btn.style.color='#0F6E56';
+    if(icon) icon.textContent='♥';
+  } else {
+    btn.style.background='#fff';
+    btn.style.borderColor='#e2e8f0';
+    btn.style.color='#64748B';
+    if(icon) icon.textContent='♡';
+  }
+  renderMarkers();
+  if(typeof updateActivityList==='function') updateActivityList();
+  updateResetBtn();
+}
+
+function _updateSavedBadge(){
+  const el=document.getElementById('savedFilterCount');
+  if(el) el.textContent=savedActivities.size;
+  const btn=document.getElementById('savedFilterBtn');
+  const divider=document.getElementById('savedFilterDivider');
+  if(btn){
+    btn.style.display = savedActivities.size > 0 ? 'flex' : 'none';
+  }
+  if(divider){
+    divider.style.display = savedActivities.size > 0 ? 'block' : 'none';
   }
 }
 
@@ -3550,7 +3612,7 @@ function updateMapInsight(visible){
 function copyActivity(id){
   const a=ACTIVITIES.find(x=>x.id===id);
   if(!a)return;
-  const text=`📍 ${a.name}\n📅 ${a.date} · ${a.time}\n🗺 ${a.location}\n👥 ${a.attendees} attending${a.newcomer?' · 🌟 Newcomer-friendly':''}${a.website?'\n🌐 '+a.website:''}`;
+  const text=`📍 ${a.name}\n📅 ${a.date} · ${a.time}\n🗺 ${a.location}\n👥 ${a.attendees} attending${a.website?'\n🌐 '+a.website:''}`;
   if(navigator.share){
     navigator.share({title:a.name,text,url:a.website||window.location.href}).catch(()=>{});
   } else {
@@ -3820,7 +3882,7 @@ function initBubbleScatter(){
 
     circle.on('mouseover',(e)=>{
       circle.attr('fill-opacity',1).attr('stroke-width',2.5);
-      tip.innerHTML=`<strong>${a.name}</strong><br>${CAT_LABEL[a.category]} · ${a.date} ${a.time}<br>👥 ${a.attendees} attending${a.newcomer?' · 🌟 Newcomer-friendly':''}<br><span style="color:#5DCAA5;font-size:10px;margin-top:3px;display:block">Click → view on map</span>`;
+      tip.innerHTML=`<strong>${a.name}</strong><br>${CAT_LABEL[a.category]} · ${a.date} ${a.time}<br>👥 ${a.attendees} attending<br><span style="color:#5DCAA5;font-size:10px;margin-top:3px;display:block">Click → view on map</span>`;
       tip.style.display='block';tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-10)+'px';
     }).on('mousemove',e=>{
       tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-10)+'px';
@@ -4739,7 +4801,8 @@ function _seasonalFocus(label){
 
   chart.data.datasets.forEach((d,i)=>{
     if(!label){
-      // reset all
+      // reset all — show all stacked
+      d.hidden=false;
       d.backgroundColor=d._origBg||d.backgroundColor;
       d.borderColor=d._origBorder||d.borderColor;
       d.borderWidth=1.5;
@@ -4747,6 +4810,7 @@ function _seasonalFocus(label){
     } else if(d.label===label){
       d._origBg=d._origBg||d.backgroundColor;
       d._origBorder=d._origBorder||d.borderColor;
+      d.hidden=false;
       d.backgroundColor=d._origBorder+'CC';
       d.borderColor=d._origBorder;
       d.borderWidth=2.5;
@@ -4754,13 +4818,13 @@ function _seasonalFocus(label){
     } else {
       d._origBg=d._origBg||d.backgroundColor;
       d._origBorder=d._origBorder||d.borderColor;
-      d.backgroundColor=d._origBorder+'15';
-      d.borderColor=d._origBorder+'40';
-      d.borderWidth=0.5;
-      d.fill=true;
+      d.hidden=true;  // actually hide so y-axis rescales
     }
   });
-  chart.update('none');
+  // Toggle stacking: stack all when All, unstack when single
+  chart.options.scales.x.stacked = !label;
+  chart.options.scales.y.stacked = !label;
+  chart.update();
 
   // Update pill styles
   if(wrap) wrap.querySelectorAll('button').forEach(btn=>{
